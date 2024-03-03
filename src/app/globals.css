@@ -2,32 +2,89 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background-color: #080a0c;
+  color: white;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.gradient-1 {
+  background: linear-gradient(
+    91deg,
+    #70a2ff 0%,
+    #72f6d1 21.87%,
+    #76e268 47.92%,
+    #ffd505 72.4%,
+    #f76e64 100%
+  );
+}
+
+.gradient-2 {
+  background: linear-gradient(91deg, #70a2ff 0%, #f76e64 100%);
+}
+
+.gradient-3 {
+  background: linear-gradient(
+    91deg,
+    #70a2ff 0%,
+    #72e5da 28.65%,
+    #72f6d1 50.52%,
+    #76e268 100%
+  );
+}
+
+.gradient-4 {
+  background: linear-gradient(91deg, #ffd505 0%, #f44336 100%);
+}
+
+.gradient-5 {
+  background: linear-gradient(91deg, #76e268 0%, #ffd505 100%);
+}
+
+.gradient-6 {
+  background: linear-gradient(91deg, #45f0d1 0%, #76e268 100%);
+}
+
+.gradient-7 {
+  background: linear-gradient(91deg, #70a2ff 0%, #54f0d1 100%);
+}
+
+.gradient-8 {
+  background: linear-gradient(
+    91deg,
+    #a9cdff 0%,
+    #72f6d1 21.87%,
+    #a0ed8d 55.73%,
+    #fed365 81.77%,
+    #faa49e 100%
+  );
+}
+
+.gradient-9 {
+  background: linear-gradient(
+    91deg,
+    #8ad4ec 0%,
+    #ef96ff 21.74%,
+    #ff56a9 54.03%,
+    #ffaa6c 85.28%
+  );
+}
+
+.gradient-960 {
+  background: linear-gradient(
+    91deg,
+    rgba(138, 212, 236, 0.6) 0%,
+    rgba(239, 150, 255, 0.6) 21.74%,
+    rgba(255, 86, 169, 0.6) 54.03%,
+    rgba(255, 170, 108, 0.6) 85.28%
+  );
+}
+
+.gradient-10 {
+  background: linear-gradient(
+    91deg,
+    rgba(96, 123, 132, 0.7) 0%,
+    rgba(57, 21, 63, 0.7) 29.54%,
+    rgba(81, 11, 46, 0.7) 54.03%,
+    rgba(103, 45, 3, 0.7) 85.28%
+  );
 }
