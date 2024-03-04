@@ -2,9 +2,52 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  @font-face {
+    font-family: "Apfel Grotezk";
+    src: url("/fonts/apfel-grotezk/ApfelGrotezk-Regular.otf") format("opentype");
+  }
+  @font-face {
+    font-family: "Neue Machina Bold";
+    src: url("/fonts/neue-machina/NeueMachina-Ultrabold.otf") format("opentype");
+  }
+}
+
 body {
   background-color: #080a0c;
   color: white;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+button,
+button > div {
+  font-family: "Neue Machina Bold", sans-serif;
+  user-select: none;
+}
+
+p,
+span,
+div,
+small {
+  font-family: "Apfel Grotezk", sans-serif;
+  user-select: none;
+}
+
+/* .text-gradient-9 {
+  background: -webkit-linear-gradient(
+    91deg,
+    #8ad4ec 0%,
+    #ef96ff 21.74%,
+    #ff56a9 54.03%,
+    #ffaa6c 85.28%
+  );
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .gradient-1 {
@@ -87,4 +130,4 @@ body {
     rgba(81, 11, 46, 0.7) 54.03%,
     rgba(103, 45, 3, 0.7) 85.28%
   );
-}
+} */

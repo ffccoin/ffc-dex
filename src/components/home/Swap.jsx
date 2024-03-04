@@ -14,19 +14,15 @@ export default function Swap() {
   return (
     //styleName: Headline-Thin/H3-Bold;
 
-    <div className="grid place-items-center  justify-center">
+    <div className="grid place-items-center justify-center">
       <SettingsModal isOpen={isModalOpen} onClose={toggleModal} />
-
-      <div
-        className={`max-w-[512px] px-3 sm:px-1  flex-col
-        flex items-start`}
-      >
+      <div className={`max-w-[512px] px-3 sm:px-1 flex-col flex items-start`}>
         <div className=" flex flex-row w-full justify-between">
-          <div className="font-light text-5xl ">Swap</div>
+          <h1 className="font-light text-5xl">Swap</h1>
           <Image
             src="/home/settings.svg"
             alt="setting"
-            onClick={()=> setModalOpen(true)}
+            onClick={() => setModalOpen(true)}
             width={32}
             className="cursor-pointer"
             height={32}
