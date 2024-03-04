@@ -1,7 +1,9 @@
+import Swap from "@/components/home/Swap"
+
 export default function Home() {
   return (
-    <main className="text-5xl font-light">
-      Your Liquidity
+    <main className="overflow-hidden">
+        <Swap/>
     </main>
-  );
+    )
 }
