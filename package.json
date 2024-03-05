@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.18",
+    "alchemy-sdk": "^3.1.2",
     "axios": "^1.6.7",
     "framer-motion": "^11.0.8",
     "moralis": "^2.25.0",

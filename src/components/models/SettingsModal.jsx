@@ -27,7 +27,7 @@ export default function SettingsModal({ isOpen, onClose ,onSelectOption}) {
     isOpen && (
       <div className="fixed inset-0 z-40 bg-[rgba(0,0,0,0.4)] backdrop-blur-sm  ">
         <div className="fixed  px-8 z-50 top-0 left-0  h-full w-full items-center justify-center flex">
-          <div className=" bg-gray23  w-[512px] sm:h-[536px] h-[619px]] px-8 py-10 rounded-3xl shadow-lg">
+          <div className=" bg-gray23  w-[512px] sm:h-[536px] h-[619px]] bg-neutral  px-8 py-10 rounded-3xl shadow-lg">
             <div className="flex justify-between">
               <p className="text-xl font-light">Transaction Settings</p>
               <Image
@@ -55,8 +55,8 @@ export default function SettingsModal({ isOpen, onClose ,onSelectOption}) {
                     key={option.value}
                     className={`h-10 cursor-pointer ${
                       selectedOption === option.value
-                        ? "bg-blue-500"
-                        : "bg-gray22"
+                        ? "bg-primary1"
+                        : "bg-gray22 "
                     } ${
                       option.value === "0.1%" ? "rounded-full" : "rounded-full"
                     } w-20  px-2 py-2`}
@@ -64,7 +64,7 @@ export default function SettingsModal({ isOpen, onClose ,onSelectOption}) {
                   >
                     <p
                       className={`text-${
-                        selectedOption === option.value ? "white" : "primary5"
+                        selectedOption === option.value ? "black" : "white"
                       } text-center`}
                     >
                       {option.label}
@@ -111,7 +111,7 @@ export default function SettingsModal({ isOpen, onClose ,onSelectOption}) {
               </div>
               <label class="inline-flex items-center cursor-pointer">
                 <input type="checkbox" value="" class="sr-only peer" />
-                <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                <div class="relative w-11 h-6 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-transparent dark:peer-focus:ring-transparent rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-neutralLight peer-checked:after:bg-gray-700 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-gray-100 after:border-gray-500 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary1 peer-checked:"></div>
               </label>
             </div>
             <div className="flex items-center justify-between w-full mt-7 ">
@@ -126,7 +126,7 @@ export default function SettingsModal({ isOpen, onClose ,onSelectOption}) {
               </div>
               <label class="inline-flex items-center cursor-pointer">
                 <input type="checkbox" value="" class="sr-only peer" />
-                <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                <div class="relative w-11 h-6 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-transparent dark:peer-focus:ring-transparent rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-neutralLight peer-checked:after:bg-gray-700 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-gray-100 after:border-gray-500 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary1 peer-checked:"></div>
               </label>
             </div>
           </div>

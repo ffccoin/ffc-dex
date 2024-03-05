@@ -24,6 +24,19 @@ export default function Swap() {
     data: null,
     value: null,
   });
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredTokenList = tokenList.filter((token) => {
+    const tokenName = token.ticker.toLowerCase();
+    const tokenAddress = token.address.toLowerCase();
+    const search = searchQuery.trim().toLowerCase();
+
+    console.log("Token Name:", tokenName);
+    console.log("Token Address:", tokenAddress);
+    console.log("Search Query:", search);
+
+    return tokenName.includes(search) || tokenAddress.includes(search);
+  });
   const toggleModal = () => {
     setModalOpen(!isModalOpen);
   };
@@ -120,46 +133,82 @@ export default function Swap() {
   return (
     <div className="grid place-items-center justify-center py-10 px-3">
       <Dialog
-        open={isOpen}
-        onClose={() => setIsOpen(false)}
-        className="relative z-50 "
-      >
-        {/* The backdrop, rendered as a fixed sibling to the panel container */}
-        <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
-        <div className="fixed inset-0 w-fit mx-auto overflow-y-auto">
-          <div className="flex bg-neutral items-center justify-center p-4">
-            <Dialog.Panel className="mx-auto my-auto w-[512px] p-10  rounded bg-gray22">
-              <Dialog.Title className={" text-center text-2xl "}>
-                Select a Token
-              </Dialog.Title>
-              {tokenList?.map((e, i) => {
-                return (
-                  <Dialog.Description>
-                    <div
-                      className="mt-7 flex gap-9 items-center "
-                      key={i}
-                      onClick={() => modifyToken(i)}
-                    >
-                      <img
-                        src={e.img}
-                        alt={e.ticker}
-                        className=" w-6 h-6"
-                        width={25}
-                        height={25}
-                      />
-                      <div className="flex flex-col">
-                        <div className="">{e.name}</div>
-                        <div className="">{e.ticker}</div>
-                      </div>
-                      <div className=""> {e.decimals}</div>
-                    </div>
-                  </Dialog.Description>
-                );
-              })}
-            </Dialog.Panel>
+  open={isOpen}
+  onClose={() => setIsOpen(false)}
+  className="relative z-50"
+>
+  {/* The backdrop, rendered as a fixed sibling to the panel container */}
+  <div className="fixed inset-0 backdrop-blur-sm" aria-hidden="true" />
+  <div className="fixed inset-0 flex items-center justify-center p-10" >
+    <div className="bg-neutral rounded-3xl w-full max-w-[32rem] h-[90%] overflow-y-auto">
+      <div className="px-7 py-3">
+        <div className="flex mt-4 items-center justify-between">
+          <div className="flex-grow text-center">
+            <p className="text-2xl">Select a Token</p>
           </div>
+          <Image
+            alt="close"
+            src="/home/cross.svg"
+            className="justify-self-end cursor-pointer"
+            width={24}
+            height={24}
+            onClick={() => setIsOpen(false)}
+          />
         </div>
-      </Dialog>
+        <input
+          type="text"
+          placeholder="Search name or paste address"
+          className="w-full p-2 mt-6 mb-2 border h-14 outline-none rounded-2xl border-neutralLight text-neutralLight bg-neutral"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+
+        {filteredTokenList.map((e, i) => {
+          return (
+            <Dialog.Description className="mt-4" key={i}>
+              <div
+                className="flex gap-9 items-center justify-between cursor-pointer"
+                onClick={() => modifyToken(i)}
+              >
+                <div className="flex gap-5 items-center">
+                  <img
+                    src={e.img}
+                    alt={e.ticker}
+                    width={33}
+                    height={33}
+                  />
+                  <div className="flex flex-col">
+                    <div className="text-base uppercase font-neue-machina">
+                      {e.ticker}
+                    </div>
+                    <div className="text-sm mt-1 text-neutralLight">
+                      {e.name}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="text-sm text-neutralLight">
+                  {e.decimals}
+                </div>
+              </div>
+            </Dialog.Description>
+          );
+        })}
+
+        <div className="flex justify-center gap-3 mt-4">
+          <Image
+            alt="manage"
+            src="/home/manage.svg"
+            width={24}
+            height={24}
+          />
+          <p className="text-primary1">Manage</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</Dialog>
+
       <SettingsModal
         isOpen={isModalOpen}
         onClose={toggleModal}
@@ -225,11 +274,11 @@ export default function Swap() {
               </div>
             )}
             {!tokenOne && (
-              <div className="w-[50%]" onClick={() => openModal(1)}>
-                <button className="bg-primary1 text-black rounded-full px-4 py-3 min-w-fit">
-                  Select a token
-                </button>
-              </div>
+              <div className="w-[50%] grid " onClick={() => openModal(2)}>
+              <button className="bg-primary1 justify-self-end text-black rounded-full px-4 py-3 min-w-fit">
+                Select a token
+              </button>
+            </div>
             )}
           </div>
           <Image
@@ -278,8 +327,8 @@ export default function Swap() {
                 </div>
               </div>
             ) : (
-              <div className="w-[50%]" onClick={() => openModal(2)}>
-                <button className="bg-primary1 text-black rounded-full px-4 py-3 min-w-fit">
+              <div className="w-[50%] grid " onClick={() => openModal(2)}>
+                <button className="bg-primary1 justify-self-end text-black rounded-full px-4 py-3 min-w-fit">
                   Select a token
                 </button>
               </div>
