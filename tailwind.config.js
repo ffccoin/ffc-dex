@@ -63,6 +63,7 @@ module.exports = {
       fontFamily: {
         "apfel-grotezk": "Apfel Grotezk",
         "neue-machina-bold": "Neue Machina Bold",
+        "neue-machina": "Neue Machina",
       },
     },
   },

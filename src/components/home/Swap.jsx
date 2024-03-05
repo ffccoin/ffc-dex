@@ -66,7 +66,7 @@ export default function Swap() {
     setIsOpen(false);
   }
 
-  async function fetchPrices(one,two) {
+  async function fetchPrices(one, two) {
     const res = await axios.get(`/api/swap`, {
       params: { addressOne: one, addressTwo: two },
     });
@@ -118,7 +118,7 @@ export default function Swap() {
     setIsOpen(true);
   }
   return (
-    <div className="grid place-items-center  justify-center">
+    <div className="grid place-items-center justify-center py-10 px-3">
       <Dialog
         open={isOpen}
         onClose={() => setIsOpen(false)}
@@ -126,14 +126,20 @@ export default function Swap() {
       >
         {/* The backdrop, rendered as a fixed sibling to the panel container */}
         <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
-        <div className="fixed inset-0 w-screen overflow-y-auto">
-        <div className="flex min-h-full items-center justify-center p-4">
+        <div className="fixed inset-0 w-fit mx-auto overflow-y-auto">
+          <div className="flex bg-neutral items-center justify-center p-4">
             <Dialog.Panel className="mx-auto my-auto w-[512px] p-10  rounded bg-gray22">
-              <Dialog.Title className={" text-center text-2xl " }>Select a Token</Dialog.Title>
+              <Dialog.Title className={" text-center text-2xl "}>
+                Select a Token
+              </Dialog.Title>
               {tokenList?.map((e, i) => {
                 return (
                   <Dialog.Description>
-                    <div className="mt-7 flex gap-9 items-center " key={i} onClick={() => modifyToken(i)}>
+                    <div
+                      className="mt-7 flex gap-9 items-center "
+                      key={i}
+                      onClick={() => modifyToken(i)}
+                    >
                       <img
                         src={e.img}
                         alt={e.ticker}
@@ -165,7 +171,7 @@ export default function Swap() {
         flex items-start`}
       >
         <div className=" flex flex-row w-full justify-between">
-          <div className="font-light text-5xl text-[#CBFB45] ">Swap</div>
+          <div className="font-light text-5xl">Swap</div>
           <Image
             src="/home/settings.svg"
             alt="setting"
@@ -180,7 +186,7 @@ export default function Swap() {
             swapPlaces ? "flex-col-reverse" : "flex-col"
           } `}
         >
-          <div className="w-full border mt-2 flex items-center border-gray22 rounded-2xl px-4 py-4">
+          <div className="w-full border mt-2 flex items-center border-neutral rounded-2xl px-4 py-4">
             <div className="sm:w-full w-[50%]">
               <p className="text-sm font-semibold">From</p>
               <input
@@ -199,7 +205,7 @@ export default function Swap() {
             {tokenOne && (
               <div className="flex items-center ">
                 <p className="text-[#CBFB45] font-semibold ">Max</p>
-                <div className="border-gray23 w-28 flex gap-x-1 items-center justify-between p-3 border rounded-2xl h-[64px] ">
+                <div className="w-28 flex gap-x-1 items-center justify-between p-3 border rounded-2xl h-[64px] ">
                   <img
                     src={tokenOne.img}
                     alt="assetOneLogo"
@@ -219,12 +225,10 @@ export default function Swap() {
               </div>
             )}
             {!tokenOne && (
-              <div className="w-[50%] sm:w-[37%] " onClick={() => openModal(1)}>
-                <Button
-                  title={"Select a Token"}
-                  className={"bg-[#CBFB45] text-black"}
-                  width="full"
-                />
+              <div className="w-[50%]" onClick={() => openModal(1)}>
+                <button className="bg-primary1 text-black rounded-full px-4 py-3 min-w-fit">
+                  Select a token
+                </button>
               </div>
             )}
           </div>
@@ -236,7 +240,7 @@ export default function Swap() {
             onClick={switchTokens}
             className="self-center cursor-pointer   mt-2"
           />
-          <div className="w-full  border mt-2 flex items-center border-gray22 rounded-2xl px-4 py-4">
+          <div className="w-full  border mt-2 flex items-center border-neutral rounded-2xl px-4 py-4">
             <div className="sm:w-full w-[50%]">
               <p className="text-sm font-semibold">To</p>
               <input
@@ -251,9 +255,8 @@ export default function Swap() {
                 <p className="text-sm font-normal"> 0.0</p>
               </div>
             </div>
-            {tokenTwo && (
-              <div className="flex items-center ">
-                {" "}
+            {tokenTwo ? (
+              <div className="flex items-center">
                 <p className="text-[#CBFB45] font-semibold ">Max</p>
                 <div className="border-gray23 w-28  text-sm flex gap-x-1 items-center justify-between p-3 border rounded-2xl h-[64px]">
                   <img
@@ -274,25 +277,20 @@ export default function Swap() {
                   />
                 </div>
               </div>
-            )}
-            {!tokenTwo && (
-              <div className="w-[50%] sm:w-[37%] " onClick={() => openModal(2)}>
-                <Button
-                  title={"Select a Token"}
-                  className={"bg-[#CBFB45] text-black"}
-                  width="full"
-                />
+            ) : (
+              <div className="w-[50%]" onClick={() => openModal(2)}>
+                <button className="bg-primary1 text-black rounded-full px-4 py-3 min-w-fit">
+                  Select a token
+                </button>
               </div>
             )}
-          </div>{" "}
+          </div>
         </div>
-        <div className="w-full mt-10 ">
-          <Button
-            title={"Enter an Amount"}
-            className={"bg-gray23 text-gray18"}
-            width="full"
-          />
-        </div>{" "}
+        <div className="w-full mt-10">
+          <button className="w-full py-3 rounded-full bg-neutral text-neutralLight">
+            Enter an amount
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -11,6 +11,10 @@
     font-family: "Neue Machina Bold";
     src: url("/fonts/neue-machina/NeueMachina-Ultrabold.otf") format("opentype");
   }
+  @font-face {
+    font-family: "Neue Machina";
+    src: url("/fonts/neue-machina/NeueMachina-Regular.otf") format("opentype");
+  }
 }
 
 body {
@@ -26,8 +30,9 @@ h5,
 h6,
 button,
 button > div {
-  font-family: "Neue Machina Bold", sans-serif;
+  font-family: "Neue Machina", sans-serif;
   user-select: none;
+  font-weight: 600;
 }
 
 p,
