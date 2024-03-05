@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import { useState } from "react";
 
-export default function SettingsModal({ isOpen, onClose }) {
+export default function SettingsModal({ isOpen, onClose ,onSelectOption}) {
   const [selectedOption, setSelectedOption] = useState(null);
   const options = [
     { value: "0.1%", label: "0.1%" },
@@ -12,6 +12,7 @@ export default function SettingsModal({ isOpen, onClose }) {
 
   const handleOptionClick = (value) => {
     setSelectedOption(value);
+    onSelectOption(value);
   };
 
   const calculatePercentage = () => {
@@ -44,7 +45,7 @@ export default function SettingsModal({ isOpen, onClose }) {
                 src="/home/questionMark.svg"
                 width={24}
                 height={24}
-                onClick={onClose}
+                className="cursor-pointer"
               />
             </div>
             <form>
@@ -85,7 +86,6 @@ export default function SettingsModal({ isOpen, onClose }) {
                 src="/home/questionMark.svg"
                 width={24}
                 height={24}
-                onClick={onClose}
               />
             </div>
             <div className="flex items-center mt-[16px] gap-x-2 ">
@@ -94,7 +94,7 @@ export default function SettingsModal({ isOpen, onClose }) {
                 placeholder="20"
                 className=" w-[121px] text-sm caret-gray12  rounded-xl pl-2  placeholder-gray12 leading-[42px] border border-gray22 bg-transparent  outline-none"
               />
-              <p className="">Minutes</p>
+              <p className="ml-3">Minutes</p>
             </div>
             <div className="flex items-center mt-10 gap-x-2 ">
               <p className="text-xl  font-light">Interface Settings</p>
@@ -107,7 +107,6 @@ export default function SettingsModal({ isOpen, onClose }) {
                   src="/home/questionMark.svg"
                   width={24}
                   height={24}
-                  onClick={onClose}
                 />
               </div>
               <label class="inline-flex items-center cursor-pointer">
@@ -123,7 +122,6 @@ export default function SettingsModal({ isOpen, onClose }) {
                   src="/home/questionMark.svg"
                   width={24}
                   height={24}
-                  onClick={onClose}
                 />
               </div>
               <label class="inline-flex items-center cursor-pointer">
