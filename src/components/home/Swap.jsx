@@ -44,9 +44,8 @@ export default function Swap() {
         name: "FFC",
         symbol: "FFC",
         decimals: 18,
-        logoURI: "/header/logo-mobile.svg"
+        logoURI: "/header/logo-mobile.svg",
       };
-  
 
       // const concatenatedTokens = data.tokens.reduce((acc, curr) => [...acc, ...curr], []);
       // console.log("Tokens fetched:", concatenatedTokens);
@@ -62,16 +61,11 @@ export default function Swap() {
       }
       fetchPrices(tokenList[0].address, tokenList[1].address);
 
-
       // Set the state with fetched data
     } catch (error) {
       console.error("Error fetching exchange rate:", error);
     }
   };
-
-
-  
-  
 
   useEffect(() => {
     fetchExchangeRate();
@@ -164,7 +158,6 @@ export default function Swap() {
     setTxDetails(tx.data.tx);
   }
 
-
   useEffect(() => {
     if (txDetails.to && isConnected) {
       sendTransaction();
@@ -207,9 +200,7 @@ export default function Swap() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
-
               {filteredTokenList.map((e, i) => {
-
                 return (
                   <Dialog.Description className="mt-4" key={i}>
                     <div
@@ -217,11 +208,12 @@ export default function Swap() {
                       onClick={() => modifyToken(i)}
                     >
                       <div className="flex gap-5 items-center">
-                        <img
+                        <Image
                           src={e.logoURI}
                           alt={e.symbol}
                           width={33}
                           height={33}
+                          quality={100}
                         />
                         <div className="flex flex-col">
                           <div className="text-base uppercase font-neue-machina">
@@ -297,29 +289,28 @@ export default function Swap() {
                 <p className="text-sm font-normal"> 0.0</p>
               </div>
             </div>
-            {tokenOne && (
-              <div className="flex  items-center ">
-                <p className="text-[#CBFB45] mr-3 font-semibold ">Max</p>
-                <div className="w-28 flex gap-x-1 items-center justify-between p-3 border rounded-2xl h-[64px] ">
-                 <img
+            {tokenOne ? (
+              <div className="flex items-center gap-x-2">
+                <p className="text-[#CBFB45] mx-4 font-semibold">Max</p>
+                <button
+                  className="w-28 flex gap-x-1 items-center justify-between p-3 border border-neutral rounded-2xl h-[64px] min-w-[136px]"
+                  onClick={() => openModal(1)}
+                >
+                  <Image
                     src={tokenOne.logoURI}
                     alt="assetOneLogo"
                     className="assetLogo"
-                    width={30}
-                    height={30}
+                    width={32}
+                    height={32}
+                    quality={100}
                   />
-                  {tokenOne.symbol}
-                  <Image
-                    alt="img"
-                    src="/home/downArrow.svg"
-                    onClick={() => openModal(1)}
-                    width={14}
-                    height={14}
-                  />
-                </div>
+                  <span className="text-sm font-semibold">
+                    {tokenOne.symbol}
+                  </span>
+                  {chevronDown}
+                </button>
               </div>
-            )}
-            {!tokenOne && (
+            ) : (
               <div className="w-[50%] grid " onClick={() => openModal(1)}>
                 <button className="bg-primary1 justify-self-end text-black rounded-full px-4 py-3 min-w-fit">
                   Select a token
@@ -343,34 +334,32 @@ export default function Swap() {
                 value={tokenTwoAmount}
                 disabled={true}
                 className=" w-full text-[34px] caret-gray12  placeholder-gray12 leading-[42px] border-transparent bg-transparent outline-none"
-              />{" "}
+              />
               <div className="flex flex-row gap-x-2">
-                {" "}
                 <p className="text-sm font-normal">Balance :</p>
                 <p className="text-sm font-normal"> 0.0</p>
               </div>
             </div>
             {tokenTwo ? (
-              <div className="flex items-center">
-                <p className="text-[#CBFB45] mr-3 font-semibold ">Max</p>
-                <div className="border-gray23 w-28  text-sm flex gap-x-1 items-center justify-between p-3 border rounded-2xl h-[64px]">
-                  <img
+              <div className="flex items-center gap-x-2">
+                <p className="text-[#CBFB45] mx-4 font-semibold">Max</p>
+                <button
+                  className="w-28 flex gap-x-1 items-center justify-between p-3 border border-neutral rounded-2xl h-[64px] min-w-[136px]"
+                  onClick={() => openModal(2)}
+                >
+                  <Image
                     src={tokenTwo.logoURI}
                     alt="assetOneLogo"
                     className="assetLogo"
-                    width={30}
-                    height={30}
+                    width={32}
+                    height={32}
+                    quality={100}
                   />
-                  {tokenTwo.symbol}
-                  <Image
-                    alt="img"
-                    src="/home/downArrow.svg"
-                    onClick={() => openModal(2)}
-                    className=""
-                    width={15}
-                    height={15}
-                  />
-                </div>
+                  <span className="text-sm font-semibold">
+                    {tokenTwo.symbol}
+                  </span>
+                  {chevronDown}
+                </button>
               </div>
             ) : (
               <div className="w-[50%] grid " onClick={() => openModal(2)}>
@@ -390,3 +379,21 @@ export default function Swap() {
     </div>
   );
 }
+
+const chevronDown = (
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M8 9.99997L12 14L16 9.99997"
+      stroke="white"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
