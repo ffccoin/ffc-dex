@@ -10,6 +10,7 @@ import axios from "axios";
 
 export default function Swap() {
   let [isOpen, setIsOpen] = useState(false);
+  const [tokenList, setTokenList] = useState([]);
   const [selectedSlippage, setSelectedSlippage] = useState(null);
   const [swapPlaces, setSwapPlaces] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
@@ -19,15 +20,52 @@ export default function Swap() {
   const [tokenOneAmount, setTokenOneAmount] = useState(null);
   const [tokenTwoAmount, setTokenTwoAmount] = useState(null);
   const [prices, setPrices] = useState(null);
+  const [coinData, setCoinData] = useState(null);
   const [txDetails, setTxDetails] = useState({
     to: null,
     data: null,
     value: null,
   });
+
+  const fetchExchangeRate = async () => {
+    try {
+      const url = "https://tokens.coingecko.com/uniswap/all.json";
+      const res = await fetch(url);
+
+      if (!res.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await res.json();
+      console.log(data.tokens);
+
+      // const concatenatedTokens = data.tokens.reduce((acc, curr) => [...acc, ...curr], []);
+      // console.log("Tokens fetched:", concatenatedTokens);
+
+      // setTokenList(concatenatedTokens);
+      if (Array.isArray(data.tokens)) {
+        console.log("Tokens fetched:", data.tokens);
+        setTokenList(data.tokens);
+      } else {
+        console.error("Unexpected data structure for tokens", data.tokens);
+      }
+      fetchPrices(tokenList[0].address, tokenList[1].address);
+
+
+      // Set the state with fetched data
+    } catch (error) {
+      console.error("Error fetching exchange rate:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchExchangeRate();
+  }, []);
+
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredTokenList = tokenList.filter((token) => {
-    const tokenName = token.ticker.toLowerCase();
+    const tokenName = token.symbol.toLowerCase();
     const tokenAddress = token.address.toLowerCase();
     const search = searchQuery.trim().toLowerCase();
 
@@ -67,7 +105,6 @@ export default function Swap() {
     } else {
       setTokenTwo(tokenList[i]);
       if (tokenOne != null) {
-        console.log("helo");
         fetchPrices(tokenOne.address, tokenList[i].address);
       }
     }
@@ -112,9 +149,10 @@ export default function Swap() {
     setTxDetails(tx.data.tx);
   }
 
-  useEffect(() => {
-    fetchPrices(tokenList[0].address, tokenList[1].address);
-  }, []);
+  // useEffect(() => {
+  //   fetchExchangeRate();
+
+  // }, []);
 
   useEffect(() => {
     if (txDetails.to && isConnected) {
@@ -129,81 +167,82 @@ export default function Swap() {
   return (
     <div className="grid place-items-center justify-center py-10 px-3">
       <Dialog
-  open={isOpen}
-  onClose={() => setIsOpen(false)}
-  className="relative z-50"
->
-  {/* The backdrop, rendered as a fixed sibling to the panel container */}
-  <div className="fixed inset-0 backdrop-blur-sm" aria-hidden="true" />
-  <div className="fixed inset-0 flex items-center justify-center p-10" >
-    <div className="bg-neutral rounded-3xl w-full max-w-[32rem] h-[90%] overflow-y-auto">
-      <div className="px-7 py-3">
-        <div className="flex mt-4 items-center justify-between">
-          <div className="flex-grow text-center">
-            <p className="text-2xl">Select a Token</p>
-          </div>
-          <Image
-            alt="close"
-            src="/home/cross.svg"
-            className="justify-self-end cursor-pointer"
-            width={24}
-            height={24}
-            onClick={() => setIsOpen(false)}
-          />
-        </div>
-        <input
-          type="text"
-          placeholder="Search name or paste address"
-          className="w-full p-2 mt-6 mb-2 border h-14 outline-none rounded-2xl border-neutralLight text-neutralLight bg-neutral"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-
-        {filteredTokenList.map((e, i) => {
-          return (
-            <Dialog.Description className="mt-4" key={i}>
-              <div
-                className="flex gap-9 items-center justify-between cursor-pointer"
-                onClick={() => modifyToken(i)}
-              >
-                <div className="flex gap-5 items-center">
-                  <img
-                    src={e.img}
-                    alt={e.ticker}
-                    width={33}
-                    height={33}
-                  />
-                  <div className="flex flex-col">
-                    <div className="text-base uppercase font-neue-machina">
-                      {e.ticker}
-                    </div>
-                    <div className="text-sm mt-1 text-neutralLight">
-                      {e.name}
-                    </div>
-                  </div>
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        className="relative z-50"
+      >
+        {/* The backdrop, rendered as a fixed sibling to the panel container */}
+        <div className="fixed inset-0 backdrop-blur-sm" aria-hidden="true" />
+        <div className="fixed inset-0 flex items-center justify-center p-10">
+          <div className="bg-neutral rounded-3xl w-full max-w-[32rem] h-[90%] overflow-y-auto">
+            <div className="px-7 py-3">
+              <div className="flex mt-4 items-center justify-between">
+                <div className="flex-grow text-center">
+                  <p className="text-2xl">Select a Token</p>
                 </div>
-
-                <div className="text-sm text-neutralLight">
-                  {e.decimals}
-                </div>
+                <Image
+                  alt="close"
+                  src="/home/cross.svg"
+                  className="justify-self-end cursor-pointer"
+                  width={24}
+                  height={24}
+                  onClick={() => setIsOpen(false)}
+                />
               </div>
-            </Dialog.Description>
-          );
-        })}
+              <input
+                type="text"
+                placeholder="Search name or paste address"
+                className="w-full p-2 mt-6 mb-2 border h-14 outline-none rounded-2xl border-neutralLight text-neutralLight bg-neutral"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
 
-        <div className="flex justify-center gap-3 mt-4">
-          <Image
-            alt="manage"
-            src="/home/manage.svg"
-            width={24}
-            height={24}
-          />
-          <p className="text-primary1">Manage</p>
+              {filteredTokenList.map((e, i) => {
+
+                return (
+                  <Dialog.Description className="mt-4" key={i}>
+                    <div
+                      className="flex gap-9 items-center justify-between cursor-pointer"
+                      onClick={() => modifyToken(i)}
+                    >
+                      <div className="flex gap-5 items-center">
+                        <img
+                          src={e.logoURI}
+                          alt={e.symbol}
+                          width={33}
+                          height={33}
+                        />
+                        <div className="flex flex-col">
+                          <div className="text-base uppercase font-neue-machina">
+                            {e.symbol}
+                          </div>
+                          <div className="text-sm mt-1 text-neutralLight">
+                            {e.name}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="text-sm text-neutralLight">
+                        {e.decimals}
+                      </div>
+                    </div>
+                  </Dialog.Description>
+                );
+              })}
+
+              <div className="flex justify-center gap-3 mt-4">
+                <Image
+                  alt="manage"
+                  src="/home/manage.svg"
+                  width={24}
+                  height={24}
+                />
+                <p className="text-primary1">Manage</p>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</Dialog>
+      </Dialog>
 
       <SettingsModal
         isOpen={isModalOpen}
@@ -252,13 +291,13 @@ export default function Swap() {
                 <p className="text-[#CBFB45] mr-3 font-semibold ">Max</p>
                 <div className="w-28 flex gap-x-1 items-center justify-between p-3 border rounded-2xl h-[64px] ">
                   <img
-                    src={tokenOne.img}
+                    src={tokenOne.logoURI}
                     alt="assetOneLogo"
                     className="assetLogo"
                     width={30}
                     height={30}
                   />
-                  {tokenOne.ticker}
+                  {tokenOne.symbol}
                   <Image
                     alt="img"
                     src="/home/downArrow.svg"
@@ -271,10 +310,10 @@ export default function Swap() {
             )}
             {!tokenOne && (
               <div className="w-[50%] grid " onClick={() => openModal(1)}>
-              <button className="bg-primary1 justify-self-end text-black rounded-full px-4 py-3 min-w-fit">
-                Select a token
-              </button>
-            </div>
+                <button className="bg-primary1 justify-self-end text-black rounded-full px-4 py-3 min-w-fit">
+                  Select a token
+                </button>
+              </div>
             )}
           </div>
           <Image
@@ -305,13 +344,13 @@ export default function Swap() {
                 <p className="text-[#CBFB45] mr-3 font-semibold ">Max</p>
                 <div className="border-gray23 w-28  text-sm flex gap-x-1 items-center justify-between p-3 border rounded-2xl h-[64px]">
                   <img
-                    src={tokenTwo.img}
+                    src={tokenTwo.logoURI}
                     alt="assetOneLogo"
                     className="assetLogo"
                     width={30}
                     height={30}
                   />
-                  {tokenTwo.ticker}
+                  {tokenTwo.symbol}
                   <Image
                     alt="img"
                     src="/home/downArrow.svg"
