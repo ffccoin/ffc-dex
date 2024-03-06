@@ -42,9 +42,9 @@ export default function Swap() {
   //       chainId: 1,
   //       address: "0xbf05C4023E735ab912E2c34c0f391702efEC34",
   //       name: "FFC",
-  //       symbol: "FFC",
+  //       ticker: "FFC",
   //       decimals: 18,
-  //       logoURI: "/header/logo-mobile.svg"
+  //       img: "/header/logo-mobile.svg"
   //     };
   
 
@@ -73,9 +73,9 @@ export default function Swap() {
   
   
 
-  useEffect(() => {
-    fetchExchangeRate();
-  }, []);
+  // useEffect(() => {
+  //   fetchExchangeRate();
+  // }, []);
 
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -251,8 +251,8 @@ export default function Swap() {
                     >
                       <div className="flex gap-5 items-center">
                         <img
-                          src={e.logoURI}
-                          alt={e.symbol}
+                          src={e.img}
+                          alt={e.ticker}
                           width={33}
                           height={33}
                           quality={100}
@@ -335,14 +335,14 @@ export default function Swap() {
                 <p className="text-[#CBFB45] mr-3 font-semibold ">Max</p>
                 <div className="w-28 flex gap-x-1 items-center justify-between p-3 border rounded-2xl h-[64px] ">
                  <img
-                    src={tokenOne.logoURI}
+                    src={tokenOne.img}
                     alt="assetOneLogo"
                     className="assetLogo"
                     width={32}
                     height={32}
-                    quality={100}
+                    quality={100} 
                   />
-                  {tokenOne.symbol}
+                  {tokenOne.ticker}
                   <Image
                     alt="img"
                     src="/home/downArrow.svg"
@@ -387,14 +387,14 @@ export default function Swap() {
                 <p className="text-[#CBFB45] mr-3 font-semibold ">Max</p>
                 <div className="border-gray23 w-28  text-sm flex gap-x-1 items-center justify-between p-3 border rounded-2xl h-[64px]">
                   <img
-                    src={tokenTwo.logoURI}
+                    src={tokenTwo.img}
                     alt="assetOneLogo"
                     className="assetLogo"
                     width={32}
                     height={32}
                     quality={100}
                   />
-                  {tokenTwo.symbol}
+                  {tokenTwo.ticker}
                   <Image
                     alt="img"
                     src="/home/downArrow.svg"
