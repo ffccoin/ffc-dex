@@ -130,7 +130,7 @@ export default function Swap() {
   async function fetchPrices() {
     console.log("Getting Price");
 
-    let amount = tokenOneAmount * 10 ** tokenOne.decimals;
+    let amount =Number( tokenOneAmount * 10 ** tokenOne.decimals);
     console.log(amount);
 
     const params = {
