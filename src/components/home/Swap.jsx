@@ -1,4 +1,5 @@
 "use client";
+import qs from "qs";
 import React from "react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -10,7 +11,6 @@ import axios from "axios";
 
 export default function Swap() {
   let [isOpen, setIsOpen] = useState(false);
-  const [tokenList, setTokenList] = useState([]);
   const [selectedSlippage, setSelectedSlippage] = useState(null);
   const [swapPlaces, setSwapPlaces] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
@@ -27,14 +27,14 @@ export default function Swap() {
     value: null,
   });
 
-  const fetchExchangeRate = async () => {
-    try {
-      const url = "https://tokens.coingecko.com/uniswap/all.json";
-      const res = await fetch(url);
+  // const fetchExchangeRate = async () => {
+  //   try {
+  //     const url = "https://tokens.coingecko.com/uniswap/all.json";
+  //     const res = await fetch(url);
 
-      if (!res.ok) {
-        throw new Error("Network response was not ok");
-      }
+  //     if (!res.ok) {
+  //       throw new Error("Network response was not ok");
+  //     }
 
       const data = await res.json();
       console.log(data.tokens);
@@ -44,8 +44,9 @@ export default function Swap() {
         name: "FFC",
         symbol: "FFC",
         decimals: 18,
-        logoURI: "/header/logo-mobile.svg",
+        logoURI: "/header/logo-mobile.svg"
       };
+  
 
       // const concatenatedTokens = data.tokens.reduce((acc, curr) => [...acc, ...curr], []);
       // console.log("Tokens fetched:", concatenatedTokens);
@@ -61,11 +62,16 @@ export default function Swap() {
       }
       fetchPrices(tokenList[0].address, tokenList[1].address);
 
+
       // Set the state with fetched data
     } catch (error) {
       console.error("Error fetching exchange rate:", error);
     }
   };
+
+
+  
+  
 
   useEffect(() => {
     fetchExchangeRate();
@@ -74,7 +80,7 @@ export default function Swap() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredTokenList = tokenList.filter((token) => {
-    const tokenName = token.symbol.toLowerCase();
+    const tokenName = token.ticker.toLowerCase();
     const tokenAddress = token.address.toLowerCase();
     const search = searchQuery.trim().toLowerCase();
 
@@ -88,8 +94,14 @@ export default function Swap() {
   };
   function changeAmount(e) {
     setTokenOneAmount(e.target.value);
-    setTokenTwoAmount((e.target.value * prices.ratio).toFixed(2));
+    if (tokenOne && tokenTwo ){
+      fetchPrices();
+    }
   }
+  function checkDisabled(tokenOne, tokenTwo) {
+    return tokenOne === null || tokenTwo === null;
+}
+
   function switchTokens() {
     setPrices(null);
     setTokenOneAmount(0);
@@ -109,54 +121,84 @@ export default function Swap() {
     if (changeToken === 1) {
       setTokenOne(tokenList[i]);
       if (tokenTwo != null) {
-        fetchPrices(tokenList[i].address, tokenTwo.address);
+        // fetchPrices(tokenList[i].address, tokenTwo.address);
       }
     } else {
       setTokenTwo(tokenList[i]);
       if (tokenOne != null) {
-        fetchPrices(tokenOne.address, tokenList[i].address);
+        // fetchPrices(tokenOne.address, tokenList[i].address);
       }
     }
 
     setIsOpen(false);
   }
 
-  async function fetchPrices(one, two) {
-    const res = await axios.get(`/api/swap`, {
-      params: { addressOne: one, addressTwo: two },
-    });
-    console.log(res.data);
-    setPrices(res.data);
+  async function fetchPrices() {
+    console.log("Getting Price");
+
+    let amount = tokenOneAmount * 10 ** tokenOne.decimals;
+    console.log(amount);
+
+    const params = {
+      sellToken: tokenOne.address,
+      buyToken: tokenTwo.address,
+      sellAmount: amount,
+    };
+
+    const headers = {
+      "0x-api-key": "9a827917-91ba-4739-87f9-23451d511ea6",
+    };
+
+    // Fetch the swap price.
+    const response = await fetch(
+      `https://api.0x.org/swap/v1/price?${qs.stringify(params)}`,
+      { headers }
+    );
+
+    const swapPriceJSON = await response.json();
+    console.log("Price: ", swapPriceJSON);
+    console.log(swapPriceJSON.buyAmount/ (10 ** tokenTwo.decimals));
+    setTokenTwoAmount(swapPriceJSON.buyAmount/ (10 ** tokenTwo.decimals));
+
   }
-  async function fetchDexSwap() {
-    const allowance = await axios.get(
-      `https://api.1inch.io/v5.0/1/approve/allowance?tokenAddress=${tokenOne.address}&walletAddress=${address}`
-    );
 
-    if (allowance.data.allowance === "0") {
-      const approve = await axios.get(
-        `https://api.1inch.io/v5.0/1/approve/transaction?tokenAddress=${tokenOne.address}`
-      );
+  // async function fetchPrices(one, two) {
+  //   const res = await axios.get(`/api/swap`, {
+  //     params: { addressOne: one, addressTwo: two },
+  //   });
+  //   console.log(res.data);
+  //   setPrices(res.data);
+  // }
+  // async function fetchDexSwap() {
+  //   const allowance = await axios.get(
+  //     `https://api.1inch.io/v5.0/1/approve/allowance?tokenAddress=${tokenOne.address}&walletAddress=${address}`
+  //   );
 
-      setTxDetails(approve.data);
-      console.log("not approved");
-      return;
-    }
+  //   if (allowance.data.allowance === "0") {
+  //     const approve = await axios.get(
+  //       `https://api.1inch.io/v5.0/1/approve/transaction?tokenAddress=${tokenOne.address}`
+  //     );
 
-    const tx = await axios.get(
-      `https://api.1inch.io/v5.0/1/swap?fromTokenAddress=${
-        tokenOne.address
-      }&toTokenAddress=${tokenTwo.address}&amount=${tokenOneAmount.padEnd(
-        tokenOne.decimals + tokenOneAmount.length,
-        "0"
-      )}&fromAddress=${address}&slippage=${slippage}`
-    );
+  //     setTxDetails(approve.data);
+  //     console.log("not approved");
+  //     return;
+  //   }
 
-    let decimals = Number(`1E${tokenTwo.decimals}`);
-    setTokenTwoAmount((Number(tx.data.toTokenAmount) / decimals).toFixed(2));
+  //   const tx = await axios.get(
+  //     `https://api.1inch.io/v5.0/1/swap?fromTokenAddress=${
+  //       tokenOne.address
+  //     }&toTokenAddress=${tokenTwo.address}&amount=${tokenOneAmount.padEnd(
+  //       tokenOne.decimals + tokenOneAmount.length,
+  //       "0"
+  //     )}&fromAddress=${address}&slippage=${slippage}`
+  //   );
+
+  //   let decimals = Number(`1E${tokenTwo.decimals}`);
+  //   setTokenTwoAmount((Number(tx.data.toTokenAmount) / decimals).toFixed(2));
 
     setTxDetails(tx.data.tx);
   }
+
 
   useEffect(() => {
     if (txDetails.to && isConnected) {
@@ -208,7 +250,7 @@ export default function Swap() {
                       onClick={() => modifyToken(i)}
                     >
                       <div className="flex gap-5 items-center">
-                        <Image
+                        <img
                           src={e.logoURI}
                           alt={e.symbol}
                           width={33}
@@ -217,7 +259,7 @@ export default function Swap() {
                         />
                         <div className="flex flex-col">
                           <div className="text-base uppercase font-neue-machina">
-                            {e.symbol}
+                            {e.ticker}
                           </div>
                           <div className="text-sm mt-1 text-neutralLight">
                             {e.name}
@@ -252,7 +294,6 @@ export default function Swap() {
         onClose={toggleModal}
         onSelectOption={handleSlippageSelection}
       />
-
       <div
         className={`max-w-[512px] px-3 sm:px-1  flex-col
         flex items-start`}
@@ -280,7 +321,7 @@ export default function Swap() {
                 placeholder="0"
                 value={tokenOneAmount}
                 onChange={changeAmount}
-                disabled={!prices}
+                disabled={checkDisabled(tokenOne, tokenTwo)}
                 className=" w-full text-[34px] caret-gray12  placeholder-gray12 leading-[42px] border-transparent bg-transparent outline-none"
               />
               <div className="flex flex-row gap-x-2">
@@ -289,14 +330,11 @@ export default function Swap() {
                 <p className="text-sm font-normal"> 0.0</p>
               </div>
             </div>
-            {tokenOne ? (
-              <div className="flex items-center gap-x-2">
-                <p className="text-[#CBFB45] mx-4 font-semibold">Max</p>
-                <button
-                  className="w-28 flex gap-x-1 items-center justify-between p-3 border border-neutral rounded-2xl h-[64px] min-w-[136px]"
-                  onClick={() => openModal(1)}
-                >
-                  <Image
+            {tokenOne && (
+              <div className="flex  items-center ">
+                <p className="text-[#CBFB45] mr-3 font-semibold ">Max</p>
+                <div className="w-28 flex gap-x-1 items-center justify-between p-3 border rounded-2xl h-[64px] ">
+                 <img
                     src={tokenOne.logoURI}
                     alt="assetOneLogo"
                     className="assetLogo"
@@ -304,11 +342,15 @@ export default function Swap() {
                     height={32}
                     quality={100}
                   />
-                  <span className="text-sm font-semibold">
-                    {tokenOne.symbol}
-                  </span>
-                  {chevronDown}
-                </button>
+                  {tokenOne.symbol}
+                  <Image
+                    alt="img"
+                    src="/home/downArrow.svg"
+                    onClick={() => openModal(1)}
+                    width={14}
+                    height={14}
+                  />
+                </div>
               </div>
             ) : (
               <div className="w-[50%] grid " onClick={() => openModal(1)}>
@@ -341,13 +383,10 @@ export default function Swap() {
               </div>
             </div>
             {tokenTwo ? (
-              <div className="flex items-center gap-x-2">
-                <p className="text-[#CBFB45] mx-4 font-semibold">Max</p>
-                <button
-                  className="w-28 flex gap-x-1 items-center justify-between p-3 border border-neutral rounded-2xl h-[64px] min-w-[136px]"
-                  onClick={() => openModal(2)}
-                >
-                  <Image
+              <div className="flex items-center">
+                <p className="text-[#CBFB45] mr-3 font-semibold ">Max</p>
+                <div className="border-gray23 w-28  text-sm flex gap-x-1 items-center justify-between p-3 border rounded-2xl h-[64px]">
+                  <img
                     src={tokenTwo.logoURI}
                     alt="assetOneLogo"
                     className="assetLogo"
@@ -355,11 +394,16 @@ export default function Swap() {
                     height={32}
                     quality={100}
                   />
-                  <span className="text-sm font-semibold">
-                    {tokenTwo.symbol}
-                  </span>
-                  {chevronDown}
-                </button>
+                  {tokenTwo.symbol}
+                  <Image
+                    alt="img"
+                    src="/home/downArrow.svg"
+                    onClick={() => openModal(2)}
+                    className=""
+                    width={15}
+                    height={15}
+                  />
+                </div>
               </div>
             ) : (
               <div className="w-[50%] grid " onClick={() => openModal(2)}>
