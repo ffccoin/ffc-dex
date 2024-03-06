@@ -248,8 +248,8 @@ export default function Swap() {
               </div>
             </div>
             {tokenOne && (
-              <div className="flex items-center ">
-                <p className="text-[#CBFB45] font-semibold ">Max</p>
+              <div className="flex  items-center ">
+                <p className="text-[#CBFB45] mr-3 font-semibold ">Max</p>
                 <div className="w-28 flex gap-x-1 items-center justify-between p-3 border rounded-2xl h-[64px] ">
                   <img
                     src={tokenOne.img}
@@ -302,7 +302,7 @@ export default function Swap() {
             </div>
             {tokenTwo ? (
               <div className="flex items-center">
-                <p className="text-[#CBFB45] font-semibold ">Max</p>
+                <p className="text-[#CBFB45] mr-3 font-semibold ">Max</p>
                 <div className="border-gray23 w-28  text-sm flex gap-x-1 items-center justify-between p-3 border rounded-2xl h-[64px]">
                   <img
                     src={tokenTwo.img}
