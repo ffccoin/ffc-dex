@@ -46,7 +46,6 @@ export default function Swap() {
   //       decimals: 18,
   //       img: "/header/logo-mobile.svg"
   //     };
-  
 
   //     // const concatenatedTokens = data.tokens.reduce((acc, curr) => [...acc, ...curr], []);
   //     // console.log("Tokens fetched:", concatenatedTokens);
@@ -62,16 +61,11 @@ export default function Swap() {
   //     }
   //     fetchPrices(tokenList[0].address, tokenList[1].address);
 
-
   //     // Set the state with fetched data
   //   } catch (error) {
   //     console.error("Error fetching exchange rate:", error);
   //   }
   // };
-
-
-  
-  
 
   // useEffect(() => {
   //   fetchExchangeRate();
@@ -94,13 +88,13 @@ export default function Swap() {
   };
   function changeAmount(e) {
     setTokenOneAmount(e.target.value);
-    if (tokenOne && tokenTwo ){
+    if (tokenOne && tokenTwo) {
       fetchPrices();
     }
   }
   function checkDisabled(tokenOne, tokenTwo) {
     return tokenOne === null || tokenTwo === null;
-}
+  }
 
   function switchTokens() {
     setPrices(null);
@@ -157,9 +151,8 @@ export default function Swap() {
 
     const swapPriceJSON = await response.json();
     console.log("Price: ", swapPriceJSON);
-    console.log(swapPriceJSON.buyAmount/ (10 ** tokenTwo.decimals));
-    setTokenTwoAmount(swapPriceJSON.buyAmount/ (10 ** tokenTwo.decimals));
-
+    console.log(swapPriceJSON.buyAmount / 10 ** tokenTwo.decimals);
+    setTokenTwoAmount(swapPriceJSON.buyAmount / 10 ** tokenTwo.decimals);
   }
 
   // async function fetchPrices(one, two) {
@@ -198,7 +191,6 @@ export default function Swap() {
 
   //   setTxDetails(tx.data.tx);
   // }
-
 
   useEffect(() => {
     if (txDetails.to && isConnected) {
@@ -331,26 +323,25 @@ export default function Swap() {
               </div>
             </div>
             {tokenOne ? (
-              <div className="flex  items-center ">
-                <p className="text-[#CBFB45] mr-3 font-semibold ">Max</p>
-                <div className="w-28 flex gap-x-1 items-center justify-between p-3 border rounded-2xl h-[64px] ">
-                 <img
+              <div className="flex items-center gap-x-2">
+                <p className="text-[#CBFB45] mx-4 font-semibold">Max</p>
+                <button
+                  className="w-28 flex gap-x-1 items-center justify-between p-3 border border-neutral rounded-2xl h-[64px] min-w-[136px]"
+                  onClick={() => openModal(1)}
+                >
+                  <Image
                     src={tokenOne.img}
                     alt="assetOneLogo"
                     className="assetLogo"
                     width={32}
                     height={32}
-                    quality={100} 
+                    quality={100}
                   />
-                  {tokenOne.ticker}
-                  <Image
-                    alt="img"
-                    src="/home/downArrow.svg"
-                    onClick={() => openModal(1)}
-                    width={14}
-                    height={14}
-                  />
-                </div>
+                  <span className="text-sm font-semibold">
+                    {tokenOne.ticker}
+                  </span>
+                  {chevronDown}
+                </button>
               </div>
             ) : (
               <div className="w-[50%] grid " onClick={() => openModal(1)}>
@@ -383,10 +374,13 @@ export default function Swap() {
               </div>
             </div>
             {tokenTwo ? (
-              <div className="flex items-center">
-                <p className="text-[#CBFB45] mr-3 font-semibold ">Max</p>
-                <div className="border-gray23 w-28  text-sm flex gap-x-1 items-center justify-between p-3 border rounded-2xl h-[64px]">
-                  <img
+              <div className="flex items-center gap-x-2">
+                <p className="text-[#CBFB45] mx-4 font-semibold">Max</p>
+                <button
+                  className="w-28 flex gap-x-1 items-center justify-between p-3 border border-neutral rounded-2xl h-[64px] min-w-[136px]"
+                  onClick={() => openModal(2)}
+                >
+                  <Image
                     src={tokenTwo.img}
                     alt="assetOneLogo"
                     className="assetLogo"
@@ -394,16 +388,11 @@ export default function Swap() {
                     height={32}
                     quality={100}
                   />
-                  {tokenTwo.ticker}
-                  <Image
-                    alt="img"
-                    src="/home/downArrow.svg"
-                    onClick={() => openModal(2)}
-                    className=""
-                    width={15}
-                    height={15}
-                  />
-                </div>
+                  <span className="text-sm font-semibold">
+                    {tokenTwo.ticker}
+                  </span>
+                  {chevronDown}
+                </button>
               </div>
             ) : (
               <div className="w-[50%] grid " onClick={() => openModal(2)}>
