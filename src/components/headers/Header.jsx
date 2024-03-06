@@ -1,8 +1,12 @@
+"use client";
+
 import Image from "next/image";
-import Button from "../buttons/button";
 import Sidebar from "./Sidebar";
+import { usePathname, useRouter } from "next/navigation";
 
 const Header = () => {
+  const pathname = usePathname();
+  const router = useRouter();
   return (
     <header className="grid place-items-center w-full h-[72px] mt-2">
       <div className="max-w-[1440px] w-full flex justify-between items-center h-[72px] px-5 sm:px-8">
@@ -22,42 +26,58 @@ const Header = () => {
         />
         <Sidebar />
         <div className="hidden md:flex items-center gap-x-5">
-          <a
-            href="#"
-            className="py-2.5 hover:text-primary1 hover:border-b hover:border-primary1"
+          <button
+            onClick={() => router.push("/swap")}
+            className={`py-2.5 ${
+              pathname === "/swap"
+                ? "text-primary1 border-b border-primary1"
+                : "hover:text-primary1 hover:border-b hover:border-primary1"
+            } `}
           >
             Swap
-          </a>
-          <a
-            href="#"
-            className="py-2.5 hover:text-primary1 hover:border-b hover:border-primary1"
+          </button>
+          <button
+            onClick={() => router.push("/pool")}
+            className={`py-2.5 ${
+              pathname === "/pool"
+                ? "text-primary1 border-b border-primary1"
+                : "hover:text-primary1 hover:border-b hover:border-primary1"
+            } `}
           >
             Pool
-          </a>
-          <a
-            href="#"
-            className="py-2.5 hover:text-primary1 hover:border-b hover:border-primary1"
+          </button>
+          <button
+            onClick={() => router.push("/tokens")}
+            className={`py-2.5 ${
+              pathname === "/tokens"
+                ? "text-primary1 border-b border-primary1"
+                : "hover:text-primary1 hover:border-b hover:border-primary1"
+            } `}
           >
             Tokens
-          </a>
-          <a
-            href="#"
-            className="py-2.5 hover:text-primary1 hover:border-b hover:border-primary1"
+          </button>
+          <button
+            onClick={() => router.push("/vote")}
+            className={`py-2.5 ${
+              pathname === "/vote"
+                ? "text-primary1 border-b border-primary1"
+                : "hover:text-primary1 hover:border-b hover:border-primary1"
+            } `}
           >
             Vote
-          </a>
+          </button>
         </div>
         <div className="hidden md:flex gap-x-2 items-center">
-          <button className="bg-primary1 text-black rounded-full p-4">
+          <button className="bg-primary1 text-black rounded-full px-4 py-3">
             0 $FFC
           </button>
-          <button className="border border-white text-white rounded-full p-4">
-            Connect to wallet
+          <button className="bg-gray22 text-white rounded-full px-4 py-3">
+            Connect to Wallet
           </button>
-          <button className="bg-primary1 text-black rounded-full p-4">
+          <button className="bg-gray22 text-white rounded-full px-4 py-3">
             {darkMode}
           </button>
-          <button className="bg-primary1 text-black rounded-full p-4">
+          <button className="bg-gray22 text-white rounded-full px-4 py-3">
             {threeDots}
           </button>
         </div>
