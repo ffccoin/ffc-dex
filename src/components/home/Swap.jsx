@@ -38,6 +38,15 @@ export default function Swap() {
 
       const data = await res.json();
       console.log(data.tokens);
+      const additionalToken = {
+        chainId: 1,
+        address: "0xbf05C4023E735ab912E2c34c0f391702efEC34",
+        name: "FFC",
+        symbol: "FFC",
+        decimals: 18,
+        logoURI: "/header/logo-mobile.svg"
+      };
+  
 
       // const concatenatedTokens = data.tokens.reduce((acc, curr) => [...acc, ...curr], []);
       // console.log("Tokens fetched:", concatenatedTokens);
@@ -45,7 +54,9 @@ export default function Swap() {
       // setTokenList(concatenatedTokens);
       if (Array.isArray(data.tokens)) {
         console.log("Tokens fetched:", data.tokens);
-        setTokenList(data.tokens);
+        const top50Tokens = data.tokens.slice(0, 50);
+        const tokenListWithAdditional = [...top50Tokens, additionalToken];
+        setTokenList(tokenListWithAdditional);
       } else {
         console.error("Unexpected data structure for tokens", data.tokens);
       }
@@ -57,6 +68,10 @@ export default function Swap() {
       console.error("Error fetching exchange rate:", error);
     }
   };
+
+
+  
+  
 
   useEffect(() => {
     fetchExchangeRate();
@@ -149,10 +164,6 @@ export default function Swap() {
     setTxDetails(tx.data.tx);
   }
 
-  // useEffect(() => {
-  //   fetchExchangeRate();
-
-  // }, []);
 
   useEffect(() => {
     if (txDetails.to && isConnected) {
@@ -174,7 +185,7 @@ export default function Swap() {
         {/* The backdrop, rendered as a fixed sibling to the panel container */}
         <div className="fixed inset-0 backdrop-blur-sm" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-10">
-          <div className="bg-neutral rounded-3xl w-full max-w-[32rem] h-[90%] overflow-y-auto">
+          <div className="bg-neutral rounded-3xl w-full max-w-[32rem] h-[95%] overflow-y-auto">
             <div className="px-7 py-3">
               <div className="flex mt-4 items-center justify-between">
                 <div className="flex-grow text-center">
@@ -290,7 +301,7 @@ export default function Swap() {
               <div className="flex  items-center ">
                 <p className="text-[#CBFB45] mr-3 font-semibold ">Max</p>
                 <div className="w-28 flex gap-x-1 items-center justify-between p-3 border rounded-2xl h-[64px] ">
-                  <img
+                 <img
                     src={tokenOne.logoURI}
                     alt="assetOneLogo"
                     className="assetLogo"
