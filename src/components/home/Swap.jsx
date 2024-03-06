@@ -31,10 +31,6 @@ export default function Swap() {
     const tokenAddress = token.address.toLowerCase();
     const search = searchQuery.trim().toLowerCase();
 
-    console.log("Token Name:", tokenName);
-    console.log("Token Address:", tokenAddress);
-    console.log("Search Query:", search);
-
     return tokenName.includes(search) || tokenAddress.includes(search);
   });
   const toggleModal = () => {
@@ -49,8 +45,8 @@ export default function Swap() {
   }
   function switchTokens() {
     setPrices(null);
-    setTokenOneAmount(null);
-    setTokenTwoAmount(null);
+    setTokenOneAmount(0);
+    setTokenTwoAmount(0);
     const one = tokenOne;
     const two = tokenTwo;
     setTokenOne(two);
@@ -61,8 +57,8 @@ export default function Swap() {
   }
   function modifyToken(i) {
     setPrices(null);
-    setTokenOneAmount(null);
-    setTokenTwoAmount(null);
+    setTokenOneAmount(0);
+    setTokenTwoAmount(0);
     if (changeToken === 1) {
       setTokenOne(tokenList[i]);
       if (tokenTwo != null) {
@@ -274,7 +270,7 @@ export default function Swap() {
               </div>
             )}
             {!tokenOne && (
-              <div className="w-[50%] grid " onClick={() => openModal(2)}>
+              <div className="w-[50%] grid " onClick={() => openModal(1)}>
               <button className="bg-primary1 justify-self-end text-black rounded-full px-4 py-3 min-w-fit">
                 Select a token
               </button>
