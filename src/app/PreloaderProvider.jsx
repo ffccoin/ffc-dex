@@ -1,5 +1,6 @@
 "use client";
 import LoadingPage from "@/components/animations/loading";
+import BottomBar from "@/components/headers/BottomBar";
 import Header from "@/components/headers/Header";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -12,16 +13,17 @@ const PreloaderProvider = ({ children }) => {
   }, []);
 
   return (
-    <>
+    <main className="relative min-h-screen">
       {!loading ? (
         <>
           {pathname !== "/" && <Header />}
           {children}
+          {pathname !== "/" && <BottomBar />}
         </>
       ) : (
         <LoadingPage />
       )}
-    </>
+    </main>
   );
 };
 

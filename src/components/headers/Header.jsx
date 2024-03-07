@@ -8,11 +8,11 @@ const Header = () => {
   const pathname = usePathname();
   const router = useRouter();
   return (
-    <header className="grid place-items-center w-full h-[72px] mt-2">
+    <header className="grid place-items-center w-full h-[72px] pt-2">
       <div className="max-w-[1440px] w-full flex justify-between items-center h-[72px] px-5 sm:px-8">
         <Image
           src="/header/logo.svg"
-          className="hidden sm:block"
+          className="hidden sm:block md:hidden lg:block"
           width={220}
           height={32}
           alt="logo"
@@ -22,15 +22,14 @@ const Header = () => {
           width={39}
           height={32}
           alt="logo"
-          className="sm:hidden"
+          className="sm:hidden md:block lg:hidden"
         />
-        <Sidebar />
         <div className="hidden md:flex items-center gap-x-5">
           <button
             onClick={() => router.push("/swap")}
             className={`py-2.5 ${
               pathname === "/swap"
-                ? "text-primary1 border-b border-primary1"
+                ? "border-b border-primary1"
                 : "hover:text-primary1 hover:border-b hover:border-primary1"
             } `}
           >
@@ -40,7 +39,7 @@ const Header = () => {
             onClick={() => router.push("/pool")}
             className={`py-2.5 ${
               pathname === "/pool"
-                ? "text-primary1 border-b border-primary1"
+                ? "border-b border-primary1"
                 : "hover:text-primary1 hover:border-b hover:border-primary1"
             } `}
           >
@@ -50,7 +49,7 @@ const Header = () => {
             onClick={() => router.push("/tokens")}
             className={`py-2.5 ${
               pathname === "/tokens"
-                ? "text-primary1 border-b border-primary1"
+                ? "border-b border-primary1"
                 : "hover:text-primary1 hover:border-b hover:border-primary1"
             } `}
           >
@@ -60,24 +59,27 @@ const Header = () => {
             onClick={() => router.push("/vote")}
             className={`py-2.5 ${
               pathname === "/vote"
-                ? "text-primary1 border-b border-primary1"
+                ? "border-b border-primary1"
                 : "hover:text-primary1 hover:border-b hover:border-primary1"
             } `}
           >
             Vote
           </button>
         </div>
-        <div className="hidden md:flex gap-x-2 items-center">
-          <button className="bg-primary1 text-black rounded-full px-4 py-3">
+        <div className="flex gap-x-2 items-center">
+          <button className="bg-primary1 text-black rounded-full px-3 py-2 text-sm sm:text-base sm:px-4 sm:py-3">
             0 $FFC
           </button>
-          <button className="bg-gray22 text-white rounded-full px-4 py-3">
+          <button className="bg-gray22 text-white rounded-full px-3 py-2 text-sm sm:text-base sm:px-4 sm:py-3 hidden md:block">
             Connect to Wallet
           </button>
-          <button className="bg-gray22 text-white rounded-full px-4 py-3">
+          <button className="bg-gray22 text-white rounded-full px-3 py-2 text-sm sm:text-base sm:px-4 sm:py-3 md:hidden">
+            Connect
+          </button>
+          <button className="bg-gray22 text-white rounded-full px-3 py-2 text-sm sm:text-base sm:px-4 sm:py-3 hidden md:block">
             {darkMode}
           </button>
-          <button className="bg-gray22 text-white rounded-full px-4 py-3">
+          <button className="bg-gray22 text-white rounded-full px-3 py-2 text-sm sm:text-base sm:px-4 sm:py-3 hidden md:block">
             {threeDots}
           </button>
         </div>
@@ -88,8 +90,8 @@ const Header = () => {
 
 const darkMode = (
   <svg
-    width="24"
-    height="24"
+    width="20"
+    height="20"
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -162,8 +164,8 @@ const darkMode = (
 
 const threeDots = (
   <svg
-    width="24"
-    height="24"
+    width="20"
+    height="20"
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

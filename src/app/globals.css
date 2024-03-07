@@ -43,6 +43,10 @@ small {
   user-select: none;
 }
 
+button {
+  outline: none;
+}
+
 /* Loader */
 .circle {
   position: relative;
