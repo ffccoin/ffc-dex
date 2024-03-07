@@ -10,7 +10,6 @@ import SettingsModal from "../models/SettingsModal";
 import axios from "axios";
 import { formatUnits } from "ethers";
 
-
 export default function Swap() {
   let [isOpen, setIsOpen] = useState(false);
   const [selectedSlippage, setSelectedSlippage] = useState(null);
@@ -74,6 +73,7 @@ export default function Swap() {
   // }, []);
 
   const [searchQuery, setSearchQuery] = useState("");
+  const [loadingValue, setLoadingValue] = useState(false);
 
   const filteredTokenList = tokenList.filter((token) => {
     const tokenName = token.ticker.toLowerCase();
@@ -88,12 +88,8 @@ export default function Swap() {
   const handleSlippageSelection = (slippage) => {
     setSelectedSlippage(slippage);
   };
-  function changeAmount(e) {
-    const newAmount = e.target.value;
+  async function changeAmount(e) {
     setTokenOneAmount(e.target.value);
-    // if (tokenOne && tokenTwo) {
-    //   fetchPrices();
-    // }
   }
   function checkDisabled(tokenOne, tokenTwo) {
     return tokenOne === null || tokenTwo === null;
@@ -131,7 +127,6 @@ export default function Swap() {
   }
 
   async function fetchPrices() {
-    console.log("Getting Price");
     let tokenOneAmountNum = parseFloat(tokenOneAmount);
     let amount = tokenOneAmountNum * Math.pow(10, tokenOne.decimals);
     const params = {
@@ -151,8 +146,6 @@ export default function Swap() {
     );
 
     const swapPriceJSON = await response.json();
-    // console.log("Price: ", swapPriceJSON);
-    console.log(formatUnits(swapPriceJSON.buyAmount,tokenTwo.decimals));
     setTokenTwoAmount(swapPriceJSON.buyAmount / 10 ** tokenTwo.decimals);
   }
 
@@ -192,6 +185,14 @@ export default function Swap() {
 
   //   setTxDetails(tx.data.tx);
   // }
+
+  // when price of token 1 changes fetch prices
+  useEffect(() => {
+    if (tokenOne && tokenTwo) {
+      setLoadingValue(true);
+      fetchPrices().then(() => setLoadingValue(false));
+    }
+  }, [tokenOneAmount]);
 
   useEffect(() => {
     if (txDetails.to && isConnected) {
@@ -281,7 +282,6 @@ export default function Swap() {
           </div>
         </div>
       </Dialog>
-
       <SettingsModal
         isOpen={isModalOpen}
         onClose={toggleModal}
@@ -318,7 +318,6 @@ export default function Swap() {
                 className=" w-full text-[34px] caret-gray12  placeholder-gray12 leading-[42px] border-transparent bg-transparent outline-none"
               />
               <div className="flex flex-row gap-x-2">
-                {" "}
                 <p className="text-sm font-normal">Balance :</p>
                 <p className="text-sm font-normal"> 0.0</p>
               </div>
@@ -358,14 +357,14 @@ export default function Swap() {
             width={32}
             height={32}
             onClick={switchTokens}
-            className="self-center cursor-pointer   mt-2"
+            className="self-center cursor-pointer mt-2"
           />
           <div className="w-full  border mt-2 flex items-center border-neutral rounded-2xl px-4 py-4">
             <div className="sm:w-full w-[50%]">
               <p className="text-sm font-semibold">To</p>
               <input
                 placeholder="0"
-                value={tokenTwoAmount}
+                value={loadingValue ? "Loading..." : tokenTwoAmount}
                 disabled={true}
                 className=" w-full text-[34px] caret-gray12  placeholder-gray12 leading-[42px] border-transparent bg-transparent outline-none"
               />
@@ -405,7 +404,10 @@ export default function Swap() {
           </div>
         </div>
         <div className="w-full mt-10">
-          <button className="w-full py-3 rounded-full bg-neutral text-neutralLight" onClick={() => fetchPrices()}>
+          <button
+            className="w-full py-3 rounded-full bg-neutral text-neutralLight"
+            onClick={() => fetchPrices()}
+          >
             Enter an amount
           </button>
         </div>
