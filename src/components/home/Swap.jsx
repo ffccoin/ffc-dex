@@ -8,6 +8,8 @@ import Button from "../buttons/button";
 import tokenList from "../../../public/tokenList.json";
 import SettingsModal from "../models/SettingsModal";
 import axios from "axios";
+import { formatUnits } from "ethers";
+
 
 export default function Swap() {
   let [isOpen, setIsOpen] = useState(false);
@@ -87,10 +89,11 @@ export default function Swap() {
     setSelectedSlippage(slippage);
   };
   function changeAmount(e) {
+    const newAmount = e.target.value;
     setTokenOneAmount(e.target.value);
-    if (tokenOne && tokenTwo) {
-      fetchPrices();
-    }
+    // if (tokenOne && tokenTwo) {
+    //   fetchPrices();
+    // }
   }
   function checkDisabled(tokenOne, tokenTwo) {
     return tokenOne === null || tokenTwo === null;
@@ -129,10 +132,8 @@ export default function Swap() {
 
   async function fetchPrices() {
     console.log("Getting Price");
-
-    let amount =Number( tokenOneAmount * 10 ** tokenOne.decimals);
-    console.log(amount);
-
+    let tokenOneAmountNum = parseFloat(tokenOneAmount);
+    let amount = tokenOneAmountNum * Math.pow(10, tokenOne.decimals);
     const params = {
       sellToken: tokenOne.address,
       buyToken: tokenTwo.address,
@@ -150,8 +151,8 @@ export default function Swap() {
     );
 
     const swapPriceJSON = await response.json();
-    console.log("Price: ", swapPriceJSON);
-    console.log(swapPriceJSON.buyAmount / 10 ** tokenTwo.decimals);
+    // console.log("Price: ", swapPriceJSON);
+    console.log(formatUnits(swapPriceJSON.buyAmount,tokenTwo.decimals));
     setTokenTwoAmount(swapPriceJSON.buyAmount / 10 ** tokenTwo.decimals);
   }
 
@@ -404,7 +405,7 @@ export default function Swap() {
           </div>
         </div>
         <div className="w-full mt-10">
-          <button className="w-full py-3 rounded-full bg-neutral text-neutralLight">
+          <button className="w-full py-3 rounded-full bg-neutral text-neutralLight" onClick={() => fetchPrices()}>
             Enter an amount
           </button>
         </div>
