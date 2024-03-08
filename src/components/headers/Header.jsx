@@ -71,11 +71,9 @@ const Header = () => {
             0 $FFC
           </button>
           {/* <button className="bg-gray22 text-white rounded-full px-3 py-2 text-sm sm:text-base sm:px-4 sm:py-3 hidden md:block"> */}
-          <w3m-button className="border-transparent" />          
+          <w3m-button label="Connect" />          
           {/* </button> */}
-          <button className="bg-gray22 text-white rounded-full px-3 py-2 text-sm sm:text-base sm:px-4 sm:py-3 md:hidden">
-            Connect
-          </button>
+          
           <button className="bg-gray22 text-white rounded-full px-3 py-2 text-sm sm:text-base sm:px-4 sm:py-3 hidden md:block">
             {darkMode}
           </button>
