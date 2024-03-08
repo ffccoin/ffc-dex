@@ -10,18 +10,28 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.18",
+    "@tanstack/react-query": "^5.25.0",
+    "@web3modal/wagmi": "^4.0.13",
     "alchemy-sdk": "^3.1.2",
     "axios": "^1.6.7",
+    "bufferutil": "^4.0.8",
+    "encoding": "^0.1.13",
     "ethers": "^6.11.1",
     "framer-motion": "^11.0.8",
     "moralis": "^2.25.0",
     "next": "14.1.1",
+    "pino": "^8.19.0",
+    "pino-pretty": "^10.3.1",
     "qs": "^6.11.2",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "supports-color": "^9.4.0",
+    "utf-8-validate": "^6.0.3",
+    "viem": "2.x",
+    "wagmi": "^2.5.7"
   },
   "devDependencies": {
-    "autoprefixer": "^10.0.1",
+    "autoprefixer": "^10.4.18",
     "postcss": "^8",
     "tailwindcss": "^3.3.0"
   }

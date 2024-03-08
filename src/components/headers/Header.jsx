@@ -70,9 +70,9 @@ const Header = () => {
           <button className="bg-primary1 text-black rounded-full px-3 py-2 text-sm sm:text-base sm:px-4 sm:py-3">
             0 $FFC
           </button>
-          <button className="bg-gray22 text-white rounded-full px-3 py-2 text-sm sm:text-base sm:px-4 sm:py-3 hidden md:block">
-            Connect to Wallet
-          </button>
+          {/* <button className="bg-gray22 text-white rounded-full px-3 py-2 text-sm sm:text-base sm:px-4 sm:py-3 hidden md:block"> */}
+          <w3m-button className="border-transparent" />          
+          {/* </button> */}
           <button className="bg-gray22 text-white rounded-full px-3 py-2 text-sm sm:text-base sm:px-4 sm:py-3 md:hidden">
             Connect
           </button>

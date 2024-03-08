@@ -1,6 +1,7 @@
 import Header from "@/components/headers/Header";
 import "./globals.css";
 import PreloaderProvider from "./PreloaderProvider";
+import { Web3Modal } from '@/context/Web3Modal';
 
 export const metadata = {
   title: "Create Next App",
@@ -11,7 +12,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <PreloaderProvider>{children}</PreloaderProvider>
+        <Web3Modal>        <PreloaderProvider>{children}</PreloaderProvider></Web3Modal>
       </body>
     </html>
   );
