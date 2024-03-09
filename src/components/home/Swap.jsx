@@ -345,7 +345,7 @@ export default function Swap() {
               </div>
             ) : (
               <div className="w-[50%] grid " onClick={() => openModal(1)}>
-                <button className="bg-primary1 justify-self-end text-black rounded-full px-4 py-3 min-w-fit">
+                <button className="bg-primary1 text-sm sm:text-base justify-self-end text-black rounded-full px-4 py-3 min-w-fit">
                   Select a token
                 </button>
               </div>
@@ -396,7 +396,7 @@ export default function Swap() {
               </div>
             ) : (
               <div className="w-[50%] grid " onClick={() => openModal(2)}>
-                <button className="bg-primary1 justify-self-end text-black rounded-full px-4 py-3 min-w-fit">
+                <button className="bg-primary1 text-sm sm:text-base justify-self-end text-black rounded-full px-4 py-3 min-w-fit">
                   Select a token
                 </button>
               </div>
