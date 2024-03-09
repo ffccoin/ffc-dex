@@ -406,9 +406,10 @@ export default function Swap() {
         <div className="w-full mt-10">
           <button
             className="w-full py-3 rounded-full bg-neutral text-neutralLight"
-            onClick={() => fetchPrices()}
+          
           >
             Enter an amount
+
           </button>
         </div>
       </div>

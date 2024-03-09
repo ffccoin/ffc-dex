@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Sidebar from "./Sidebar";
 import { usePathname, useRouter } from "next/navigation";
-
+import Component from "./test";
 const Header = () => {
   const pathname = usePathname();
   const router = useRouter();
@@ -71,11 +71,9 @@ const Header = () => {
             0 $FFC
           </button>
           {/* <button className="bg-gray22 text-white rounded-full px-3 py-2 text-sm sm:text-base sm:px-4 sm:py-3 hidden md:block"> */}
-          <w3m-button />
-          {/* </button> */}
-          {/* <button className="bg-gray22 text-white rounded-full px-3 py-2 text-sm sm:text-base sm:px-4 sm:py-3 md:hidden">
-            Connect
-          </button> */}
+          <w3m-network-button  balance="show"/>  
+          <w3m-button label="Connect"  balance="hide"/>  
+          
           <button className="bg-gray22 text-white rounded-full px-3 py-2 text-sm sm:text-base sm:px-4 sm:py-3 hidden md:block">
             {darkMode}
           </button>
