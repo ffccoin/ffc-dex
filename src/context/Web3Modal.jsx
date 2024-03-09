@@ -21,7 +21,7 @@ export const web3ModalCreate = createWeb3Modal({
   themeVariables: {
     "--w3m-color-mix": "#151517",
     // "--w3m-color-mix-strength": 40,
-    "--w3m-accent":"#181E25",
+    "--w3m-accent":"#CBFB45",
   },
 });
 export function Web3Modal({ children, initialState }) {
