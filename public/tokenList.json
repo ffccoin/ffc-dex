@@ -1,15 +1,8 @@
 [
-    {
-        "name": "FFC",
-        "address": "0xbf05C4023E735ab912E2c34c0f391702efEC34",
-        "ticker": "$FFC",
-        "decimals": 18,
-        "img": "/header/logo-mobile.svg"
-      },
   {
     "name": "FFC",
     "address": "0xbf05C4023E735ab912E2c34c0f391702efEC34",
-    "ticker": "FFC",
+    "ticker": "$FFC",
     "decimals": 18,
     "img": "/header/logo-mobile.svg"
   },

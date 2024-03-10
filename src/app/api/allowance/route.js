@@ -1,5 +1,4 @@
 // Import necessary modules
-import Moralis from "moralis";
 import { NextResponse } from "next/server";
 const axios = require("axios"); // Import axios if not already imported
 
