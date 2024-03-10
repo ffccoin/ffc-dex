@@ -430,7 +430,6 @@ export default function Swap() {
                 : "bg-primary1 text-black"
             }`}
             onClick={() => swapTokens()}
-            disabled
           >
             {tokenOneAmount === null || tokenOneAmount === 0
               ? "Enter an amount"
