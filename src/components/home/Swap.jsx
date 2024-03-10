@@ -12,7 +12,6 @@ import { formatUnits } from "ethers";
 import { useAccount, useEnsName } from "wagmi";
 import { useSendTransaction, useWaitForTransaction } from "wagmi";
 
-
 export default function Swap() {
   let [isOpen, setIsOpen] = useState(false);
   const [selectedSlippage, setSelectedSlippage] = useState(0);
@@ -26,74 +25,34 @@ export default function Swap() {
   const [prices, setPrices] = useState(null);
   const [coinData, setCoinData] = useState(null);
   const { address, connector, isConnected } = useAccount();
-  
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [loadingValue, setLoadingValue] = useState(false);
+
   const [txDetails, setTxDetails] = useState({
     to: null,
     data: null,
     value: null,
   });
 
-  const {data, sendTransaction} = useSendTransaction({
+  const { data, sendTransaction } = useSendTransaction({
     request: {
       from: address,
-      to: String(txDetails.to),
-      data: String(txDetails.data),
-      value: String(txDetails.value),
-    }
-  })
-  useEffect(()=>{
+      to: txDetails ? String(txDetails.to) : "",
+      data: txDetails ? String(txDetails.data) : "",
+      value: txDetails ? String(txDetails.value) : "",
+    },
+  });
+  useEffect(() => {
+    console.log("helo ramihsa")
+    console.log(txDetails); // This will log the updated state, but only after it changes.
 
-    if(txDetails.to && isConnected){
+    if (txDetails.to && isConnected) {
       sendTransaction();
     }
-}, [txDetails])
+  }, [txDetails]);
 
-  // const fetchExchangeRate = async () => {
-  //   try {
-  //     const url = "https://tokens.coingecko.com/uniswap/all.json";
-  //     const res = await fetch(url);
 
-  //     if (!res.ok) {
-  //       throw new Error("Network response was not ok");
-  //     }
-
-  //     const data = await res.json();
-  //     console.log(data.tokens);
-  //     const additionalToken = {
-  //       chainId: 1,
-  //       address: "0xbf05C4023E735ab912E2c34c0f391702efEC34",
-  //       name: "FFC",
-  //       ticker: "FFC",
-  //       decimals: 18,
-  //       img: "/header/logo-mobile.svg"
-  //     };
-
-  //     // const concatenatedTokens = data.tokens.reduce((acc, curr) => [...acc, ...curr], []);
-  //     // console.log("Tokens fetched:", concatenatedTokens);
-
-  //     // setTokenList(concatenatedTokens);
-  //     if (Array.isArray(data.tokens)) {
-  //       console.log("Tokens fetched:", data.tokens);
-  //       const top50Tokens = data.tokens.slice(0, 50);
-  //       const tokenListWithAdditional = [...top50Tokens, additionalToken];
-  //       setTokenList(tokenListWithAdditional);
-  //     } else {
-  //       console.error("Unexpected data structure for tokens", data.tokens);
-  //     }
-  //     fetchPrices(tokenList[0].address, tokenList[1].address);
-
-  //     // Set the state with fetched data
-  //   } catch (error) {
-  //     console.error("Error fetching exchange rate:", error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchExchangeRate();
-  // }, []);
-
-  const [searchQuery, setSearchQuery] = useState("");
-  const [loadingValue, setLoadingValue] = useState(false);
 
   const filteredTokenList = tokenList.filter((token) => {
     const tokenName = token.ticker.toLowerCase();
@@ -167,6 +126,7 @@ export default function Swap() {
 
     const swapPriceJSON = await response.json();
     setTokenTwoAmount(swapPriceJSON.buyAmount / 10 ** tokenTwo.decimals);
+
   }
 
   async function swapTokens() {
@@ -178,9 +138,21 @@ export default function Swap() {
         address: address,
       },
     });
-    console.log(res1.data);
+    console.log(res1.data.data.allowance );
+    if (res1.data.data.allowance === "0") {
+      const approve = await axios.get(`/api/approveAllowance`, {
+        params: {
+          src: tokenOne.address,
+        },
+      });
+      setTxDetails({
+        to: approve.data.to,
+        data: approve.data.data,
+        value: approve.data.value,
+      });      // console.log(txDetails);
+      
+    }
 
-    
     const res = await axios.get(`/api/swap`, {
       params: {
         src: tokenOne.address,
@@ -190,61 +162,17 @@ export default function Swap() {
         from: address,
       },
     });
+    console.log("helo");
     console.log(res.data);
-    setTxDetails(res.data)
-    console.log(txDetails);
+    // setTxDetails(res.data.tx);
+    
   }
-
-  // async function fetchPrices(one, two) {
-  //   const res = await axios.get(`/api/swap`, {
-  //     params: { addressOne: one, addressTwo: two },
-  //   });
-  //   console.log(res.data);
-  //   setPrices(res.data);
-  // }
-  // async function fetchDexSwap() {
-  //   const allowance = await axios.get(
-  //     `https://api.1inch.io/v5.0/1/approve/allowance?tokenAddress=${tokenOne.address}&walletAddress=${address}`
-  //   );
-
-  //   if (allowance.data.allowance === "0") {
-  //     const approve = await axios.get(
-  //       `https://api.1inch.io/v5.0/1/approve/transaction?tokenAddress=${tokenOne.address}`
-  //     );
-
-  //     setTxDetails(approve.data);
-  //     console.log("not approved");
-  //     return;
-  //   }
-
-  //   const tx = await axios.get(
-  //     `https://api.1inch.io/v5.0/1/swap?fromTokenAddress=${
-  //       tokenOne.address
-  //     }&toTokenAddress=${tokenTwo.address}&amount=${tokenOneAmount.padEnd(
-  //       tokenOne.decimals + tokenOneAmount.length,
-  //       "0"
-  //     )}&fromAddress=${address}&slippage=${slippage}`
-  //   );
-
-  //   let decimals = Number(`1E${tokenTwo.decimals}`);
-  //   setTokenTwoAmount((Number(tx.data.toTokenAmount) / decimals).toFixed(2));
-
-  //   setTxDetails(tx.data.tx);
-  // }
-
-  // when price of token 1 changes fetch prices
   useEffect(() => {
     if (tokenOne && tokenTwo) {
       setLoadingValue(true);
       fetchPrices().then(() => setLoadingValue(false));
     }
   }, [tokenOneAmount]);
-
-  useEffect(() => {
-    if (txDetails.to && isConnected) {
-      sendTransaction();
-    }
-  }, [txDetails]);
 
   function openModal(asset) {
     setChangeToken(asset);
