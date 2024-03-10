@@ -424,10 +424,17 @@ export default function Swap() {
         </div>
         <div className="w-full mt-10">
           <button
-            className="w-full py-3 rounded-full bg-neutral text-neutralLight"
+            className={`w-full py-3 rounded-full ${
+              tokenOneAmount === null || tokenOneAmount === 0
+                ? "bg-neutral text-neutralLight"
+                : "bg-primary1 text-black"
+            }`}
             onClick={() => swapTokens()}
+            disabled
           >
-            Enter an amount
+            {tokenOneAmount === null || tokenOneAmount === 0
+              ? "Enter an amount"
+              : "Swap"}
           </button>
         </div>
       </div>
