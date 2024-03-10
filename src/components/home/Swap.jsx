@@ -34,22 +34,32 @@ export default function Swap() {
     data: null,
     value: null,
   });
+  const { data: hash, error, isPending, sendTransaction } = useSendTransaction()
+  async function sendTransaction1() {
+    sendTransaction({
+      from: address, 
+      to: txDetails.to, 
+      data: txDetails.data, 
+      value: txDetails.value, 
+    });
+  }
 
-  const { data, sendTransaction } = useSendTransaction();
-  useEffect(() => {
-    console.log("TX DETAILS:");
-    console.log(txDetails); // This will log the updated state, but only after it changes.
+  // const { data, sendTransaction } = useSendTransaction({
+  //   request: {
+  //     from: "0x8744bf1060285DA8A0F49dcAb1b319657DB7aECF",
+  //     to: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+  //     data: "0x095ea7b3000000000000000000000000111111125421ca6dc452d289314280a0f8842a65ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+  //     value: "0",
+  //   },
+  // });
+  // useEffect(() => {
+  //   console.log("tx UseEffect called");
+  //   console.log(txDetails); // This will log the updated state, but only after it changes.
 
-    if (txDetails.to && isConnected) {
-      console.log("SENDING TRANSACTION");
-      sendTransaction({
-        from: address,
-        to: txDetails ? String(txDetails.to) : "",
-        data: txDetails ? String(txDetails.data) : "",
-        value: txDetails ? String(txDetails.value) : "",
-      });
-    }
-  }, [txDetails]);
+  //   if (txDetails.to && isConnected) {
+  //     sendTransaction1();
+  //   }
+  // }, [txDetails]);
 
   const filteredTokenList = tokenList.filter((token) => {
     const tokenName = token.ticker.toLowerCase();
@@ -135,6 +145,7 @@ export default function Swap() {
       },
     });
     console.log(res1.data.data.allowance);
+    console.log(res1.data.data.allowance);
     if (res1.data.data.allowance === "0") {
       const approve = await axios.get(`/api/approveAllowance`, {
         params: {
@@ -145,21 +156,26 @@ export default function Swap() {
         to: approve.data.to,
         data: approve.data.data,
         value: approve.data.value,
-      }); // console.log(txDetails);
+      });
+      sendTransaction1(); // console.log(txDetails);
     }
 
-    const res = await axios.get(`/api/swap`, {
-      params: {
-        src: tokenOne.address,
-        dst: tokenTwo.address,
-        amount: amount,
-        slippage: selectedSlippage,
-        from: address,
-      },
-    });
-    console.log("helo");
-    console.log(res.data);
-    // setTxDetails(res.data.tx);
+    // const res = await axios.get(`/api/swap`, {
+    //   params: {
+    //     src: tokenOne.address,
+    //     dst: tokenTwo.address,
+    //     amount: amount,
+    //     slippage: selectedSlippage,
+    //     from: address,
+    //   },
+    // });
+    // console.log("helo");
+    // console.log(res.data);
+    // setTxDetails({
+    //   to: res.data.to,
+    //   data: res.data.data,
+    //   value: res.data.value,
+    // });
   }
   useEffect(() => {
     if (tokenOne && tokenTwo) {
