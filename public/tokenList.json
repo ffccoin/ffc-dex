@@ -2,17 +2,25 @@
     {
         "name": "FFC",
         "address": "0xbf05C4023E735ab912E2c34c0f391702efEC34",
-        "ticker": "FFC",
+        "ticker": "$FFC",
         "decimals": 18,
         "img": "/header/logo-mobile.svg"
-      },{
+      },
+  {
+    "name": "FFC",
+    "address": "0xbf05C4023E735ab912E2c34c0f391702efEC34",
+    "ticker": "FFC",
+    "decimals": 18,
+    "img": "/header/logo-mobile.svg"
+  },
+  {
     "ticker": "USDC",
     "img": "https://cdn.moralis.io/eth/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48.png",
     "name": "USD Coin",
     "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
     "decimals": 6
   },
-  
+
   {
     "ticker": "LINK",
     "img": "https://cdn.moralis.io/eth/0x514910771af9ca656af840dff83e8264ecf986ca.png",
@@ -33,6 +41,13 @@
     "name": "Gemini USD",
     "address": "0x056Fd409E1d7A124BD7017459dFEa2F387b6d5Cd",
     "decimals": 2
+  },
+  {
+    "ticker": "ETH",
+    "img": "https://assets.coingecko.com/coins/images/279/standard/ethereum.png?1696501628",
+    "name": "Ethereum",
+    "address": "0x056Fd409E1d7A124BD7017459dFEa2F387b6d5Cd",
+    "decimals": 18
   },
   {
     "ticker": "DAI",
