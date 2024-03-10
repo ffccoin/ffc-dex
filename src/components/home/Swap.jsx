@@ -9,10 +9,11 @@ import tokenList from "../../../public/tokenList.json";
 import SettingsModal from "../models/SettingsModal";
 import axios from "axios";
 import { formatUnits } from "ethers";
+import { useAccount, useEnsName } from "wagmi";
 
 export default function Swap() {
   let [isOpen, setIsOpen] = useState(false);
-  const [selectedSlippage, setSelectedSlippage] = useState(null);
+  const [selectedSlippage, setSelectedSlippage] = useState(0);
   const [swapPlaces, setSwapPlaces] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
   const [tokenOne, setTokenOne] = useState(null);
@@ -27,6 +28,8 @@ export default function Swap() {
     data: null,
     value: null,
   });
+  const { address, connector, isConnected } = useAccount();
+  console.log(address);
 
   // const fetchExchangeRate = async () => {
   //   try {
@@ -112,12 +115,12 @@ export default function Swap() {
     setTokenOneAmount(0);
     setTokenTwoAmount(0);
     if (changeToken === 1) {
-      setTokenOne(tokenList[i]);
+      setTokenOne(filteredTokenList[i]);
       if (tokenTwo != null) {
         // fetchPrices(tokenList[i].address, tokenTwo.address);
       }
     } else {
-      setTokenTwo(tokenList[i]);
+      setTokenTwo(filteredTokenList[i]);
       if (tokenOne != null) {
         // fetchPrices(tokenOne.address, tokenList[i].address);
       }
@@ -147,6 +150,22 @@ export default function Swap() {
 
     const swapPriceJSON = await response.json();
     setTokenTwoAmount(swapPriceJSON.buyAmount / 10 ** tokenTwo.decimals);
+  }
+
+  async function swapTokens() {
+    let tokenOneAmountNum = parseFloat(tokenOneAmount);
+    let amount = tokenOneAmountNum * Math.pow(10, tokenOne.decimals);
+
+    const res = await axios.get(`/api/swap`, {
+      params: {
+        src: tokenOne.address,
+        dst: tokenTwo.address,
+        amount: amount,
+        slippage: selectedSlippage,
+        from: address,
+      },
+    });
+    console.log(res.data);
   }
 
   // async function fetchPrices(one, two) {
@@ -406,10 +425,9 @@ export default function Swap() {
         <div className="w-full mt-10">
           <button
             className="w-full py-3 rounded-full bg-neutral text-neutralLight"
-          
+            onClick={() => swapTokens()}
           >
             Enter an amount
-
           </button>
         </div>
       </div>
