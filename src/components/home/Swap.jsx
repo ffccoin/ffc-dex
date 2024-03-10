@@ -12,7 +12,6 @@ import { formatUnits } from "ethers";
 import { useAccount, useEnsName } from "wagmi";
 import { useSendTransaction, useWaitForTransaction } from "wagmi";
 
-
 export default function Swap() {
   let [isOpen, setIsOpen] = useState(false);
   const [selectedSlippage, setSelectedSlippage] = useState(0);
@@ -26,27 +25,26 @@ export default function Swap() {
   const [prices, setPrices] = useState(null);
   const [coinData, setCoinData] = useState(null);
   const { address, connector, isConnected } = useAccount();
-  
+
   const [txDetails, setTxDetails] = useState({
     to: null,
     data: null,
     value: null,
   });
 
-  const {data, sendTransaction} = useSendTransaction({
+  const { data, sendTransaction } = useSendTransaction({
     request: {
       from: address,
       to: String(txDetails.to),
       data: String(txDetails.data),
       value: String(txDetails.value),
-    }
-  })
-  useEffect(()=>{
-
-    if(txDetails.to && isConnected){
+    },
+  });
+  useEffect(() => {
+    if (txDetails.to && isConnected) {
       sendTransaction();
     }
-}, [txDetails])
+  }, [txDetails]);
 
   // const fetchExchangeRate = async () => {
   //   try {
@@ -179,8 +177,14 @@ export default function Swap() {
       },
     });
     console.log(res1.data);
-
-    
+    if (res1.data.allowance === "0") {
+      console.log("Allowance 0")
+      const res2 = await axios.get(`/api/transaction`, {
+        params: {
+          tokenAddress: tokenOne.address,
+        },
+      });
+    }
     const res = await axios.get(`/api/swap`, {
       params: {
         src: tokenOne.address,
@@ -191,7 +195,7 @@ export default function Swap() {
       },
     });
     console.log(res.data);
-    setTxDetails(res.data)
+    setTxDetails(res.data);
     console.log(txDetails);
   }
 
