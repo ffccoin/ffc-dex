@@ -1,18 +1,26 @@
 [
-    {
-        "name": "FFC",
-        "address": "0xbf05C4023E735ab912E2c34c0f391702efEC34",
-        "ticker": "FFC",
-        "decimals": 18,
-        "img": "/header/logo-mobile.svg"
-      },{
+  {
+    "name": "FFC",
+    "address": "0xbf05C4023E735ab912E2c34c0f391702efEC34",
+    "ticker": "FFC",
+    "decimals": 18,
+    "img": "/header/logo-mobile.svg"
+  },
+  {
+    "ticker": "ETH",
+    "img": "https://cdn.moralis.io/eth/0x2170ed0880ac9a755fd29b2688956bd959f933f8.png",
+    "name": "Ethereum",
+    "address": "0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe",
+    "decimals": 18
+  },
+  {
     "ticker": "USDC",
     "img": "https://cdn.moralis.io/eth/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48.png",
     "name": "USD Coin",
     "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
     "decimals": 6
   },
-  
+
   {
     "ticker": "LINK",
     "img": "https://cdn.moralis.io/eth/0x514910771af9ca656af840dff83e8264ecf986ca.png",

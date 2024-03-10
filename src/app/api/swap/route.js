@@ -14,7 +14,7 @@ export async function getSwapData(req, res) {
   const url = "https://api.1inch.dev/swap/v6.0/1/swap";
   const config = {
     headers: {
-      Authorization: "Bearer JJdEhrKq5Co25lD2iYcnLA6jKjl4BaDQ",
+      Authorization: "Bearer YWhnQLVh62MTNAcRWm19QrAyrTIC7qan",
     },
     params: {
       src: src,

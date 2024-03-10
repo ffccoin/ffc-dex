@@ -383,7 +383,13 @@ export default function Swap() {
               <p className="text-sm font-semibold">To</p>
               <input
                 placeholder="0"
-                value={loadingValue ? "Loading..." : tokenTwoAmount}
+                value={
+                  loadingValue
+                    ? "Loading..."
+                    : tokenTwoAmount === NaN
+                    ? "Cannot fetch value"
+                    : tokenTwoAmount
+                }
                 disabled={true}
                 className=" w-full text-[34px] caret-gray12  placeholder-gray12 leading-[42px] border-transparent bg-transparent outline-none"
               />
