@@ -17,10 +17,10 @@ export async function getSwapData(req, res) {
       Authorization: "Bearer YWhnQLVh62MTNAcRWm19QrAyrTIC7qan",
     },
     params: {
-      "src": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
-      "dst": "0x111111111117dc0aa78b770fa6a738034120c302",
-      "amount": "10",
-      "from": "0xfDA94c106913bB8a90ea3109944C083d991398e7",
+      "src": src,
+      "dst": dst,
+      "amount": amount,
+      "from": from,
       "slippage": "0"
     },
   };

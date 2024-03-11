@@ -18,6 +18,11 @@ export default function Swap() {
   const [selectedSlippage, setSelectedSlippage] = useState(0);
   const [swapPlaces, setSwapPlaces] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
+  const [buttonLabel, setButtonLabel] = useState("Enter an amount");
+  const [buttonClass, setButtonClass] = useState(
+    "bg-neutral text-neutralLight"
+  );
+
   const [tokenOne, setTokenOne] = useState(null);
   const [tokenTwo, setTokenTwo] = useState(null);
   const [changeToken, setChangeToken] = useState(1);
@@ -144,54 +149,65 @@ export default function Swap() {
   }
 
   async function swapTokens() {
-    setIsLoading(true);
-    let tokenOneAmountNum = parseFloat(tokenOneAmount);
-    let amount = tokenOneAmountNum * Math.pow(10, tokenOne.decimals);
-    const res1 = await axios.get(`/api/allowance`, {
-      params: {
-        src: tokenOne.address,
-        address: address,
-      },
-    });
-    console.log(res1.data.data.allowance);
-    if (res1.data.data.allowance == "0") {
-      await new Promise((resolve) => setTimeout(resolve, 3000));
+    if (isConnected) {
+      if (buttonLabel == "Swap") {
+        setIsLoading(true);
+        let tokenOneAmountNum = parseFloat(tokenOneAmount);
+        let amount = tokenOneAmountNum * Math.pow(10, tokenOne.decimals);
+        const res1 = await axios.get(`/api/allowance`, {
+          params: {
+            src: tokenOne.address,
+            address: address,
+          },
+        });
+        if (res1.data.data.allowance == "0") {
+          setButtonLabel("increase Allowance");
+          setIsLoading(false);
+          return;
+        } else {
+          const res = await axios.get(`/api/swap`, {
+            params: {
+              src: tokenOne.address,
+              dst: tokenTwo.address,
+              amount: amount,
+              slippage: selectedSlippage,
+              from: address,
+            },
+          });
+          console.log("helo");
+          console.log(res.data);
+          setTxDetails({
+            to: res.data.to,
+            data: res.data.data,
+            value: res.data.value,
+          });
+          return;
+        }
+      }
+      if (buttonLabel == "increase Allowance") {
+        setIsLoading(true);
 
-      const approve = await axios.get(`/api/approveAllowance`, {
-        params: {
-          src: tokenOne.address,
-        },
-      });
-      setTxDetails({
-        to: approve.data.to,
-        data: approve.data.data,
-        value: approve.data.value,
-      });
-      console.log("not approved");
-      return;
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        const approve = await axios.get(`/api/approveAllowance`, {
+          params: {
+            src: tokenOne.address,
+          },
+        });
+        setTxDetails({
+          to: approve.data.to,
+          data: approve.data.data,
+          value: approve.data.value,
+        });
+        console.log("not approved");
+        return;
+      }
     }
-
-    // const res = await axios.get(`/api/swap`, {
-    //   params: {
-    //     src: tokenOne.address,
-    //     dst: tokenTwo.address,
-    //     amount: amount,
-    //     slippage: selectedSlippage,
-    //     from: address,
-    //   },
-    // });
-    // console.log("helo");
-    // console.log(res.data);
-    // setTxDetails({
-    //   to: res.data.to,
-    //   data: res.data.data,
-    //   value: res.data.value,
-    // });
   }
 
   useEffect(() => {
     if (tokenOne && tokenTwo) {
       setLoadingValue(true);
+      setButtonLabel("Swap");
       fetchPrices().then(() => setLoadingValue(false));
     }
   }, [tokenOneAmount]);
@@ -419,9 +435,7 @@ export default function Swap() {
                 }`}
                 onClick={() => swapTokens()}
               >
-                {tokenOneAmount === null || tokenOneAmount === 0
-                  ? "Enter an amount"
-                  : "Swap"}
+                {buttonLabel}
               </button>
             </div>
           </div>
