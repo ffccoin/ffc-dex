@@ -24,6 +24,7 @@
     "qs": "^6.11.2",
     "react": "^18",
     "react-dom": "^18",
+    "react-loader-spinner": "^6.1.6",
     "supports-color": "^9.4.0",
     "utf-8-validate": "^6.0.3",
     "viem": "2.x",
