@@ -34,13 +34,18 @@ export default function Swap() {
     data: null,
     value: null,
   });
-  const { data: hash, error, isPending, sendTransaction } = useSendTransaction()
+  const {
+    data: hash,
+    error,
+    isPending,
+    sendTransaction,
+  } = useSendTransaction();
   async function sendTransaction1() {
     sendTransaction({
-      from: address, 
-      to: txDetails.to, 
-      data: txDetails.data, 
-      value: txDetails.value, 
+      from: address,
+      to: txDetails.to,
+      data: txDetails.data,
+      value: txDetails.value,
     });
   }
 
@@ -135,7 +140,7 @@ export default function Swap() {
     setTokenTwoAmount(swapPriceJSON.buyAmount / 10 ** tokenTwo.decimals);
   }
 
-  async function swapTokens() {
+  async function getAllowance() {
     let tokenOneAmountNum = parseFloat(tokenOneAmount);
     let amount = tokenOneAmountNum * Math.pow(10, tokenOne.decimals);
     const res1 = await axios.get(`/api/allowance`, {
@@ -145,8 +150,13 @@ export default function Swap() {
       },
     });
     console.log(res1.data.data.allowance);
-    console.log(res1.data.data.allowance);
-    if (res1.data.data.allowance === "0") {
+    return res1.data.data.allowance;
+  }
+
+  async function swapTokens() {
+    const allowance = await getAllowance();
+    if (allowance === "0") {
+      console.log("ALLOWANCE 0")
       const approve = await axios.get(`/api/approveAllowance`, {
         params: {
           src: tokenOne.address,
@@ -157,7 +167,9 @@ export default function Swap() {
         data: approve.data.data,
         value: approve.data.value,
       });
-      sendTransaction1(); // console.log(txDetails);
+
+      sendTransaction1();
+       // console.log(txDetails);
     }
 
     // const res = await axios.get(`/api/swap`, {
@@ -177,6 +189,7 @@ export default function Swap() {
     //   value: res.data.value,
     // });
   }
+
   useEffect(() => {
     if (tokenOne && tokenTwo) {
       setLoadingValue(true);
