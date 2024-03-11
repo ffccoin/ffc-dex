@@ -30,7 +30,6 @@ export default function Swap() {
   const [changeToken, setChangeToken] = useState(1);
   const [tokenOneAmount, setTokenOneAmount] = useState(null);
   const [tokenTwoAmount, setTokenTwoAmount] = useState(null);
-  const [prices, setPrices] = useState(null);
   const [coinData, setCoinData] = useState(null);
   const { address, connector, isConnected } = useAccount();
   const [isLoading, setIsLoading] = useState(false);
@@ -97,19 +96,18 @@ export default function Swap() {
   }
 
   function switchTokens() {
-    setPrices(null);
-    setTokenOneAmount(0);
+    const amount = tokenTwoAmount
+    setTokenOneAmount(amount);
     setTokenTwoAmount(0);
     const one = tokenOne;
     const two = tokenTwo;
     setTokenOne(two);
     setTokenTwo(one);
     if (tokenTwo != null && tokenOne != null) {
-      fetchPrices(two.address, one.address);
+      fetchPrices();
     }
   }
   function modifyToken(i) {
-    setPrices(null);
     setTokenOneAmount(0);
     setTokenTwoAmount(0);
     if (changeToken === 1) {
@@ -188,7 +186,6 @@ export default function Swap() {
       }
       if (buttonLabel == "increase Allowance") {
         setIsLoading(true);
-
         await new Promise((resolve) => setTimeout(resolve, 3000));
         const approve = await axios.get(`/api/approveAllowance`, {
           params: {
@@ -201,6 +198,8 @@ export default function Swap() {
           value: approve.data.value,
         });
         console.log("not approved");
+        setButtonLabel("Swap");
+
         return;
       }
     }
@@ -404,10 +403,8 @@ export default function Swap() {
                     value={
                       loadingValue
                         ? "Loading..."
-                        : tokenTwoAmount === 0
-                        ? ""
-                        : tokenTwoAmount === NaN
-                        ? "Unable to fetch"
+                        : isNaN(tokenTwoAmount)
+                        ? "Can't fetch value"
                         : tokenTwoAmount
                     }
                     disabled={true}
