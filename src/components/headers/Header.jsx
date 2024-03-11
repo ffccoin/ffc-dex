@@ -66,7 +66,7 @@ const Header = () => {
           </button>
         </div>
         <div className="flex gap-x-2 items-center">
-          <button className="bg-primary1 text-black rounded-full px-3 py-2 text-sm sm:text-base sm:px-4 sm:py-3">
+          <button className="bg-primary1 text-black rounded-full px-3 py-2 text-sm sm:text-base sm:px-4 sm:py-2">
             0 $FFC
           </button>
           

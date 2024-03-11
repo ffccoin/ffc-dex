@@ -181,6 +181,7 @@ export default function Swap() {
             data: res.data.data,
             value: res.data.value,
           });
+          setIsLoading(false);
           return;
         }
       }
