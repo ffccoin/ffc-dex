@@ -57,14 +57,14 @@ export default function Swap() {
   //     value: "0",
   //   },
   // });
-  // useEffect(() => {
-  //   console.log("tx UseEffect called");
-  //   console.log(txDetails); // This will log the updated state, but only after it changes.
+  useEffect(() => {
+    console.log("tx UseEffect called");
+    console.log(txDetails); // This will log the updated state, but only after it changes.
 
-  //   if (txDetails.to && isConnected) {
-  //     sendTransaction1();
-  //   }
-  // }, [txDetails]);
+    if (txDetails.to && isConnected) {
+      sendTransaction1();
+    }
+  }, [txDetails]);
 
   const filteredTokenList = tokenList.filter((token) => {
     const tokenName = token.ticker.toLowerCase();
@@ -150,13 +150,9 @@ export default function Swap() {
       },
     });
     console.log(res1.data.data.allowance);
-    return res1.data.data.allowance;
-  }
+    if (res1.data.data.allowance == "0") {
+      await new Promise(resolve => setTimeout(resolve, 3000));
 
-  async function swapTokens() {
-    const allowance = await getAllowance();
-    if (allowance === "0") {
-      console.log("ALLOWANCE 0")
       const approve = await axios.get(`/api/approveAllowance`, {
         params: {
           src: tokenOne.address,
@@ -167,9 +163,8 @@ export default function Swap() {
         data: approve.data.data,
         value: approve.data.value,
       });
-
-      sendTransaction1();
-       // console.log(txDetails);
+      console.log("not approved")
+      return 
     }
 
     // const res = await axios.get(`/api/swap`, {
@@ -188,6 +183,7 @@ export default function Swap() {
     //   data: res.data.data,
     //   value: res.data.value,
     // });
+
   }
 
   useEffect(() => {
