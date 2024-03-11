@@ -11,6 +11,7 @@ import axios from "axios";
 import { formatUnits } from "ethers";
 import { useAccount, useEnsName } from "wagmi";
 import { useSendTransaction, useWaitForTransaction } from "wagmi";
+import LoadingPage from "@/components/animations/swapLoading";
 
 export default function Swap() {
   let [isOpen, setIsOpen] = useState(false);
@@ -25,6 +26,8 @@ export default function Swap() {
   const [prices, setPrices] = useState(null);
   const [coinData, setCoinData] = useState(null);
   const { address, connector, isConnected } = useAccount();
+  const [isLoading, setIsLoading] = useState(false);
+
 
   const [searchQuery, setSearchQuery] = useState("");
   const [loadingValue, setLoadingValue] = useState(false);
@@ -63,6 +66,8 @@ export default function Swap() {
 
     if (txDetails.to && isConnected) {
       sendTransaction1();
+      setIsLoading(false);
+
     }
   }, [txDetails]);
 
@@ -140,7 +145,8 @@ export default function Swap() {
     setTokenTwoAmount(swapPriceJSON.buyAmount / 10 ** tokenTwo.decimals);
   }
 
-  async function getAllowance() {
+  async function swapTokens() {
+    setIsLoading(true);
     let tokenOneAmountNum = parseFloat(tokenOneAmount);
     let amount = tokenOneAmountNum * Math.pow(10, tokenOne.decimals);
     const res1 = await axios.get(`/api/allowance`, {
@@ -167,22 +173,22 @@ export default function Swap() {
       return 
     }
 
-    // const res = await axios.get(`/api/swap`, {
-    //   params: {
-    //     src: tokenOne.address,
-    //     dst: tokenTwo.address,
-    //     amount: amount,
-    //     slippage: selectedSlippage,
-    //     from: address,
-    //   },
-    // });
-    // console.log("helo");
-    // console.log(res.data);
-    // setTxDetails({
-    //   to: res.data.to,
-    //   data: res.data.data,
-    //   value: res.data.value,
-    // });
+    const res = await axios.get(`/api/swap`, {
+      params: {
+        src: tokenOne.address,
+        dst: tokenTwo.address,
+        amount: amount,
+        slippage: selectedSlippage,
+        from: address,
+      },
+    });
+    console.log("helo");
+    console.log(res.data);
+    setTxDetails({
+      to: res.data.to,
+      data: res.data.data,
+      value: res.data.value,
+    });
 
   }
 
@@ -199,6 +205,7 @@ export default function Swap() {
   }
   return (
     <div className="grid place-items-center justify-center py-10 px-3">
+       {isLoading && <LoadingPage/>} 
       <Dialog
         open={isOpen}
         onClose={() => setIsOpen(false)}
