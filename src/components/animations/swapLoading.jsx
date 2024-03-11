@@ -35,8 +35,8 @@ const LoadingPage = () => {
       animate(
         scope.current,
         { rotate: 360 },
-        { duration: 4, ease: "linear", repeat: Infinity },
-      );
+        { duration: 3, ease: "linear", repeat: Infinity },
+      ); // Changed duration to 3 seconds
     };
     animateLoader();
   }, []);

@@ -28,7 +28,6 @@ export default function Swap() {
   const { address, connector, isConnected } = useAccount();
   const [isLoading, setIsLoading] = useState(false);
 
-
   const [searchQuery, setSearchQuery] = useState("");
   const [loadingValue, setLoadingValue] = useState(false);
 
@@ -67,7 +66,6 @@ export default function Swap() {
     if (txDetails.to && isConnected) {
       sendTransaction1();
       setIsLoading(false);
-
     }
   }, [txDetails]);
 
@@ -157,7 +155,7 @@ export default function Swap() {
     });
     console.log(res1.data.data.allowance);
     if (res1.data.data.allowance == "0") {
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      await new Promise((resolve) => setTimeout(resolve, 3000));
 
       const approve = await axios.get(`/api/approveAllowance`, {
         params: {
@@ -169,27 +167,26 @@ export default function Swap() {
         data: approve.data.data,
         value: approve.data.value,
       });
-      console.log("not approved")
-      return 
+      console.log("not approved");
+      return;
     }
 
-    const res = await axios.get(`/api/swap`, {
-      params: {
-        src: tokenOne.address,
-        dst: tokenTwo.address,
-        amount: amount,
-        slippage: selectedSlippage,
-        from: address,
-      },
-    });
-    console.log("helo");
-    console.log(res.data);
-    setTxDetails({
-      to: res.data.to,
-      data: res.data.data,
-      value: res.data.value,
-    });
-
+    // const res = await axios.get(`/api/swap`, {
+    //   params: {
+    //     src: tokenOne.address,
+    //     dst: tokenTwo.address,
+    //     amount: amount,
+    //     slippage: selectedSlippage,
+    //     from: address,
+    //   },
+    // });
+    // console.log("helo");
+    // console.log(res.data);
+    // setTxDetails({
+    //   to: res.data.to,
+    //   data: res.data.data,
+    //   value: res.data.value,
+    // });
   }
 
   useEffect(() => {
@@ -204,226 +201,232 @@ export default function Swap() {
     setIsOpen(true);
   }
   return (
-    <div className="grid place-items-center justify-center py-10 px-3">
-       {isLoading && <LoadingPage/>} 
-      <Dialog
-        open={isOpen}
-        onClose={() => setIsOpen(false)}
-        className="relative z-50"
-      >
-        {/* The backdrop, rendered as a fixed sibling to the panel container */}
-        <div className="fixed inset-0 backdrop-blur-sm" aria-hidden="true" />
-        <div className="fixed inset-0 flex items-center justify-center p-10">
-          <div className="bg-neutral rounded-3xl w-full max-w-[32rem] h-[95%] overflow-y-auto">
-            <div className="px-7 py-3">
-              <div className="flex mt-4 items-center justify-between">
-                <div className="flex-grow text-center">
-                  <p className="text-2xl">Select a Token</p>
-                </div>
-                <Image
-                  alt="close"
-                  src="/home/cross.svg"
-                  className="justify-self-end cursor-pointer"
-                  width={24}
-                  height={24}
-                  onClick={() => setIsOpen(false)}
-                />
-              </div>
-              <input
-                type="text"
-                placeholder="Search name or paste address"
-                className="w-full p-2 mt-6 mb-2 border h-14 outline-none rounded-2xl border-neutralLight text-neutralLight bg-neutral"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              {filteredTokenList.map((e, i) => {
-                return (
-                  <Dialog.Description className="mt-4" key={i}>
-                    <div
-                      className="flex gap-9 items-center justify-between cursor-pointer"
-                      onClick={() => modifyToken(i)}
-                    >
-                      <div className="flex gap-5 items-center">
-                        <img
-                          src={e.img}
-                          alt={e.ticker}
-                          width={33}
-                          height={33}
-                          quality={100}
-                        />
-                        <div className="flex flex-col">
-                          <div className="text-base uppercase font-neue-machina">
-                            {e.ticker}
+    <div className="">
+      {isLoading && <LoadingPage />}
+      {!isLoading && (
+        <div className="grid place-items-center justify-center py-10 px-3">
+          <Dialog
+            open={isOpen}
+            onClose={() => setIsOpen(false)}
+            className="relative z-50"
+          >
+            {/* The backdrop, rendered as a fixed sibling to the panel container */}
+            <div
+              className="fixed inset-0 backdrop-blur-sm"
+              aria-hidden="true"
+            />
+            <div className="fixed inset-0 flex items-center justify-center p-10">
+              <div className="bg-neutral rounded-3xl w-full max-w-[32rem] h-[95%] overflow-y-auto">
+                <div className="px-7 py-3">
+                  <div className="flex mt-4 items-center justify-between">
+                    <div className="flex-grow text-center">
+                      <p className="text-2xl">Select a Token</p>
+                    </div>
+                    <Image
+                      alt="close"
+                      src="/home/cross.svg"
+                      className="justify-self-end cursor-pointer"
+                      width={24}
+                      height={24}
+                      onClick={() => setIsOpen(false)}
+                    />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Search name or paste address"
+                    className="w-full p-2 mt-6 mb-2 border h-14 outline-none rounded-2xl border-neutralLight text-neutralLight bg-neutral"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                  {filteredTokenList.map((e, i) => {
+                    return (
+                      <Dialog.Description className="mt-4" key={i}>
+                        <div
+                          className="flex gap-9 items-center justify-between cursor-pointer"
+                          onClick={() => modifyToken(i)}
+                        >
+                          <div className="flex gap-5 items-center">
+                            <img
+                              src={e.img}
+                              alt={e.ticker}
+                              width={33}
+                              height={33}
+                              quality={100}
+                            />
+                            <div className="flex flex-col">
+                              <div className="text-base uppercase font-neue-machina">
+                                {e.ticker}
+                              </div>
+                              <div className="text-sm mt-1 text-neutralLight">
+                                {e.name}
+                              </div>
+                            </div>
                           </div>
-                          <div className="text-sm mt-1 text-neutralLight">
-                            {e.name}
+
+                          <div className="text-sm text-neutralLight">
+                            {e.decimals}
                           </div>
                         </div>
-                      </div>
+                      </Dialog.Description>
+                    );
+                  })}
 
-                      <div className="text-sm text-neutralLight">
-                        {e.decimals}
-                      </div>
-                    </div>
-                  </Dialog.Description>
-                );
-              })}
-
-              <div className="flex justify-center gap-3 mt-4">
-                <Image
-                  alt="manage"
-                  src="/home/manage.svg"
-                  width={24}
-                  height={24}
-                />
-                <p className="text-primary1">Manage</p>
+                  <div className="flex justify-center gap-3 mt-4">
+                    <Image
+                      alt="manage"
+                      src="/home/manage.svg"
+                      width={24}
+                      height={24}
+                    />
+                    <p className="text-primary1">Manage</p>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      </Dialog>
-      <SettingsModal
-        isOpen={isModalOpen}
-        onClose={toggleModal}
-        onSelectOption={handleSlippageSelection}
-      />
-      <div
-        className={`max-w-[512px] px-3 sm:px-1  flex-col
-        flex items-start`}
-      >
-        <div className=" flex flex-row w-full justify-between">
-          <div className="font-light text-5xl">Swap</div>
-          <Image
-            src="/home/settings.svg"
-            alt="setting"
-            onClick={() => setModalOpen(true)}
-            width={32}
-            className="cursor-pointer"
-            height={32}
+          </Dialog>
+          <SettingsModal
+            isOpen={isModalOpen}
+            onClose={toggleModal}
+            onSelectOption={handleSlippageSelection}
           />
-        </div>
-        <div
-          className={`mt-8 flex ${
-            swapPlaces ? "flex-col-reverse" : "flex-col"
-          } `}
-        >
-          <div className="w-full border mt-2 flex items-center border-neutral rounded-2xl px-4 py-4">
-            <div className="sm:w-full w-[50%]">
-              <p className="text-sm font-semibold">From</p>
-              <input
-                placeholder="0"
-                value={tokenOneAmount}
-                onChange={changeAmount}
-                disabled={checkDisabled(tokenOne, tokenTwo)}
-                className=" w-full text-[34px] caret-gray12  placeholder-gray12 leading-[42px] border-transparent bg-transparent outline-none"
-              />
-              <div className="flex flex-row gap-x-2">
-                <p className="text-sm font-normal">Balance :</p>
-                <p className="text-sm font-normal"> 0.0</p>
-              </div>
-            </div>
-            {tokenOne ? (
-              <div className="flex items-center gap-x-2">
-                <p className="text-[#CBFB45] mx-4 font-semibold">Max</p>
-                <button
-                  className="w-28 flex gap-x-1 items-center justify-between p-3 border border-neutral rounded-2xl h-[64px] min-w-[136px]"
-                  onClick={() => openModal(1)}
-                >
-                  <Image
-                    src={tokenOne.img}
-                    alt="assetOneLogo"
-                    className="assetLogo"
-                    width={32}
-                    height={32}
-                    quality={100}
-                  />
-                  <span className="text-sm font-semibold">
-                    {tokenOne.ticker}
-                  </span>
-                  {chevronDown}
-                </button>
-              </div>
-            ) : (
-              <div className="w-[50%] grid " onClick={() => openModal(1)}>
-                <button className="bg-primary1 text-sm sm:text-base justify-self-end text-black rounded-full px-4 py-3 min-w-fit">
-                  Select a token
-                </button>
-              </div>
-            )}
-          </div>
-          <Image
-            src="/home/doubleArrow.svg"
-            alt="setting"
-            width={32}
-            height={32}
-            onClick={switchTokens}
-            className="self-center cursor-pointer mt-2"
-          />
-          <div className="w-full  border mt-2 flex items-center border-neutral rounded-2xl px-4 py-4">
-            <div className="sm:w-full w-[50%]">
-              <p className="text-sm font-semibold">To</p>
-              <input
-                placeholder="0"
-                value={
-                  loadingValue
-                    ? "Loading..."
-                    : tokenTwoAmount === NaN
-                    ? "Cannot fetch value"
-                    : tokenTwoAmount
-                }
-                disabled={true}
-                className=" w-full text-[34px] caret-gray12  placeholder-gray12 leading-[42px] border-transparent bg-transparent outline-none"
-              />
-              <div className="flex flex-row gap-x-2">
-                <p className="text-sm font-normal">Balance :</p>
-                <p className="text-sm font-normal"> 0.0</p>
-              </div>
-            </div>
-            {tokenTwo ? (
-              <div className="flex items-center gap-x-2">
-                <p className="text-[#CBFB45] mx-4 font-semibold">Max</p>
-                <button
-                  className="w-28 flex gap-x-1 items-center justify-between p-3 border border-neutral rounded-2xl h-[64px] min-w-[136px]"
-                  onClick={() => openModal(2)}
-                >
-                  <Image
-                    src={tokenTwo.img}
-                    alt="assetOneLogo"
-                    className="assetLogo"
-                    width={32}
-                    height={32}
-                    quality={100}
-                  />
-                  <span className="text-sm font-semibold">
-                    {tokenTwo.ticker}
-                  </span>
-                  {chevronDown}
-                </button>
-              </div>
-            ) : (
-              <div className="w-[50%] grid " onClick={() => openModal(2)}>
-                <button className="bg-primary1 text-sm sm:text-base justify-self-end text-black rounded-full px-4 py-3 min-w-fit">
-                  Select a token
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-        <div className="w-full mt-10">
-          <button
-            className={`w-full py-3 rounded-full ${
-              tokenOneAmount === null || tokenOneAmount === 0
-                ? "bg-neutral text-neutralLight"
-                : "bg-primary1 text-black"
-            }`}
-            onClick={() => swapTokens()}
+          <div
+            className={`max-w-[512px] px-3 sm:px-1  flex-col flex items-start`}
           >
-            {tokenOneAmount === null || tokenOneAmount === 0
-              ? "Enter an amount"
-              : "Swap"}
-          </button>
+            <div className=" flex flex-row w-full justify-between">
+              <div className="font-light text-5xl">Swap</div>
+              <Image
+                src="/home/settings.svg"
+                alt="setting"
+                onClick={() => setModalOpen(true)}
+                width={32}
+                className="cursor-pointer"
+                height={32}
+              />
+            </div>
+            <div
+              className={`mt-8 flex ${
+                swapPlaces ? "flex-col-reverse" : "flex-col"
+              } `}
+            >
+              <div className="w-full border mt-2 flex items-center border-neutral rounded-2xl px-4 py-4">
+                <div className="sm:w-full w-[50%]">
+                  <p className="text-sm font-semibold">From</p>
+                  <input
+                    placeholder="0"
+                    value={tokenOneAmount}
+                    onChange={changeAmount}
+                    disabled={checkDisabled(tokenOne, tokenTwo)}
+                    className=" w-full text-[34px] caret-gray12  placeholder-gray12 leading-[42px] border-transparent bg-transparent outline-none"
+                  />
+                  <div className="flex flex-row gap-x-2">
+                    <p className="text-sm font-normal">Balance :</p>
+                    <p className="text-sm font-normal"> 0.0</p>
+                  </div>
+                </div>
+                {tokenOne ? (
+                  <div className="flex items-center gap-x-2">
+                    <p className="text-[#CBFB45] mx-4 font-semibold">Max</p>
+                    <button
+                      className="w-28 flex gap-x-1 items-center justify-between p-3 border border-neutral rounded-2xl h-[64px] min-w-[136px]"
+                      onClick={() => openModal(1)}
+                    >
+                      <Image
+                        src={tokenOne.img}
+                        alt="assetOneLogo"
+                        className="assetLogo"
+                        width={32}
+                        height={32}
+                        quality={100}
+                      />
+                      <span className="text-sm font-semibold">
+                        {tokenOne.ticker}
+                      </span>
+                      {chevronDown}
+                    </button>
+                  </div>
+                ) : (
+                  <div className="w-[50%] grid " onClick={() => openModal(1)}>
+                    <button className="bg-primary1 text-sm sm:text-base justify-self-end text-black rounded-full px-4 py-3 min-w-fit">
+                      Select a token
+                    </button>
+                  </div>
+                )}
+              </div>
+              <Image
+                src="/home/doubleArrow.svg"
+                alt="setting"
+                width={32}
+                height={32}
+                onClick={switchTokens}
+                className="self-center cursor-pointer mt-2"
+              />
+              <div className="w-full  border mt-2 flex items-center border-neutral rounded-2xl px-4 py-4">
+                <div className="sm:w-full w-[50%]">
+                  <p className="text-sm font-semibold">To</p>
+                  <input
+                    placeholder="0"
+                    value={
+                      loadingValue
+                        ? "Loading..."
+                        : tokenTwoAmount === NaN
+                        ? "Cannot fetch value"
+                        : tokenTwoAmount
+                    }
+                    disabled={true}
+                    className=" w-full text-[34px] caret-gray12  placeholder-gray12 leading-[42px] border-transparent bg-transparent outline-none"
+                  />
+                  <div className="flex flex-row gap-x-2">
+                    <p className="text-sm font-normal">Balance :</p>
+                    <p className="text-sm font-normal"> 0.0</p>
+                  </div>
+                </div>
+                {tokenTwo ? (
+                  <div className="flex items-center gap-x-2">
+                    <p className="text-[#CBFB45] mx-4 font-semibold">Max</p>
+                    <button
+                      className="w-28 flex gap-x-1 items-center justify-between p-3 border border-neutral rounded-2xl h-[64px] min-w-[136px]"
+                      onClick={() => openModal(2)}
+                    >
+                      <Image
+                        src={tokenTwo.img}
+                        alt="assetOneLogo"
+                        className="assetLogo"
+                        width={32}
+                        height={32}
+                        quality={100}
+                      />
+                      <span className="text-sm font-semibold">
+                        {tokenTwo.ticker}
+                      </span>
+                      {chevronDown}
+                    </button>
+                  </div>
+                ) : (
+                  <div className="w-[50%] grid " onClick={() => openModal(2)}>
+                    <button className="bg-primary1 text-sm sm:text-base justify-self-end text-black rounded-full px-4 py-3 min-w-fit">
+                      Select a token
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="w-full mt-10">
+              <button
+                className={`w-full py-3 rounded-full ${
+                  tokenOneAmount === null || tokenOneAmount === 0
+                    ? "bg-neutral text-neutralLight"
+                    : "bg-primary1 text-black"
+                }`}
+                onClick={() => swapTokens()}
+              >
+                {tokenOneAmount === null || tokenOneAmount === 0
+                  ? "Enter an amount"
+                  : "Swap"}
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
