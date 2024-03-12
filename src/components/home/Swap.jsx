@@ -11,6 +11,7 @@ import { useAccount, useEnsName } from "wagmi";
 import { useSendTransaction, useWaitForTransaction } from "wagmi";
 import { DNA, ThreeDots } from "react-loader-spinner";
 import TransactionSuccessModal from "../models/TransactionSuccessModal";
+import { useWeb3Modal } from "@web3modal/wagmi/react";
 
 export const fetcher = ([endpoint, params]) => {
   const { sellAmount, buyAmount } = params;
@@ -23,6 +24,7 @@ export const fetcher = ([endpoint, params]) => {
 };
 
 export default function Swap() {
+  const { open, close } = useWeb3Modal();
   let [isOpen, setIsOpen] = useState(false);
   const [selectedSlippage, setSelectedSlippage] = useState(0.5);
   const [swapPlaces, setSwapPlaces] = useState(false);
@@ -359,7 +361,7 @@ export default function Swap() {
           onClose={() => setSuccessfulTransaction(false)}
         />
         <div
-          className={`max-w-[512px] px-3 sm:px-1  flex-col flex items-start`}
+          className={`max-w-[512px] px-3 sm:px-1 flex-col flex items-start`}
         >
           <div className="flex flex-row w-full px-2 justify-between">
             <div className="flex items-center gap-x-2">
@@ -517,35 +519,44 @@ export default function Swap() {
               </div>
             )}
             <div className="w-full mt-4">
-              <button
-                className={`w-full  rounded-full ${
-                  tokenOneAmount === null ||
-                  tokenOneAmount === 0 ||
-                  !tokenOneAmount
-                    ? "bg-gray23 text-neutralLight"
-                    : "bg-primary1 text-black"
-                }
+              {isConnected ? (
+                <button
+                  className={`w-full  rounded-full ${
+                    tokenOneAmount === null ||
+                    tokenOneAmount === 0 ||
+                    !tokenOneAmount
+                      ? "bg-gray23 text-neutralLight"
+                      : "bg-primary1 text-black"
+                  }
               ${!isLoading && "py-3"}
               `}
-                onClick={() => swapTokens()}
-              >
-                {isLoading ? (
-                  <div className="flex w-full justify-center items-center">
-                    <ThreeDots
-                      visible={true}
-                      height="50"
-                      width="50"
-                      color="#000000"
-                      radius="9"
-                      ariaLabel="three-dots-loading"
-                      wrapperStyle={{}}
-                      wrapperClass=""
-                    />
-                  </div>
-                ) : (
-                  buttonLabel
-                )}
-              </button>
+                  onClick={() => swapTokens()}
+                >
+                  {isLoading ? (
+                    <div className="flex w-full justify-center items-center">
+                      <ThreeDots
+                        visible={true}
+                        height="50"
+                        width="50"
+                        color="#000000"
+                        radius="9"
+                        ariaLabel="three-dots-loading"
+                        wrapperStyle={{}}
+                        wrapperClass=""
+                      />
+                    </div>
+                  ) : (
+                    buttonLabel
+                  )}
+                </button>
+              ) : (
+                <button
+                  onClick={() => open({ view: "Connect" })}
+                  className="w-full bg-primary1 text-black rounded-full py-3"
+                >
+                  Connect Wallet
+                </button>
+              )}
             </div>
           </div>
         </div>
