@@ -30,7 +30,7 @@ h5,
 h6,
 button,
 button > div {
-  font-family: "Neue Machina", sans-serif;
+  font-family: "Apfel Grotezk", sans-serif;
   user-select: none;
   font-weight: 600;
 }
@@ -47,6 +47,10 @@ button {
   outline: none;
 }
 
+.scrollbar-hidden {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
 
 /* Loader */
 .circle {

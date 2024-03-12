@@ -3,9 +3,11 @@
 import Image from "next/image";
 import Sidebar from "./Sidebar";
 import { usePathname, useRouter } from "next/navigation";
+import { useAccount } from "wagmi";
 const Header = () => {
   const pathname = usePathname();
   const router = useRouter();
+  const { isDisconnected } = useAccount();
   return (
     <header className="grid place-items-center w-full h-[72px] pt-2">
       <div className="max-w-[1440px] w-full flex justify-between items-center h-[72px] px-5 sm:px-8">
@@ -66,15 +68,15 @@ const Header = () => {
           </button>
         </div>
         <div className="flex gap-x-2 items-center">
-          <button className="bg-primary1 text-black rounded-full px-3 py-2 text-sm sm:text-base sm:px-4 sm:py-2">
-            0 $FFC
-          </button>
-          
           {/* <button className="bg-gray22 text-white rounded-full px-3 py-2 text-sm sm:text-base sm:px-4 sm:py-3 hidden md:block"> */}
-          <w3m-network-button  balance="show"/>  
-          <w3m-button label="Connect"  balance="hide"/>  
-          
-          <button className="bg-gray22 text-white rounded-full px-3 py-2 text-sm sm:text-base sm:px-4 sm:py-3 hidden md:block">
+          {/* <w3m-network-button  balance="show" />   */}
+          {isDisconnected ? (
+            <w3m-button label="Connect" balance="hide" />
+          ) : (
+            <w3m-account-button balance="show" />
+          )}
+          {/* <w3m-connect-button /> */}
+          <button className="bg-gray22 text-white rounded-full px-2 py-1 text-sm sm:text-base sm:px-4 sm:py-3 hidden md:block">
             {darkMode}
           </button>
           <button className="bg-gray22 text-white rounded-full px-3 py-2 text-sm sm:text-base sm:px-4 sm:py-3 hidden md:block">
@@ -88,8 +90,8 @@ const Header = () => {
 
 const darkMode = (
   <svg
-    width="20"
-    height="20"
+    width="14"
+    height="14"
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -162,8 +164,8 @@ const darkMode = (
 
 const threeDots = (
   <svg
-    width="20"
-    height="20"
+    width="14"
+    height="14"
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

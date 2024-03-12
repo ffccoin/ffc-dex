@@ -3,7 +3,7 @@
 import React, { ReactNode } from "react";
 import { wagmiConfig, projectId } from "@/blockchain/config";
 
-import { createWeb3Modal,useWeb3Modal } from "@web3modal/wagmi/react";
+import { createWeb3Modal, useWeb3Modal } from "@web3modal/wagmi/react";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -20,17 +20,16 @@ export const web3ModalCreate = createWeb3Modal({
   projectId,
   themeVariables: {
     "--w3m-color-mix": "#151517",
-    // "--w3m-color-mix-strength": 40,
-    "--w3m-accent":"#CBFB45",
+    "--w3m-accent": "#181E25",
   },
 });
 export function Web3Modal({ children, initialState }) {
-  
   return (
     <WagmiProvider config={wagmiConfig} initialState={initialState}>
-      <QueryClientProvider client={queryClient}>{children}
-      <div>
-        </div></QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        {children}
+        <div></div>
+      </QueryClientProvider>
     </WagmiProvider>
   );
 }

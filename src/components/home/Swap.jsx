@@ -15,22 +15,29 @@ import LoadingPage from "@/components/animations/swapLoading";
 import { DNA, ThreeDots } from "react-loader-spinner";
 import loading from "@/app/loading";
 
+export const fetcher = ([endpoint, params]) => {
+  const { sellAmount, buyAmount } = params;
+  if (!sellAmount && !buyAmount) return;
+  const query = qs.stringify(params);
+
+  return fetch(`https://api.0x.org/swap/v1/price?${query}`).then((res) =>
+    res.json()
+  );
+};
+
 export default function Swap() {
   let [isOpen, setIsOpen] = useState(false);
-  const [selectedSlippage, setSelectedSlippage] = useState(0);
+  const [selectedSlippage, setSelectedSlippage] = useState(0.5);
   const [swapPlaces, setSwapPlaces] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
   const [buttonLabel, setButtonLabel] = useState("Enter an amount");
-  const [buttonClass, setButtonClass] = useState(
-    "bg-neutral text-neutralLight"
-  );
 
   const [tokenOne, setTokenOne] = useState(null);
   const [tokenTwo, setTokenTwo] = useState(null);
   const [changeToken, setChangeToken] = useState(1);
   const [tokenOneAmount, setTokenOneAmount] = useState(null);
   const [tokenTwoAmount, setTokenTwoAmount] = useState(null);
-  const [coinData, setCoinData] = useState(null);
+  const [tokenOnePerTokenTwo, setTokenOnePerTokenTwo] = useState(null);
   const { address, connector, isConnected } = useAccount();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -65,6 +72,7 @@ export default function Swap() {
   //     value: "0",
   //   },
   // });
+
   useEffect(() => {
     console.log("tx UseEffect called");
     console.log(txDetails); // This will log the updated state, but only after it changes.
@@ -95,10 +103,12 @@ export default function Swap() {
     return tokenOne === null || tokenTwo === null;
   }
 
+  console.log("TokenOnePerTokenTwo", tokenOnePerTokenTwo);
+
   function switchTokens() {
-    const amount = tokenTwoAmount
+    const amount = tokenTwoAmount;
     setTokenOneAmount(amount);
-    setTokenTwoAmount(0);
+    setTokenTwoAmount(null);
     const one = tokenOne;
     const two = tokenTwo;
     setTokenOne(two);
@@ -108,8 +118,8 @@ export default function Swap() {
     }
   }
   function modifyToken(i) {
-    setTokenOneAmount(0);
-    setTokenTwoAmount(0);
+    setTokenOneAmount(null);
+    setTokenTwoAmount(null);
     if (changeToken === 1) {
       setTokenOne(filteredTokenList[i]);
       if (tokenTwo != null) {
@@ -126,26 +136,54 @@ export default function Swap() {
   }
 
   async function fetchPrices() {
-    let tokenOneAmountNum = parseFloat(tokenOneAmount);
-    let amount = tokenOneAmountNum * Math.pow(10, tokenOne.decimals);
-    const params = {
-      sellToken: tokenOne.address,
-      buyToken: tokenTwo.address,
-      sellAmount: amount,
-    };
+    if (!tokenOneAmount || tokenOneAmount === null || tokenOneAmount === 0) {
+      setTokenTwoAmount(0);
+      setButtonLabel("Enter an amount");
+    } else {
+      let tokenOneAmountNum = parseFloat(tokenOneAmount);
+      let amount = tokenOneAmountNum * Math.pow(10, tokenOne.decimals);
+      const params = {
+        sellToken: tokenOne.address,
+        buyToken: tokenTwo.address,
+        sellAmount: amount,
+        slippagePercentage: selectedSlippage,
+      };
 
-    const headers = {
-      "0x-api-key": "9a827917-91ba-4739-87f9-23451d511ea6",
-    };
+      const headers = {
+        "0x-api-key": "9a827917-91ba-4739-87f9-23451d511ea6",
+      };
+      // Fetch the swap price.
+      const response = await fetch(
+        `https://api.0x.org/swap/v1/price?${qs.stringify(params)}`,
+        { headers }
+      );
+      const swapPriceJSON = await response.json();
+      setTokenTwoAmount(swapPriceJSON.buyAmount / 10 ** tokenTwo.decimals);
+    }
+  }
 
-    // Fetch the swap price.
-    const response = await fetch(
-      `https://api.0x.org/swap/v1/price?${qs.stringify(params)}`,
-      { headers }
-    );
+  async function getTokenOnePerTokenTwo() {
+    if (tokenOne && tokenTwo) {
+      console.log("HERE");
+      const amount = parseFloat(1 * Math.pow(10, tokenOne.decimals));
+      const params = {
+        sellToken: tokenOne.address,
+        buyToken: tokenTwo.address,
+        sellAmount: amount,
+        slippagePercentage: selectedSlippage,
+      };
 
-    const swapPriceJSON = await response.json();
-    setTokenTwoAmount(swapPriceJSON.buyAmount / 10 ** tokenTwo.decimals);
+      const headers = {
+        "0x-api-key": "9a827917-91ba-4739-87f9-23451d511ea6",
+      };
+      // Fetch the swap price.
+      const response = await fetch(
+        `https://api.0x.org/swap/v1/price?${qs.stringify(params)}`,
+        { headers }
+      );
+      const swapPriceJSON = await response.json();
+      setTokenOnePerTokenTwo(swapPriceJSON.buyAmount / 10 ** tokenTwo.decimals);
+    }
   }
 
   async function swapTokens() {
@@ -161,7 +199,7 @@ export default function Swap() {
           },
         });
         if (res1.data.data.allowance == "0") {
-          setButtonLabel("increase Allowance");
+          setButtonLabel("Increase Allowance");
           setIsLoading(false);
           return;
         } else {
@@ -185,7 +223,7 @@ export default function Swap() {
           return;
         }
       }
-      if (buttonLabel == "increase Allowance") {
+      if (buttonLabel == "Increase Allowance") {
         setIsLoading(true);
         await new Promise((resolve) => setTimeout(resolve, 3000));
         const approve = await axios.get(`/api/approveAllowance`, {
@@ -214,6 +252,12 @@ export default function Swap() {
     }
   }, [tokenOneAmount]);
 
+  useEffect(() => {
+    if (tokenOne && tokenTwo) {
+      getTokenOnePerTokenTwo();
+    }
+  }, [tokenOne, tokenTwo]);
+
   function openModal(asset) {
     setChangeToken(asset);
     setIsOpen(true);
@@ -229,11 +273,11 @@ export default function Swap() {
           {/* The backdrop, rendered as a fixed sibling to the panel container */}
           <div className="fixed inset-0 backdrop-blur-sm" aria-hidden="true" />
           <div className="fixed inset-0 flex items-center justify-center p-10">
-            <div className="bg-neutral rounded-3xl w-full max-w-[32rem] h-[95%] overflow-y-auto">
-              <div className="px-7 py-3">
+            <Dialog.Panel className="flex bg-gray23 rounded-3xl w-full max-w-[32rem] h-[95%] px-7 py-5">
+              <div className="flex flex-col w-full">
                 <div className="flex mt-4 items-center justify-between">
                   <div className="flex-grow text-center">
-                    <p className="text-2xl">Select a Token</p>
+                    <p className="text-2xl font-light">Select a Token</p>
                   </div>
                   <Image
                     alt="close"
@@ -247,44 +291,45 @@ export default function Swap() {
                 <input
                   type="text"
                   placeholder="Search name or paste address"
-                  className="w-full p-2 mt-6 mb-2 border h-14 outline-none rounded-2xl border-gray22Light text-neutralLight bg-neutral"
+                  className="w-full p-2 mt-6 mb-2 border h-14 outline-none rounded-2xl border-gray22 text-neutralLight bg-gray23"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
-                {filteredTokenList.map((e, i) => {
-                  return (
-                    <Dialog.Description className="mt-4" key={i}>
-                      <div
-                        className="flex gap-9 items-center justify-between cursor-pointer"
-                        onClick={() => modifyToken(i)}
-                      >
-                        <div className="flex gap-5 items-center">
-                          <img
-                            src={e.img}
-                            alt={e.ticker}
-                            width={33}
-                            height={33}
-                            quality={100}
-                          />
-                          <div className="flex flex-col">
-                            <div className="text-base uppercase font-neue-machina">
-                              {e.ticker}
-                            </div>
-                            <div className="text-sm mt-1 text-neutralLight">
-                              {e.name}
+                <div className="overflow-y-auto h-full px-2 scrollbar-hidden">
+                  {filteredTokenList.map((e, i) => {
+                    return (
+                      <Dialog.Description className="mt-4" key={i}>
+                        <div
+                          className="flex gap-9 items-center justify-between cursor-pointer"
+                          onClick={() => modifyToken(i)}
+                        >
+                          <div className="flex gap-5 items-center">
+                            <img
+                              src={e.img}
+                              alt={e.ticker}
+                              width={33}
+                              height={33}
+                              quality={100}
+                            />
+                            <div className="flex flex-col">
+                              <div className="text-base uppercase font-neue-machina">
+                                {e.ticker}
+                              </div>
+                              <div className="text-sm mt-1 text-neutralLight">
+                                {e.name}
+                              </div>
                             </div>
                           </div>
-                        </div>
 
-                        <div className="text-sm text-neutralLight">
-                          {e.decimals}
+                          <div className="text-sm text-neutralLight">
+                            {e.decimals}
+                          </div>
                         </div>
-                      </div>
-                    </Dialog.Description>
-                  );
-                })}
-
-                <div className="flex justify-center gap-3 mt-4">
+                      </Dialog.Description>
+                    );
+                  })}
+                </div>
+                <div className="flex justify-center gap-3 py-2">
                   <Image
                     alt="manage"
                     src="/home/manage.svg"
@@ -294,13 +339,14 @@ export default function Swap() {
                   <p className="text-primary1">Manage</p>
                 </div>
               </div>
-            </div>
+            </Dialog.Panel>
           </div>
         </Dialog>
         <SettingsModal
           isOpen={isModalOpen}
           onClose={toggleModal}
           onSelectOption={handleSlippageSelection}
+          selectedSlippage={selectedSlippage}
         />
         <div
           className={`max-w-[512px] px-3 sm:px-1  flex-col flex items-start`}
@@ -378,14 +424,17 @@ export default function Swap() {
                 </div>
               )}
             </div>
-            <Image
-              src="/home/doubleArrow.svg"
-              alt="setting"
-              width={32}
-              height={32}
+            <button
               onClick={switchTokens}
               className="self-center cursor-pointer mt-2"
-            />
+            >
+              <Image
+                src="/home/doubleArrow.svg"
+                alt="setting"
+                width={32}
+                height={32}
+              />
+            </button>
             <div className="w-full  border mt-2 flex items-center border-gray22 rounded-2xl px-4 py-5">
               <div className="sm:w-full w-[50%] flex flex-col gap-y-1">
                 <p className="text-sm font-semibold">To</p>
@@ -409,7 +458,9 @@ export default function Swap() {
                         : tokenTwoAmount
                     }
                     disabled={true}
-                    className=" w-full text-[34px] caret-gray12  placeholder-gray12 leading-[42px] border-transparent bg-transparent outline-none"
+                    className={`w-full text-[34px] ${
+                      tokenTwoAmount === 0 && "text-gray12"
+                    } caret-gray12 placeholder-gray12 leading-[42px] border-transparent bg-transparent outline-none`}
                   />
                 )}
 
@@ -447,37 +498,45 @@ export default function Swap() {
                 </div>
               )}
             </div>
-          </div>
-          <div className="w-full mt-4">
-            <button
-              className={`w-full  rounded-full ${
-                tokenOneAmount === null || tokenOneAmount === 0
-                  ? "bg-neutral text-neutralLight"
-                  : "bg-primary1 text-black"
-              }
-              ${
-                isLoading ? "": "py-3"
-              }
+            {tokenOnePerTokenTwo && (
+              <div className="flex items-center w-full justify-between p-3 text-sm">
+                <span>Price</span>
+                <span>
+                  {tokenOnePerTokenTwo} {tokenOne.ticker} per {tokenTwo.ticker}
+                </span>
+              </div>
+            )}
+            <div className="w-full mt-4">
+              <button
+                className={`w-full  rounded-full ${
+                  tokenOneAmount === null ||
+                  tokenOneAmount === 0 ||
+                  !tokenOneAmount
+                    ? "bg-gray23 text-neutralLight"
+                    : "bg-primary1 text-black"
+                }
+              ${!isLoading && "py-3"}
               `}
-              onClick={() => swapTokens()}
-            >
-              {isLoading ? (
-                <div className="flex w-full justify-center items-center">
-                  <ThreeDots
-                    visible={true}
-                    height="50"
-                    width="50"
-                    color="#000000"
-                    radius="9"
-                    ariaLabel="three-dots-loading"
-                    wrapperStyle={{}}
-                    wrapperClass=""
-                  />
-                </div>
-              ) : (
-                buttonLabel
-              )}
-            </button>
+                onClick={() => swapTokens()}
+              >
+                {isLoading ? (
+                  <div className="flex w-full justify-center items-center">
+                    <ThreeDots
+                      visible={true}
+                      height="50"
+                      width="50"
+                      color="#000000"
+                      radius="9"
+                      ariaLabel="three-dots-loading"
+                      wrapperStyle={{}}
+                      wrapperClass=""
+                    />
+                  </div>
+                ) : (
+                  buttonLabel
+                )}
+              </button>
+            </div>
           </div>
         </div>
       </div>

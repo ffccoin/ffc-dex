@@ -26,6 +26,7 @@
     "react-dom": "^18",
     "react-loader-spinner": "^6.1.6",
     "supports-color": "^9.4.0",
+    "swr": "^2.2.5",
     "utf-8-validate": "^6.0.3",
     "viem": "2.x",
     "wagmi": "^2.5.7"

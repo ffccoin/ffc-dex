@@ -2,12 +2,12 @@ import React from "react";
 import Image from "next/image";
 import { useState } from "react";
 
-export default function SettingsModal({ isOpen, onClose, onSelectOption }) {
-  const [selectedOption, setSelectedOption] = useState(null);
+export default function SettingsModal({ isOpen, onClose, onSelectOption, selectedSlippage }) {
+  const [selectedOption, setSelectedOption] = useState(selectedSlippage);
   const options = [
-    { value: "0.1%", label: "0.1%" },
-    { value: "0.5%", label: "0.5%" },
-    { value: "1.0%", label: "1.0%" },
+    { value: 0.1, label: "0.1%" },
+    { value: 0.5, label: "0.5%" },
+    { value: 1, label: "1.0%" },
   ];
 
   const handleOptionClick = (value) => {
@@ -30,13 +30,14 @@ export default function SettingsModal({ isOpen, onClose, onSelectOption }) {
           <div className=" bg-gray23  w-[512px] sm:h-[536px] h-[619px] px-8 py-10 rounded-3xl shadow-lg">
             <div className="flex justify-between">
               <p className="text-xl font-light">Transaction Settings</p>
-              <Image
-                alt="img"
-                src="/home/cross.svg"
-                width={24}
-                height={24}
-                onClick={onClose}
-              />
+              <button onClick={onClose}>
+                <Image
+                  alt="Close Icon"
+                  src="/home/cross.svg"
+                  width={24}
+                  height={24}
+                />
+              </button>
             </div>
             <div className="flex items-center mt-8 gap-x-2">
               <p className="text-sm font-normal"> Slippage Tolerance</p>
