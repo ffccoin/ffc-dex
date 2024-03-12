@@ -25,7 +25,7 @@ export default function SettingsModal({ isOpen, onClose, onSelectOption, selecte
   };
   return (
     isOpen && (
-      <div className="fixed inset-0 z-40 bg-[rgba(0,0,0,0.4)] backdrop-blur-sm  ">
+      <div className="fixed inset-0 z-40 bg-[rgba(0,0,0,0.4)] backdrop-blur-sm">
         <div className="fixed  px-8 z-50 top-0 left-0  h-full w-full items-center justify-center flex">
           <div className=" bg-gray23  w-[512px] sm:h-[536px] h-[619px] px-8 py-10 rounded-3xl shadow-lg">
             <div className="flex justify-between">

@@ -4,16 +4,13 @@ import React from "react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Dialog } from "@headlessui/react";
-import Button from "../buttons/button";
 import tokenList from "../../../public/tokenList.json";
 import SettingsModal from "../models/SettingsModal";
 import axios from "axios";
-import { formatUnits } from "ethers";
 import { useAccount, useEnsName } from "wagmi";
 import { useSendTransaction, useWaitForTransaction } from "wagmi";
-import LoadingPage from "@/components/animations/swapLoading";
 import { DNA, ThreeDots } from "react-loader-spinner";
-import loading from "@/app/loading";
+import TransactionSuccessModal from "../models/TransactionSuccessModal";
 
 export const fetcher = ([endpoint, params]) => {
   const { sellAmount, buyAmount } = params;
@@ -40,6 +37,7 @@ export default function Swap() {
   const [tokenOnePerTokenTwo, setTokenOnePerTokenTwo] = useState(null);
   const { address, connector, isConnected } = useAccount();
   const [isLoading, setIsLoading] = useState(false);
+  const [successfulTransaction, setSuccessfulTransaction] = useState(false);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [loadingValue, setLoadingValue] = useState(false);
@@ -53,6 +51,7 @@ export default function Swap() {
     data: hash,
     error,
     isPending,
+    isSuccess,
     sendTransaction,
   } = useSendTransaction();
   async function sendTransaction1() {
@@ -262,6 +261,13 @@ export default function Swap() {
     setChangeToken(asset);
     setIsOpen(true);
   }
+
+  useEffect(() => {
+    if (isSuccess) {
+      setSuccessfulTransaction(true);
+    }
+  }, [isSuccess]);
+
   return (
     <div className="">
       <div className="grid place-items-center pt-20 px-3">
@@ -347,6 +353,10 @@ export default function Swap() {
           onClose={toggleModal}
           onSelectOption={handleSlippageSelection}
           selectedSlippage={selectedSlippage}
+        />
+        <TransactionSuccessModal
+          isOpen={successfulTransaction}
+          onClose={() => setSuccessfulTransaction(false)}
         />
         <div
           className={`max-w-[512px] px-3 sm:px-1  flex-col flex items-start`}
