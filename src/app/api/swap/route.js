@@ -10,8 +10,10 @@ export async function getSwapData(req, res) {
   const amount = searchParams.get("amount");
   const from = searchParams.get("from");
   const slippage = searchParams.get("slippage");
+  const selectedNetworkId = searchParams.get("selectedNetworkId");
 
-  const url = "https://api.1inch.dev/swap/v6.0/1/swap";
+
+  const url = `https://api.1inch.dev/swap/v6.0/${selectedNetworkId}/swap`;
   const config = {
     headers: {
       Authorization: "Bearer YWhnQLVh62MTNAcRWm19QrAyrTIC7qan",

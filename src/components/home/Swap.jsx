@@ -4,20 +4,22 @@ import React from "react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Dialog } from "@headlessui/react";
-import tokenList from "../../../public/tokenList.json";
+import tokenList1 from "../../../public/tokenList.json";
+import tokenList56 from "../../../public/chain56.json";
+
 import SettingsModal from "../models/SettingsModal";
 import axios from "axios";
 import { useAccount, useEnsName } from "wagmi";
 import { useSendTransaction, useWaitForTransaction } from "wagmi";
 import { DNA, ThreeDots } from "react-loader-spinner";
 import TransactionSuccessModal from "../models/TransactionSuccessModal";
+import { useWeb3ModalState } from "@web3modal/wagmi/react";
 import { useWeb3Modal } from "@web3modal/wagmi/react";
 
 export const fetcher = ([endpoint, params]) => {
   const { sellAmount, buyAmount } = params;
   if (!sellAmount && !buyAmount) return;
   const query = qs.stringify(params);
-
   return fetch(`https://api.0x.org/swap/v1/price?${query}`).then((res) =>
     res.json()
   );
@@ -25,12 +27,13 @@ export const fetcher = ([endpoint, params]) => {
 
 export default function Swap() {
   const { open, close } = useWeb3Modal();
+  const { selectedNetworkId } = useWeb3ModalState();
   let [isOpen, setIsOpen] = useState(false);
   const [selectedSlippage, setSelectedSlippage] = useState(0.5);
   const [swapPlaces, setSwapPlaces] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
   const [buttonLabel, setButtonLabel] = useState("Enter an amount");
-
+  const [tokenList, setTokenList] = useState([]);
   const [tokenOne, setTokenOne] = useState(null);
   const [tokenTwo, setTokenTwo] = useState(null);
   const [changeToken, setChangeToken] = useState(1);
@@ -56,6 +59,48 @@ export default function Swap() {
     isSuccess,
     sendTransaction,
   } = useSendTransaction();
+
+  useEffect(() => {
+    setTokenOne(null)
+    setTokenOneAmount(0);
+    setTokenTwoAmount(0);
+    setTokenTwo(null)
+    if (selectedNetworkId == 56) {
+      setTokenList(tokenList56);
+    } else {
+      setTokenList(tokenList1);
+    }
+  }, [selectedNetworkId]);
+
+  useEffect(() => {
+    if (tokenOne && tokenTwo) {
+      setLoadingValue(true);
+      setButtonLabel("Swap");
+      fetchPrices().then(() => setLoadingValue(false));
+    }
+  }, [tokenOneAmount]);
+
+  useEffect(() => {
+    if (tokenOne && tokenTwo) {
+      getTokenOnePerTokenTwo();
+    }
+  }, [tokenOne, tokenTwo]);
+
+  useEffect(() => {
+    console.log("tx UseEffect called");
+    console.log(txDetails);
+    if (txDetails.to && isConnected) {
+      sendTransaction1();
+      setIsLoading(false);
+    }
+  }, [txDetails]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      setSuccessfulTransaction(true);
+    }
+  }, [isSuccess]);
+
   async function sendTransaction1() {
     sendTransaction({
       from: address,
@@ -65,27 +110,8 @@ export default function Swap() {
     });
   }
 
-  // const { data, sendTransaction } = useSendTransaction({
-  //   request: {
-  //     from: "0x8744bf1060285DA8A0F49dcAb1b319657DB7aECF",
-  //     to: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-  //     data: "0x095ea7b3000000000000000000000000111111125421ca6dc452d289314280a0f8842a65ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
-  //     value: "0",
-  //   },
-  // });
-
-  useEffect(() => {
-    console.log("tx UseEffect called");
-    console.log(txDetails); // This will log the updated state, but only after it changes.
-
-    if (txDetails.to && isConnected) {
-      sendTransaction1();
-      setIsLoading(false);
-    }
-  }, [txDetails]);
-
   const filteredTokenList = tokenList.filter((token) => {
-    const tokenName = token.ticker.toLowerCase();
+    const tokenName = token.symbol.toLowerCase();
     const tokenAddress = token.address.toLowerCase();
     const search = searchQuery.trim().toLowerCase();
 
@@ -136,30 +162,87 @@ export default function Swap() {
     setIsOpen(false);
   }
 
+  // async function fetchPrices() {
+  //   if (!tokenOneAmount || tokenOneAmount === null || tokenOneAmount === 0) {
+  //     setTokenTwoAmount(0);
+  //     setButtonLabel("Enter an amount");
+  //   } else {
+  //     let tokenOneAmountNum = parseFloat(tokenOneAmount);
+  //     let amount = tokenOneAmountNum * Math.pow(10, tokenOne.decimals);
+  //     const params = {
+  //       sellToken: tokenOne.address,
+  //       buyToken: tokenTwo.address,
+  //       sellAmount: amount,
+  //       slippagePercentage: selectedSlippage,
+  //     };
+
+  //     const headers = {
+  //       "0x-api-key": "9a827917-91ba-4739-87f9-23451d511ea6",
+  //     };
+  //     if (selectedNetworkId == 84531) {
+  //       const response = await fetch(
+  //         `https://base.api.0x.org/swap/v1/price?${qs.stringify(params)}`,
+  //         { headers }
+  //       );
+  //       const swapPriceJSON = await response.json();
+  //       setTokenTwoAmount(swapPriceJSON.buyAmount / 10 ** tokenTwo.decimals);
+  //     } else if (selectedNetworkId == 56) {
+  //       console.log("bsc");
+  //       const response = await fetch(
+  //         `https://bsc.api.0x.org/swap/v1/price?${qs.stringify(params)}`,
+  //         { headers }
+  //       );
+  //       const swapPriceJSON = await response.json();
+  //       setTokenTwoAmount(swapPriceJSON.buyAmount / 10 ** tokenTwo.decimals);
+  //     } else {
+  //       const response = await fetch(
+  //         `https://api.0x.org/swap/v1/price?${qs.stringify(params)}`,
+  //         { headers }
+  //       );
+  //       const swapPriceJSON = await response.json();
+  //       setTokenTwoAmount(swapPriceJSON.buyAmount / 10 ** tokenTwo.decimals);
+  //     }
+  //   }
+  // }
+
   async function fetchPrices() {
     if (!tokenOneAmount || tokenOneAmount === null || tokenOneAmount === 0) {
       setTokenTwoAmount(0);
       setButtonLabel("Enter an amount");
-    } else {
-      let tokenOneAmountNum = parseFloat(tokenOneAmount);
-      let amount = tokenOneAmountNum * Math.pow(10, tokenOne.decimals);
-      const params = {
-        sellToken: tokenOne.address,
-        buyToken: tokenTwo.address,
-        sellAmount: amount,
-        slippagePercentage: selectedSlippage,
-      };
+      return; // Exit early if tokenOneAmount is invalid
+    }
 
-      const headers = {
-        "0x-api-key": "9a827917-91ba-4739-87f9-23451d511ea6",
-      };
-      // Fetch the swap price.
-      const response = await fetch(
-        `https://api.0x.org/swap/v1/price?${qs.stringify(params)}`,
-        { headers }
-      );
+    const tokenOneAmountNum = parseFloat(tokenOneAmount);
+    const amount = tokenOneAmountNum * Math.pow(10, tokenOne.decimals);
+    const params = {
+      sellToken: tokenOne.address,
+      buyToken: tokenTwo.address,
+      sellAmount: amount,
+      slippagePercentage: selectedSlippage,
+    };
+
+    const headers = {
+      "0x-api-key": "9a827917-91ba-4739-87f9-23451d511ea6",
+    };
+
+    let apiUrl = `https://api.0x.org/swap/v1/price`;
+    if (selectedNetworkId === 84531) {
+      apiUrl = `https://base.api.0x.org/swap/v1/price`;
+    } else if (selectedNetworkId === 56) {
+      apiUrl = `https://bsc.api.0x.org/swap/v1/price`;
+    }
+
+    try {
+      const response = await fetch(`${apiUrl}?${qs.stringify(params)}`, {
+        headers,
+      });
+      if (!response.ok) {
+        throw new Error(`Failed to fetch price: ${response.status}`);
+      }
       const swapPriceJSON = await response.json();
       setTokenTwoAmount(swapPriceJSON.buyAmount / 10 ** tokenTwo.decimals);
+    } catch (error) {
+      console.error("Error fetching price:", error);
     }
   }
 
@@ -177,16 +260,29 @@ export default function Swap() {
       const headers = {
         "0x-api-key": "9a827917-91ba-4739-87f9-23451d511ea6",
       };
-      // Fetch the swap price.
-      const response = await fetch(
-        `https://api.0x.org/swap/v1/price?${qs.stringify(params)}`,
-        { headers }
-      );
-      const swapPriceJSON = await response.json();
-      setTokenOnePerTokenTwo(swapPriceJSON.buyAmount / 10 ** tokenTwo.decimals);
+      let apiUrl = `https://api.0x.org/swap/v1/price`;
+      if (selectedNetworkId === 84531) {
+        apiUrl = `https://base.api.0x.org/swap/v1/price`;
+      } else if (selectedNetworkId === 56) {
+        apiUrl = `https://bsc.api.0x.org/swap/v1/price`;
+      }
+
+      try {
+        const response = await fetch(`${apiUrl}?${qs.stringify(params)}`, {
+          headers,
+        });
+        if (!response.ok) {
+          throw new Error(`Failed to fetch price: ${response.status}`);
+        }
+        const swapPriceJSON = await response.json();
+        setTokenOnePerTokenTwo(
+          swapPriceJSON.buyAmount / 10 ** tokenTwo.decimals
+        );
+      } catch (error) {
+        console.error("Error fetching price:", error);
+      }
     }
   }
-
   async function swapTokens() {
     if (isConnected) {
       if (buttonLabel == "Swap") {
@@ -197,6 +293,7 @@ export default function Swap() {
           params: {
             src: tokenOne.address,
             address: address,
+            selectedNetworkId: selectedNetworkId,
           },
         });
         if (res1.data.data.allowance == "0") {
@@ -210,6 +307,7 @@ export default function Swap() {
               dst: tokenTwo.address,
               amount: amount,
               slippage: selectedSlippage,
+              selectedNetworkId: selectedNetworkId,
               from: address,
             },
           });
@@ -230,6 +328,7 @@ export default function Swap() {
         const approve = await axios.get(`/api/approveAllowance`, {
           params: {
             src: tokenOne.address,
+            selectedNetworkId: selectedNetworkId,
           },
         });
         setTxDetails({
@@ -245,30 +344,10 @@ export default function Swap() {
     }
   }
 
-  useEffect(() => {
-    if (tokenOne && tokenTwo) {
-      setLoadingValue(true);
-      setButtonLabel("Swap");
-      fetchPrices().then(() => setLoadingValue(false));
-    }
-  }, [tokenOneAmount]);
-
-  useEffect(() => {
-    if (tokenOne && tokenTwo) {
-      getTokenOnePerTokenTwo();
-    }
-  }, [tokenOne, tokenTwo]);
-
   function openModal(asset) {
     setChangeToken(asset);
     setIsOpen(true);
   }
-
-  useEffect(() => {
-    if (isSuccess) {
-      setSuccessfulTransaction(true);
-    }
-  }, [isSuccess]);
 
   return (
     <div className="">
@@ -278,7 +357,6 @@ export default function Swap() {
           onClose={() => setIsOpen(false)}
           className="relative z-50"
         >
-          {/* The backdrop, rendered as a fixed sibling to the panel container */}
           <div className="fixed inset-0 backdrop-blur-sm" aria-hidden="true" />
           <div className="fixed inset-0 flex items-center justify-center p-10">
             <Dialog.Panel className="flex bg-gray23 rounded-3xl w-full max-w-[32rem] h-[95%] px-7 py-5">
@@ -313,15 +391,15 @@ export default function Swap() {
                         >
                           <div className="flex gap-5 items-center">
                             <img
-                              src={e.img}
-                              alt={e.ticker}
+                              src={e.logoURI}
+                              alt={e.symbol}
                               width={33}
                               height={33}
                               quality={100}
                             />
                             <div className="flex flex-col">
                               <div className="text-base uppercase font-neue-machina">
-                                {e.ticker}
+                                {e.symbol}
                               </div>
                               <div className="text-sm mt-1 text-neutralLight">
                                 {e.name}
@@ -360,9 +438,7 @@ export default function Swap() {
           isOpen={successfulTransaction}
           onClose={() => setSuccessfulTransaction(false)}
         />
-        <div
-          className={`max-w-[512px] px-3 sm:px-1 flex-col flex items-start`}
-        >
+        <div className={`max-w-[512px] px-3 sm:px-1 flex-col flex items-start`}>
           <div className="flex flex-row w-full px-2 justify-between">
             <div className="flex items-center gap-x-2">
               <button className="font-apfel-grotezk font-light bg-primary1 text-black px-4 flex items-center justify-center h-fit pt-1 pb-2 rounded-full">
@@ -414,8 +490,8 @@ export default function Swap() {
                     className="w-28 flex gap-x-1 items-center justify-between p-3 border border-gray22 rounded-2xl h-[64px] min-w-[136px]"
                     onClick={() => openModal(1)}
                   >
-                    <Image
-                      src={tokenOne.img}
+                    <img
+                      src={tokenOne.logoURI}
                       alt="assetOneLogo"
                       className="assetLogo"
                       width={32}
@@ -423,7 +499,7 @@ export default function Swap() {
                       quality={100}
                     />
                     <span className="text-sm font-semibold">
-                      {tokenOne.ticker}
+                      {tokenOne.symbol}
                     </span>
                     {chevronDown}
                   </button>
@@ -488,8 +564,8 @@ export default function Swap() {
                     className="w-28 flex gap-x-1 items-center justify-between p-3 border border-gray22 rounded-2xl h-[64px] min-w-[136px]"
                     onClick={() => openModal(2)}
                   >
-                    <Image
-                      src={tokenTwo.img}
+                    <img
+                      src={tokenTwo.logoURI}
                       alt="assetOneLogo"
                       className="assetLogo"
                       width={32}
@@ -497,7 +573,7 @@ export default function Swap() {
                       quality={100}
                     />
                     <span className="text-sm font-semibold">
-                      {tokenTwo.ticker}
+                      {tokenTwo.symbol}
                     </span>
                     {chevronDown}
                   </button>
@@ -510,11 +586,11 @@ export default function Swap() {
                 </div>
               )}
             </div>
-            {tokenOnePerTokenTwo && (
+            {tokenOnePerTokenTwo && tokenOne  && tokenTwo &&  (
               <div className="flex items-center w-full justify-between p-3 text-sm">
                 <span>Price</span>
                 <span>
-                  {tokenOnePerTokenTwo} {tokenOne.ticker} per {tokenTwo.ticker}
+                  {tokenOnePerTokenTwo} {tokenOne.symbol} per {tokenTwo.symbol}
                 </span>
               </div>
             )}

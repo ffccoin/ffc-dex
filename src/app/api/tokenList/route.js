@@ -2,30 +2,27 @@
 import { NextResponse } from "next/server";
 const axios = require("axios"); // Import axios if not already imported
 
-
 // Define your named exports for the handlers
 export async function getSwapData(req, res) {
   const { searchParams } = new URL(req.url);
-  const src = searchParams.get("src");
   const selectedNetworkId = searchParams.get("selectedNetworkId");
 
-
-  const url = `https://api.1inch.dev/swap/v6.0/${selectedNetworkId}/approve/transaction`;
+  const url = `https://api.1inch.dev/token/v1.2/${selectedNetworkId}`;
   const config = {
     headers: {
       Authorization: "Bearer JJdEhrKq5Co25lD2iYcnLA6jKjl4BaDQ",
     },
-    params: {
-        "tokenAddress": src,
-      },
+    params: {},
   };
 
   try {
     const response = await axios.get(url, config);
-    return NextResponse.json(response.data );
+    console.log(response.data);
+    return NextResponse.json({ data: response.data });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ message:error });
+    return NextResponse.json({ message: error });
   }
 }
 export { getSwapData as GET };
+
