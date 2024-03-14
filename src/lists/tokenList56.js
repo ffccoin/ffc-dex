@@ -7,6 +7,7 @@ export const tokenList56 = [
     logoURI:
       "https://tokens.1inch.io/0xe28b3b32b6c345a34ff64674606124dd5aceca30.png",
   },
+
   {
     address: "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82",
     name: "PancakeSwap Token",

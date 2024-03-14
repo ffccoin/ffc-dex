@@ -18,17 +18,15 @@ const SelectATokenModal = ({
   setTokenOneAmount,
   tokenTwoAmount,
   setTokenTwoAmount,
-  modifyToken,
+  changeToken,
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [tokenList, setTokenList] = useState([]);
   const { selectedNetworkId } = useWeb3ModalState();
-
   const filteredTokenList = tokenList.filter((token) => {
     const tokenName = token.symbol.toLowerCase();
     const tokenAddress = token.address.toLowerCase();
     const search = searchQuery.trim().toLowerCase();
-
     return tokenName.includes(search) || tokenAddress.includes(search);
   });
 
@@ -43,6 +41,16 @@ const SelectATokenModal = ({
       setTokenList(tokenList1);
     }
   }, [selectedNetworkId]);
+  function modifyToken(i) {
+    setTokenOneAmount(null);
+    setTokenTwoAmount(null);
+    if (changeToken === 1) {
+      setTokenOne(filteredTokenList[i]);
+    } else {
+      setTokenTwo(filteredTokenList[i]);
+    }
+    setIsOpen(false);
+  }
 
   return (
     <Dialog

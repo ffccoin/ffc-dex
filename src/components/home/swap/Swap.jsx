@@ -10,6 +10,7 @@ import SelectATokenModal from "../../models/SelectATokenModal";
 import { tokenList1 } from "@/lists/tokenList1";
 import { tokenList56 } from "@/lists/tokenList56";
 import SwitchTokenButton from "./SwitchTokenButton";
+import SwapBalance from "./SwapBalance";
 import SwapButton from "./SwapButton";
 import PerTokenPrice from "./PerTokenPrice";
 
@@ -25,7 +26,6 @@ export default function Swap({ slippage, networkId, apiUrl }) {
   const { address, isConnected } = useAccount();
   const [isLoading, setIsLoading] = useState(false);
   const [successfulTransaction, setSuccessfulTransaction] = useState(false);
-
   const [searchQuery, setSearchQuery] = useState("");
   const [loadingValue, setLoadingValue] = useState(false);
 
@@ -113,6 +113,7 @@ export default function Swap({ slippage, networkId, apiUrl }) {
       fetchPrices();
     }
   }
+
   function modifyToken(i) {
     setTokenOneAmount(null);
     setTokenTwoAmount(null);
@@ -121,7 +122,6 @@ export default function Swap({ slippage, networkId, apiUrl }) {
     } else {
       setTokenTwo(filteredTokenList[i]);
     }
-
     setIsOpen(false);
   }
 
@@ -240,6 +240,7 @@ export default function Swap({ slippage, networkId, apiUrl }) {
           tokenTwoAmount={tokenTwoAmount}
           setTokenTwoAmount={setTokenTwoAmount}
           modifyToken={modifyToken}
+          changeToken={changeToken}
         />
         <TransactionSuccessModal
           isOpen={successfulTransaction}
@@ -257,10 +258,11 @@ export default function Swap({ slippage, networkId, apiUrl }) {
                   disabled={checkDisabled(tokenOne, tokenTwo)}
                   className=" w-full text-[34px] caret-gray12  placeholder-gray12 leading-[42px] border-transparent bg-transparent outline-none"
                 />
-                <div className="flex flex-row gap-x-2">
-                  <p className="text-sm font-normal">Balance :</p>
-                  <p className="text-sm font-normal"> 0.0</p>
-                </div>
+                {tokenOne && address ? (
+                  <SwapBalance address={address} token={tokenOne.address} />
+                ) : (
+                  <span>Balance: 0.0</span>
+                )}
               </div>
               {tokenOne ? (
                 <div className="flex items-center gap-x-2">
@@ -320,11 +322,11 @@ export default function Swap({ slippage, networkId, apiUrl }) {
                     } caret-gray12 placeholder-gray12 leading-[42px] border-transparent bg-transparent outline-none`}
                   />
                 )}
-
-                <div className="flex flex-row gap-x-2">
-                  <p className="text-sm font-normal">Balance :</p>
-                  <p className="text-sm font-normal"> 0.0</p>
-                </div>
+                {tokenTwo && address ? (
+                  <SwapBalance address={address} token={tokenTwo.address} />
+                ) : (
+                  <span> Balance: 0.0</span>
+                )}
               </div>
               {tokenTwo ? (
                 <div className="flex items-center gap-x-2">

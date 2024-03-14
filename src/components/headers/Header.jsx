@@ -4,7 +4,11 @@ import Image from "next/image";
 import Sidebar from "./Sidebar";
 import { usePathname, useRouter } from "next/navigation";
 import { useAccount } from "wagmi";
+import { useWeb3Modal } from "@web3modal/wagmi/react";
+
 const Header = () => {
+  const { open, close } = useWeb3Modal();
+
   const pathname = usePathname();
   const router = useRouter();
   const { isDisconnected } = useAccount();
@@ -70,8 +74,12 @@ const Header = () => {
         <div className="flex gap-x-2 items-center">
           {/* <button className="bg-gray22 text-white rounded-full px-3 py-2 text-sm sm:text-base sm:px-4 sm:py-3 hidden md:block"> */}
           {/* <w3m-network-button  balance="show" />   */}
+          
           {isDisconnected ? (
-            <w3m-button label="Connect" balance="hide" />
+            // <w3m-button label="Connect" balance="hide" />
+            <button className="bg-gray22 text-white rounded-full px-2 py-1 text-sm sm:text-base sm:px-4 sm:py-[0.5rem]" onClick={() => open({ view: "Connect" })}>
+            Connect 
+          </button>
           ) : (
             <w3m-account-button balance="show" />
           )}
