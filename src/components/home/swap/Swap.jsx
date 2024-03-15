@@ -13,6 +13,7 @@ import SwitchTokenButton from "./SwitchTokenButton";
 import SwapBalance from "./SwapBalance";
 import SwapButton from "./SwapButton";
 import PerTokenPrice from "./PerTokenPrice";
+import SwapDetails from "./SwapDetails";
 
 export default function Swap({ slippage, networkId, apiUrl }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -329,7 +330,7 @@ export default function Swap({ slippage, networkId, apiUrl }) {
             </div>
             {tokenTwo ? (
               <div className="flex items-center gap-x-2">
-                <p className="text-[#CBFB45] mx-4 font-semibold">Max</p>
+                <p className="text-[#11130e] mx-4 font-semibold">Max</p>
                 <button
                   className="w-28 flex gap-x-1 items-center justify-between p-3 border border-gray22 rounded-2xl h-[64px] min-w-[136px]"
                   onClick={() => openModal(2)}
@@ -362,6 +363,9 @@ export default function Swap({ slippage, networkId, apiUrl }) {
             slippage={slippage}
             apiUrl={apiUrl}
           />
+          {tokenOneAmount && tokenTwoAmount ? (
+            <SwapDetails tokenTwoAmount={tokenTwoAmount} slippage={slippage} />
+          ) : null}
           <SwapButton
             tokenOneAmount={tokenOneAmount}
             isLoading={isLoading}

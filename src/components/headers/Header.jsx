@@ -75,34 +75,35 @@ const Header = () => {
         <div className="flex gap-x-2 items-center">
           {/* <button className="bg-gray22 text-white rounded-full px-3 py-2 text-sm sm:text-base sm:px-4 sm:py-3 hidden md:block"> */}
           {/* <w3m-network-button  balance="show" />   */}
-
-          {chainId === 1 ? (
-            <button
-              onClick={() => open({ view: "Networks" })}
-              className="bg-gray22 p-2 rounded-full"
-            >
-              <Image
-                src="/header/ethereum.svg"
-                width={20}
-                height={20}
-                alt="ethereum"
-              />
-            </button>
-          ) : chainId === 56 ? (
-            <button
-              onClick={() => open({ view: "Networks" })}
-              className="bg-gray22 p-2 rounded-full"
-            >
-              <Image
-                src="/header/binance.svg"
-                width={20}
-                height={20}
-                alt="binance"
-              />
-            </button>
-          ) : (
-            <p></p>
-          )}
+          <div className="flex sm:hidden">
+            {chainId === 1 ? (
+              <button
+                onClick={() => open({ view: "Networks" })}
+                className="bg-gray22 p-2 rounded-full"
+              >
+                <Image
+                  src="/header/ethereum.svg"
+                  width={20}
+                  height={20}
+                  alt="ethereum"
+                />
+              </button>
+            ) : chainId === 56 ? (
+              <button
+                onClick={() => open({ view: "Networks" })}
+                className="bg-gray22 p-2 rounded-full"
+              >
+                <Image
+                  src="/header/binance.png"
+                  width={20}
+                  height={20}
+                  alt="binance"
+                />
+              </button>
+            ) : (
+              <p></p>
+            )}
+          </div>
 
           {isDisconnected ? (
             // <w3m-button label="Connect" balance="hide" />
@@ -115,9 +116,6 @@ const Header = () => {
           ) : (
             <w3m-account-button balance="show" size="md" />
           )}
-          <button className="bg-gray22 text-white rounded-full px-3 py-1.5 text-sm sm:text-base sm:px-4 sm:py-3">
-            {threeDots}
-          </button>
         </div>
       </div>
     </header>
