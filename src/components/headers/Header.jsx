@@ -3,11 +3,12 @@
 import Image from "next/image";
 import Sidebar from "./Sidebar";
 import { usePathname, useRouter } from "next/navigation";
-import { useAccount } from "wagmi";
+import { useAccount, useChainId } from "wagmi";
 import { useWeb3Modal } from "@web3modal/wagmi/react";
 
 const Header = () => {
   const { open, close } = useWeb3Modal();
+  const chainId = useChainId();
 
   const pathname = usePathname();
   const router = useRouter();
@@ -74,20 +75,47 @@ const Header = () => {
         <div className="flex gap-x-2 items-center">
           {/* <button className="bg-gray22 text-white rounded-full px-3 py-2 text-sm sm:text-base sm:px-4 sm:py-3 hidden md:block"> */}
           {/* <w3m-network-button  balance="show" />   */}
-          
+
+          {chainId === 1 ? (
+            <button
+              onClick={() => open({ view: "Networks" })}
+              className="bg-gray22 p-2 rounded-full"
+            >
+              <Image
+                src="/header/ethereum.svg"
+                width={20}
+                height={20}
+                alt="ethereum"
+              />
+            </button>
+          ) : chainId === 56 ? (
+            <button
+              onClick={() => open({ view: "Networks" })}
+              className="bg-gray22 p-2 rounded-full"
+            >
+              <Image
+                src="/header/binance.svg"
+                width={20}
+                height={20}
+                alt="binance"
+              />
+            </button>
+          ) : (
+            <p></p>
+          )}
+
           {isDisconnected ? (
             // <w3m-button label="Connect" balance="hide" />
-            <button className="bg-gray22 text-white rounded-full px-2 py-1 text-sm sm:text-base sm:px-4 sm:py-[0.5rem]" onClick={() => open({ view: "Connect" })}>
-            Connect 
-          </button>
+            <button
+              className="bg-gray22 text-white rounded-full px-4 py-2 text-sm sm:text-base sm:px-4 sm:py-[0.5rem]"
+              onClick={() => open({ view: "Connect" })}
+            >
+              Connect to Wallet
+            </button>
           ) : (
-            <w3m-account-button balance="show" />
+            <w3m-account-button balance="show" size="md" />
           )}
-          {/* <w3m-connect-button /> */}
-          <button className="bg-gray22 text-white rounded-full px-2 py-1 text-sm sm:text-base sm:px-4 sm:py-3 hidden md:block">
-            {darkMode}
-          </button>
-          <button className="bg-gray22 text-white rounded-full px-3 py-2 text-sm sm:text-base sm:px-4 sm:py-3 hidden md:block">
+          <button className="bg-gray22 text-white rounded-full px-3 py-1.5 text-sm sm:text-base sm:px-4 sm:py-3">
             {threeDots}
           </button>
         </div>
@@ -96,84 +124,10 @@ const Header = () => {
   );
 };
 
-const darkMode = (
-  <svg
-    width="14"
-    height="14"
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M15.536 8.46394C16.4738 9.40175 17.0006 10.6736 17.0006 11.9999C17.0006 13.3262 16.4738 14.5981 15.536 15.5359C14.5981 16.4737 13.3262 17.0006 12 17.0006C10.6737 17.0006 9.40176 16.4737 8.46395 15.5359C7.52615 14.5982 6.99924 13.3264 6.99915 12.0003C6.9991 11.3436 7.12839 10.6934 7.37964 10.0867C7.63088 9.48005 7.99916 8.9288 8.46345 8.46444C8.92774 8.00009 9.47894 7.63173 10.0856 7.3804C10.6922 7.12906 11.3424 6.99968 11.9991 6.99963C13.3253 6.99954 14.5971 7.52627 15.535 8.46394"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M12 4V2"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M12 22V20"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M18.36 5.64005L19.07 4.93005"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M4.93005 19.07L5.64005 18.36"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M20 12H22"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M2 12H4"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M18.36 18.36L19.07 19.07"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M4.93005 4.93005L5.64005 5.64005"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
 const threeDots = (
   <svg
-    width="14"
-    height="14"
+    width="20"
+    height="20"
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

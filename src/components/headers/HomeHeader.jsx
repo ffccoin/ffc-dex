@@ -11,10 +11,10 @@ const HomeHeader = ({
   const router = useRouter();
   const pathname = usePathname();
   return (
-    <div className="flex flex-row w-full px-2 justify-between max-w-[512px]">
-      <div className="flex items-center gap-x-2">
+    <div className="flex flex-row w-full px-7 sm:px-2 justify-between items-center max-w-[512px]">
+      <div className="flex items-center gap-x-1 sm:gap-x-2">
         <button
-          className={`font-apfel-grotezk font-light px-4 flex items-center justify-center h-fit pt-1 pb-2 rounded-full
+          className={`font-apfel-grotezk font-light text-sm sm:text-base px-4 flex items-center justify-center h-fit pt-1 pb-2 rounded-full
               ${pathname === "/" && "bg-primary1 text-black"}
             `}
           onClick={() => router.push("/")}
@@ -22,7 +22,7 @@ const HomeHeader = ({
           Swap
         </button>
         <button
-          className={`font-apfel-grotezk font-light px-4 flex items-center justify-center h-fit pt-1 pb-2 rounded-full
+          className={`font-apfel-grotezk font-light text-sm sm:text-base px-4 flex items-center justify-center h-fit pt-1 pb-2 rounded-full
             ${pathname === "/limit" && "bg-primary1 text-black"}
           `}
           onClick={() => router.push("/limit")}
@@ -30,7 +30,7 @@ const HomeHeader = ({
           Limit
         </button>
         <button
-          className={`font-apfel-grotezk font-light px-4 flex items-center justify-center h-fit pt-1 pb-2 rounded-full
+          className={`font-apfel-grotezk font-light text-sm sm:text-base px-4 flex items-center justify-center h-fit pt-1 pb-2 rounded-full
             ${pathname === "/send" && "bg-primary1 text-black"}
           `}
           onClick={() => router.push("/send")}
@@ -38,7 +38,7 @@ const HomeHeader = ({
           Send
         </button>
         <button
-          className={`font-apfel-grotezk font-light px-4 flex items-center justify-center h-fit pt-1 pb-2 rounded-full
+          className={`font-apfel-grotezk font-light text-sm sm:text-base px-4 flex items-center justify-center h-fit pt-1 pb-2 rounded-full
             ${pathname === "/buy" && "bg-primary1 text-black"}
           `}
           onClick={() => router.push("/buy")}

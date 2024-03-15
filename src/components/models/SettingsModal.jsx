@@ -24,13 +24,13 @@ export default function SettingsModal({
     return "0.0";
   };
   return (
-    <div>
+    <div className="flex items-center">
       <button onClick={() => setModalOpen(true)}>
         <Image
           src="/home/settings.svg"
           alt="setting"
           width={32}
-          className="cursor-pointer"
+          className="cursor-pointer h-6 w-6"
           height={32}
         />
       </button>

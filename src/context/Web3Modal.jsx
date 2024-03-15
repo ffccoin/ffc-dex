@@ -19,17 +19,14 @@ export const web3ModalCreate = createWeb3Modal({
   wagmiConfig: wagmiConfig,
   projectId,
   themeVariables: {
-    "--w3m-color-mix": "#151517",
+    "--w3m-color-mix": "#181E25",
     "--w3m-accent": "#CBFB45",
   },
 });
 export function Web3Modal({ children, initialState }) {
   return (
     <WagmiProvider config={wagmiConfig} initialState={initialState}>
-      <QueryClientProvider client={queryClient}>
-        {children}
-        <div></div>
-      </QueryClientProvider>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     </WagmiProvider>
   );
 }

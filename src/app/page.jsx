@@ -18,7 +18,7 @@ export default function Home() {
   }
 
   return (
-    <main className="overflow-hidden h-full flex flex-col items-center justify-center mt-20">
+    <main className="overflow-hidden h-full flex flex-col items-center justify-center">
       <HomeHeader
         selectedSlippage={selectedSlippage}
         setSelectedSlippage={setSelectedSlippage}

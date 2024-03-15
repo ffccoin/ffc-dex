@@ -13,13 +13,13 @@ const PreloaderProvider = ({ children }) => {
   }, []);
 
   return (
-    <main className="relative min-h-screen">
+    <main className="min-h-screen h-full">
       {!loading ? (
-        <>
+        <div className="flex flex-col h-screen justify-between">
           {pathname !== "/login" && <Header />}
           {children}
           {pathname !== "/login" && <BottomBar />}
-        </>
+        </div>
       ) : (
         <LoadingPage />
       )}
