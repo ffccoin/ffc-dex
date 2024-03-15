@@ -226,150 +226,148 @@ export default function Swap({ slippage, networkId, apiUrl }) {
   }
 
   return (
-    <div className="">
-      <div className="grid place-items-center pt-20 px-3">
-        <SelectATokenModal
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-          tokenOne={tokenOne}
-          setTokenOne={setTokenOne}
-          tokenTwo={tokenTwo}
-          setTokenTwo={setTokenTwo}
-          tokenOneAmount={tokenOneAmount}
-          setTokenOneAmount={setTokenOneAmount}
-          tokenTwoAmount={tokenTwoAmount}
-          setTokenTwoAmount={setTokenTwoAmount}
-          modifyToken={modifyToken}
-          changeToken={changeToken}
-        />
-        <TransactionSuccessModal
-          isOpen={successfulTransaction}
-          onClose={() => setSuccessfulTransaction(false)}
-        />
-        <div className={`max-w-[512px] px-3 sm:px-1 flex-col flex items-start`}>
-          <div className={`mt-3 flex bg-gray22/25 p-4 rounded-2xl flex-col`}>
-            <div className="w-full border mt-2 flex items-center border-gray22 rounded-2xl px-4 py-5">
-              <div className="sm:w-full w-[50%] flex flex-col gap-y-1">
-                <p className="text-sm font-semibold">From</p>
+    <div className="grid place-items-center px-3">
+      <SelectATokenModal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        tokenOne={tokenOne}
+        setTokenOne={setTokenOne}
+        tokenTwo={tokenTwo}
+        setTokenTwo={setTokenTwo}
+        tokenOneAmount={tokenOneAmount}
+        setTokenOneAmount={setTokenOneAmount}
+        tokenTwoAmount={tokenTwoAmount}
+        setTokenTwoAmount={setTokenTwoAmount}
+        modifyToken={modifyToken}
+        changeToken={changeToken}
+      />
+      <TransactionSuccessModal
+        isOpen={successfulTransaction}
+        onClose={() => setSuccessfulTransaction(false)}
+      />
+      <div className="max-w-[512px] px-3 sm:px-1 flex-col flex items-start">
+        <div className="mt-3 flex bg-gray22/35 p-4 rounded-2xl flex-col">
+          <div className="w-full border mt-2 flex items-center border-gray22 rounded-2xl px-4 py-5">
+            <div className="sm:w-full w-[50%] flex flex-col gap-y-1">
+              <p className="text-sm font-semibold">From</p>
+              <input
+                placeholder="0"
+                value={tokenOneAmount}
+                onChange={changeAmount}
+                disabled={checkDisabled(tokenOne, tokenTwo)}
+                className=" w-full text-[34px] caret-gray12  placeholder-gray12 leading-[42px] border-transparent bg-transparent outline-none"
+              />
+              {tokenOne && address ? (
+                <SwapBalance address={address} token={tokenOne.address} />
+              ) : (
+                <span>Balance: 0.0</span>
+              )}
+            </div>
+            {tokenOne ? (
+              <div className="flex items-center gap-x-2">
+                <p className="text-[#CBFB45] mx-4 font-semibold">Max</p>
+                <button
+                  className="w-28 flex gap-x-1 items-center justify-between p-3 border border-gray22 rounded-2xl h-[64px] min-w-[136px]"
+                  onClick={() => openModal(1)}
+                >
+                  <img
+                    src={tokenOne.logoURI}
+                    alt="assetOneLogo"
+                    className="assetLogo"
+                    width={32}
+                    height={32}
+                    quality={100}
+                  />
+                  <span className="text-sm font-semibold">
+                    {tokenOne.symbol}
+                  </span>
+                  {chevronDown}
+                </button>
+              </div>
+            ) : (
+              <div className="w-[50%] grid " onClick={() => openModal(1)}>
+                <button className="bg-primary1 text-sm justify-self-end text-black rounded-full px-4 py-2 min-w-fit">
+                  Select a token
+                </button>
+              </div>
+            )}
+          </div>
+          <SwitchTokenButton switchTokens={switchTokens} />
+          <div className="w-full border mt-2 flex items-center border-gray22 rounded-2xl px-4 py-5">
+            <div className="sm:w-full w-[50%] flex flex-col gap-y-1">
+              <p className="text-sm font-semibold">To</p>
+              {loadingValue ? (
+                <DNA
+                  visible={true}
+                  height="50"
+                  width="50"
+                  ariaLabel="dna-loading"
+                  wrapperStyle={{}}
+                  wrapperClass="dna-wrapper"
+                />
+              ) : (
                 <input
                   placeholder="0"
-                  value={tokenOneAmount}
-                  onChange={changeAmount}
-                  disabled={checkDisabled(tokenOne, tokenTwo)}
-                  className=" w-full text-[34px] caret-gray12  placeholder-gray12 leading-[42px] border-transparent bg-transparent outline-none"
+                  value={
+                    loadingValue
+                      ? "Loading..."
+                      : isNaN(tokenTwoAmount)
+                      ? "Can't fetch value"
+                      : tokenTwoAmount
+                  }
+                  disabled={true}
+                  className={`w-full text-[34px] ${
+                    tokenTwoAmount === 0 && "text-gray12"
+                  } caret-gray12 placeholder-gray12 leading-[42px] border-transparent bg-transparent outline-none`}
                 />
-                {tokenOne && address ? (
-                  <SwapBalance address={address} token={tokenOne.address} />
-                ) : (
-                  <span>Balance: 0.0</span>
-                )}
-              </div>
-              {tokenOne ? (
-                <div className="flex items-center gap-x-2">
-                  <p className="text-[#CBFB45] mx-4 font-semibold">Max</p>
-                  <button
-                    className="w-28 flex gap-x-1 items-center justify-between p-3 border border-gray22 rounded-2xl h-[64px] min-w-[136px]"
-                    onClick={() => openModal(1)}
-                  >
-                    <img
-                      src={tokenOne.logoURI}
-                      alt="assetOneLogo"
-                      className="assetLogo"
-                      width={32}
-                      height={32}
-                      quality={100}
-                    />
-                    <span className="text-sm font-semibold">
-                      {tokenOne.symbol}
-                    </span>
-                    {chevronDown}
-                  </button>
-                </div>
+              )}
+              {tokenTwo && address ? (
+                <SwapBalance address={address} token={tokenTwo.address} />
               ) : (
-                <div className="w-[50%] grid " onClick={() => openModal(1)}>
-                  <button className="bg-primary1 text-sm justify-self-end text-black rounded-full px-4 py-2 min-w-fit">
-                    Select a token
-                  </button>
-                </div>
+                <span> Balance: 0.0</span>
               )}
             </div>
-            <SwitchTokenButton switchTokens={switchTokens} />
-            <div className="w-full border mt-2 flex items-center border-gray22 rounded-2xl px-4 py-5">
-              <div className="sm:w-full w-[50%] flex flex-col gap-y-1">
-                <p className="text-sm font-semibold">To</p>
-                {loadingValue ? (
-                  <DNA
-                    visible={true}
-                    height="50"
-                    width="50"
-                    ariaLabel="dna-loading"
-                    wrapperStyle={{}}
-                    wrapperClass="dna-wrapper"
+            {tokenTwo ? (
+              <div className="flex items-center gap-x-2">
+                <p className="text-[#CBFB45] mx-4 font-semibold">Max</p>
+                <button
+                  className="w-28 flex gap-x-1 items-center justify-between p-3 border border-gray22 rounded-2xl h-[64px] min-w-[136px]"
+                  onClick={() => openModal(2)}
+                >
+                  <img
+                    src={tokenTwo.logoURI}
+                    alt="assetOneLogo"
+                    className="assetLogo"
+                    width={32}
+                    height={32}
+                    quality={100}
                   />
-                ) : (
-                  <input
-                    placeholder="0"
-                    value={
-                      loadingValue
-                        ? "Loading..."
-                        : isNaN(tokenTwoAmount)
-                        ? "Can't fetch value"
-                        : tokenTwoAmount
-                    }
-                    disabled={true}
-                    className={`w-full text-[34px] ${
-                      tokenTwoAmount === 0 && "text-gray12"
-                    } caret-gray12 placeholder-gray12 leading-[42px] border-transparent bg-transparent outline-none`}
-                  />
-                )}
-                {tokenTwo && address ? (
-                  <SwapBalance address={address} token={tokenTwo.address} />
-                ) : (
-                  <span> Balance: 0.0</span>
-                )}
+                  <span className="text-sm font-semibold">
+                    {tokenTwo.symbol}
+                  </span>
+                  {chevronDown}
+                </button>
               </div>
-              {tokenTwo ? (
-                <div className="flex items-center gap-x-2">
-                  <p className="text-[#CBFB45] mx-4 font-semibold">Max</p>
-                  <button
-                    className="w-28 flex gap-x-1 items-center justify-between p-3 border border-gray22 rounded-2xl h-[64px] min-w-[136px]"
-                    onClick={() => openModal(2)}
-                  >
-                    <img
-                      src={tokenTwo.logoURI}
-                      alt="assetOneLogo"
-                      className="assetLogo"
-                      width={32}
-                      height={32}
-                      quality={100}
-                    />
-                    <span className="text-sm font-semibold">
-                      {tokenTwo.symbol}
-                    </span>
-                    {chevronDown}
-                  </button>
-                </div>
-              ) : (
-                <div className="w-[50%] grid " onClick={() => openModal(2)}>
-                  <button className="bg-primary1 text-sm justify-self-end text-black rounded-full px-4 py-2 min-w-fit">
-                    Select a token
-                  </button>
-                </div>
-              )}
-            </div>
-            <PerTokenPrice
-              tokenOne={tokenOne}
-              tokenTwo={tokenTwo}
-              slippage={slippage}
-              apiUrl={apiUrl}
-            />
-            <SwapButton
-              tokenOneAmount={tokenOneAmount}
-              isLoading={isLoading}
-              swapTokens={swapTokens}
-              buttonLabel={buttonLabel}
-            />
+            ) : (
+              <div className="w-[50%] grid " onClick={() => openModal(2)}>
+                <button className="bg-primary1 text-sm justify-self-end text-black rounded-full px-4 py-2 min-w-fit">
+                  Select a token
+                </button>
+              </div>
+            )}
           </div>
+          <PerTokenPrice
+            tokenOne={tokenOne}
+            tokenTwo={tokenTwo}
+            slippage={slippage}
+            apiUrl={apiUrl}
+          />
+          <SwapButton
+            tokenOneAmount={tokenOneAmount}
+            isLoading={isLoading}
+            swapTokens={swapTokens}
+            buttonLabel={buttonLabel}
+          />
         </div>
       </div>
     </div>

@@ -16,9 +16,9 @@ const PreloaderProvider = ({ children }) => {
     <main className="relative min-h-screen">
       {!loading ? (
         <>
-          {pathname !== "/" && <Header />}
+          {pathname !== "/login" && <Header />}
           {children}
-          {pathname !== "/" && <BottomBar />}
+          {pathname !== "/login" && <BottomBar />}
         </>
       ) : (
         <LoadingPage />
