@@ -1,4 +1,4 @@
-import LimitGraph from "@/components/LimitGraph";
+import LimitGraph from "@/components/home/limit/LimitGraph";
 import HomeHeader from "@/components/headers/HomeHeader";
 import React from "react";
 
