@@ -32,9 +32,9 @@ const Header = () => {
         />
         <div className="hidden md:flex items-center gap-x-5">
           <button
-            onClick={() => router.push("/swap")}
+            onClick={() => router.push("/")}
             className={`py-2.5 ${
-              pathname === "/swap"
+              pathname === "/"
                 ? "border-b border-primary1"
                 : "hover:text-primary1 hover:border-b hover:border-primary1"
             } `}

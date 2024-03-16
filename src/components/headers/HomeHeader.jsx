@@ -11,7 +11,7 @@ const HomeHeader = ({
   const router = useRouter();
   const pathname = usePathname();
   return (
-    <div className="flex flex-row w-full px-7 sm:px-2 justify-between items-center max-w-[512px]">
+    <div className="flex flex-row w-full px-4 sm:px-2 justify-between items-center max-w-[512px]">
       <div className="flex items-center gap-x-1 sm:gap-x-2">
         <button
           className={`font-apfel-grotezk font-light text-sm sm:text-base px-4 flex items-center justify-center h-fit pt-1 pb-2 rounded-full

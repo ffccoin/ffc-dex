@@ -14,7 +14,7 @@ const BottomBar = () => {
           <button
             onClick={() => router.push("/swap")}
             className={`py-2.5 text-center px-1 font-apfel-grotezk ${
-              pathname === "/swap"
+              pathname === "/"
                 ? "border-b border-primary1"
                 : "text-gray10 hover:text-white hover:border-b hover:border-primary1"
             }`}

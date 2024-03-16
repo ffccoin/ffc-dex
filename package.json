@@ -11,6 +11,9 @@
   "dependencies": {
     "@headlessui/react": "^1.7.18",
     "@tanstack/react-query": "^5.25.0",
+    "@tsparticles/engine": "^3.3.0",
+    "@tsparticles/react": "^3.0.0",
+    "@tsparticles/slim": "^3.3.0",
     "@web3modal/wagmi": "^4.0.13",
     "alchemy-sdk": "^3.1.2",
     "apexcharts": "^3.47.0",

@@ -43,13 +43,12 @@ const PerTokenPrice = ({ tokenOne, tokenTwo, slippage, apiUrl }) => {
   }, [tokenOne, tokenTwo]);
 
   return (
-    tokenOne &&
-    tokenTwo &&
     tokenOnePerTokenTwo && (
-      <div className="flex items-center w-full justify-between p-3 text-sm">
+      <div className="flex items-center w-full justify-between pb-1 px-2 text-sm">
         <span>Price</span>
         <span>
-          {tokenOnePerTokenTwo} {tokenOne.symbol} per {tokenTwo.symbol}
+          {tokenOnePerTokenTwo.toFixed(6)} {tokenOne.symbol} per{" "}
+          {tokenTwo.symbol}
         </span>
       </div>
     )

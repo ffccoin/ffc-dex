@@ -13,7 +13,7 @@ const SwapButton = ({ tokenOneAmount, isLoading, swapTokens, buttonLabel }) => {
         <button
           className={`w-full  rounded-full ${
             tokenOneAmount === null || tokenOneAmount === 0 || !tokenOneAmount
-              ? "bg-gray23 text-neutralLight"
+              ? "bg-gray22 text-neutralLight"
               : "bg-primary1 text-black"
           }
               ${!isLoading && "py-3"}

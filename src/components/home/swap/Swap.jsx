@@ -227,7 +227,7 @@ export default function Swap({ slippage, networkId, apiUrl }) {
   }
 
   return (
-    <div className="grid place-items-center px-3">
+    <div className="grid place-items-center">
       <SelectATokenModal
         isOpen={isOpen}
         setIsOpen={setIsOpen}
@@ -247,13 +247,13 @@ export default function Swap({ slippage, networkId, apiUrl }) {
         onClose={() => setSuccessfulTransaction(false)}
       />
       <div className="max-w-[512px] px-3 sm:px-1 flex-col flex items-start">
-        <div className="mt-3 flex bg-gray22/35 p-4 rounded-2xl flex-col">
-          <div className="w-full border mt-2 flex items-center border-gray22 rounded-2xl px-4 py-5">
+        <div className="mt-3 flex rounded-2xl flex-col">
+          <div className="w-full border flex items-center border-gray22 focus-within:bg-gray24 focus-within:border-gray24 rounded-2xl px-4 py-5">
             <div className="sm:w-full w-[50%] flex flex-col gap-y-1">
               <p className="text-sm font-semibold">From</p>
               <input
                 placeholder="0"
-                value={tokenOneAmount}
+                value={tokenOneAmount || ""}
                 onChange={changeAmount}
                 disabled={checkDisabled(tokenOne, tokenTwo)}
                 className=" w-full text-[34px] caret-gray12  placeholder-gray12 leading-[42px] border-transparent bg-transparent outline-none"
@@ -315,6 +315,8 @@ export default function Swap({ slippage, networkId, apiUrl }) {
                       : isNaN(tokenTwoAmount)
                       ? "Can't fetch value"
                       : tokenTwoAmount
+                      ? tokenTwoAmount?.toFixed(6)
+                      : ""
                   }
                   disabled={true}
                   className={`w-full text-[34px] ${
@@ -357,15 +359,21 @@ export default function Swap({ slippage, networkId, apiUrl }) {
               </div>
             )}
           </div>
-          <PerTokenPrice
-            tokenOne={tokenOne}
-            tokenTwo={tokenTwo}
-            slippage={slippage}
-            apiUrl={apiUrl}
-          />
-          {tokenOneAmount && tokenTwoAmount ? (
-            <SwapDetails tokenTwoAmount={tokenTwoAmount} slippage={slippage} />
-          ) : null}
+          {tokenOne && tokenTwo && (
+            <div className="bg-gray24 my-2 px-2 py-3 rounded-2xl">
+              <PerTokenPrice
+                tokenOne={tokenOne}
+                tokenTwo={tokenTwo}
+                slippage={slippage}
+                apiUrl={apiUrl}
+              />
+              <SwapDetails
+                tokenOneAmount={tokenOneAmount}
+                tokenTwoAmount={tokenTwoAmount}
+                slippage={slippage}
+              />
+            </div>
+          )}
           <SwapButton
             tokenOneAmount={tokenOneAmount}
             isLoading={isLoading}

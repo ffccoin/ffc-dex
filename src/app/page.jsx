@@ -1,5 +1,6 @@
 "use client";
 
+import LinkedParticlesAnimation from "@/components/animations/LinkedParticlesAnimation";
 import HomeHeader from "@/components/headers/HomeHeader";
 import Swap from "@/components/home/swap/Swap";
 import SettingsModal from "@/components/models/SettingsModal";
@@ -18,16 +19,19 @@ export default function Home() {
   }
 
   return (
-    <main className="overflow-hidden h-full flex flex-col items-center justify-center">
-      <HomeHeader
-        selectedSlippage={selectedSlippage}
-        setSelectedSlippage={setSelectedSlippage}
-      />
-      <Swap
-        slippage={selectedSlippage}
-        networkId={selectedNetworkId}
-        apiUrl={apiUrl}
-      />
+    <main className="overflow-hidden h-full flex items-center justify-center px-4 relative">
+      <LinkedParticlesAnimation />
+      <div className="bg-gray22/50 z-50 py-4 sm:px-2 rounded-2xl flex flex-col items-center justify-center w-fit">
+        <HomeHeader
+          selectedSlippage={selectedSlippage}
+          setSelectedSlippage={setSelectedSlippage}
+        />
+        <Swap
+          slippage={selectedSlippage}
+          networkId={selectedNetworkId}
+          apiUrl={apiUrl}
+        />
+      </div>
     </main>
   );
 }
