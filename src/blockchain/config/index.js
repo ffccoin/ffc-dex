@@ -12,7 +12,7 @@ const metadata = {
   name: "Web3Modal",
   description: "Web3Modal Example",
   url: "https://www.forcefinancecoin.com/", // origin must match your domain & subdomain
-  icons: ["https://www.forcefinancecoin.com/logos/header-logo.svg"],
+  icons: ["	https://ffc-dex.vercel.app/header/logo-mobile.svg"],
 };
  
 
