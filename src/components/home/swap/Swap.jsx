@@ -248,7 +248,7 @@ export default function Swap({ slippage, networkId, apiUrl }) {
       />
       <div className="max-w-[512px] px-3 sm:px-1 flex-col flex items-start">
         <div className="mt-3 flex rounded-2xl flex-col">
-          <div className="w-full border flex items-center border-gray22 focus-within:bg-gray24 focus-within:border-gray24 rounded-2xl px-4 py-5">
+          <div className="w-full border flex items-center border-gray22 bg-gray22/75 focus-within:bg-gray24 focus-within:border-gray24 rounded-2xl px-4 py-5">
             <div className="sm:w-full w-[50%] flex flex-col gap-y-1">
               <p className="text-sm font-semibold">From</p>
               <input
@@ -294,7 +294,7 @@ export default function Swap({ slippage, networkId, apiUrl }) {
             )}
           </div>
           <SwitchTokenButton switchTokens={switchTokens} />
-          <div className="w-full border mt-2 flex items-center border-gray22 rounded-2xl px-4 py-5">
+          <div className="w-full border mt-2 flex items-center border-gray22 bg-gray22/75 rounded-2xl px-4 py-5">
             <div className="sm:w-full w-[50%] flex flex-col gap-y-1">
               <p className="text-sm font-semibold">To</p>
               {loadingValue ? (
