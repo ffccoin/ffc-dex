@@ -55,7 +55,7 @@ const BuyPage = () => {
         <div className="bg-gray22/50 z-50 py-4 sm:px-2 px-4 rounded-2xl flex flex-col items-center justify-center w-full max-w-[512px] max-h-[500px] h-full mx-4">
         <HomeHeader noSettings />
 
-          <div className="flex flex-col gap-y-3 w-full h-full px-4">
+          <div className="flex flex-col justify-center gap-y-3 w-[50%] h-full px-4">
             <button
               className="bg-primary1 text-black px-3 py-2 rounded-full"
               onClick={() => setMoonPayShow(true)}
