@@ -10,10 +10,8 @@ export async function getOhlcv(req, res) {
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   myHeaders.append("X-API-KEY", "BQY63fpUCtaKamOy6vrv3cwMISFbOABY");
-  myHeaders.append(
-    "Authorization",
-    "Bearer ory_at_mlklmU3-6EvbOHqkVtBj-A8qMfwcsfTvLFyr_4OAWmA.lLnd0PAwDGgMIEeNf2GhB3zfxc1acs7GI2Uz1iBFTBM"
-  );
+  myHeaders.append("Authorization", "Bearer ory_at_oqU-iZ_nAFBkWQXQExRcttRmjKmAaFx5fU46s2Yo-4o.bgk1n3PE80OFpKj-yzgDxM9VJi6-rbNznzAxVBRAGAg");
+
   // const raw = JSON.stringify({
   //   query:
   //     'query MyQuery {\n  EVM(dataset: archive) {\n    DEXTradeByTokens(\n      orderBy: {descending: Block_Date}\n      where: {Trade: {Side: {Currency: {SmartContract: {is: "0xdac17f958d2ee523a2206206994597c13d831ec7"}}}, Currency: {SmartContract: {is: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"}}}}\n      limit: {count: 400 }\n    ) {\n      Block {\n        Date(interval: {in: years, count: 1})\n      }\n      volume: sum(of: Trade_Amount)\n      count\n      Trade {\n        high: Price(maximum: Trade_Price)\n        low: Price(minimum: Trade_Price)\n        open: Price(minimum: Block_Number)\n        close: Price(maximum: Block_Number)\n        Currency {\n          Name(selectWhere: {})\n        }\n        Dex {\n          ProtocolName\n          SmartContract\n        }\n        Side {\n          Currency {\n            Name\n            SmartContract\n          }\n        }\n      }\n    }\n  }\n}\n',
@@ -25,8 +23,9 @@ export async function getOhlcv(req, res) {
   //   variables: "{}",
   // });
 
+
   const raw = JSON.stringify({
-    "query": "query MyQuery {\n  EVM(dataset: archive) {\n    DEXTradeByTokens(\n      orderBy: {}\n      where: {Trade: {Side: {Currency: {SmartContract: {is: \"0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2\"}}}, Currency: {SmartContract: {is: \"0xdac17f958d2ee523a2206206994597c13d831ec7\"}}}, Block: {Date: {after: \"2022-01-01\", before: \"2024-12-31\"}}}\n      limit: {count:80}\n    ) {\n      Block {\n        Date(interval: {in: months, count: 1})\n      }\n      volume: sum(of: Trade_Amount)\n      count\n      Trade {\n        high: Price(maximum: Trade_Price)\n        low: Price(minimum: Trade_Price)\n        open: Price(minimum: Block_Number)\n        close: Price(maximum: Block_Number)\n        Currency {\n          Name(selectWhere: {})\n        }\n        Dex {\n          ProtocolName\n          SmartContract\n        }\n        Side {\n          Currency {\n            Name\n            SmartContract\n          }\n        }\n      }\n    }\n  }\n}\n",
+    "query": "query MyQuery {\n  EVM(dataset: archive) {\n    DEXTradeByTokens(\n      orderBy: {}\n      where: {Trade: {Side: {Currency: {SmartContract: {is: \"0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2\"}}}, Currency: {SmartContract: {is: \"0xdac17f958d2ee523a2206206994597c13d831ec7\"}}}, Block: {Date: {after: \"2022-09-01\", before: \"2024-12-31\"}}}\n      limit: {count: 100}\n    ) {\n      Block {\n        Date(interval: {in: months, count: 1})\n      }\n      volume: sum(of: Trade_Amount)\n      count\n      Trade {\n        high: Price(maximum: Trade_Price)\n        low: Price(minimum: Trade_Price)\n        open: Price(minimum: Block_Number)\n        close: Price(maximum: Block_Number)\n        Currency {\n          Name(selectWhere: {})\n        }\n        Dex {\n          ProtocolName\n          SmartContract\n        }\n        Side {\n          Currency {\n            Name\n            SmartContract\n          }\n        }\n      }\n    }\n  }\n}\n",
     "variables": "{}"
  });
   const requestOptions = {
