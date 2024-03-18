@@ -14,22 +14,14 @@ const Header = () => {
   const router = useRouter();
   const { isDisconnected } = useAccount();
   return (
-    <header className="grid place-items-center w-full h-[72px] pt-2">
+    <header className="grid place-items-center w-full h-[72px] pt-2 fixed bg-gray24">
       <div className="max-w-[1440px] w-full flex justify-between items-center h-[72px] px-5 sm:px-8">
-        <Image
-          src="/header/logo.svg"
-          className="hidden sm:block md:hidden lg:block"
-          width={220}
-          height={32}
-          alt="logo"
-        />
-        <Image
-          src="/header/logo-mobile.svg"
-          width={39}
-          height={32}
-          alt="logo"
-          className="sm:hidden md:block lg:hidden"
-        />
+        <div className="flex items-end gap-x-2">
+          <Image src="/logos/logo.svg" width={32} height={32} alt="logo" />
+          <h2 className="font-neue-machina-bold text-xl hidden sm:block md:hidden lg:block">
+            Force Finance
+          </h2>
+        </div>
         <div className="hidden md:flex items-center gap-x-5">
           <button
             onClick={() => router.push("/")}

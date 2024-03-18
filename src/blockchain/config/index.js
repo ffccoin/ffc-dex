@@ -8,13 +8,12 @@ export const projectId = "53fc8781d94a11d4ef70a2d11918f99f";
 
 if (!projectId) throw new Error("Project ID is not defined");
 
-
 const metadata = {
   name: "FFC",
   description: "forcefinancecoin",
   url: "https://www.forcefinancecoin.com/", // origin must match your domain & subdomain
-  icons: ["https://ffc-dex.vercel.app/header/logo-mobile.svg"],
-  alt: "FFC Logo" 
+  icons: ["https://ffc-dex.vercel.app/logos/logo.svg"],
+  alt: "FFC Logo",
 };
 // Create wagmiConfig
 export const wagmiConfig = defaultWagmiConfig({
