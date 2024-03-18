@@ -3,9 +3,9 @@
 import LinkedParticlesAnimation from "@/components/animations/LinkedParticlesAnimation";
 import HomeHeader from "@/components/headers/HomeHeader";
 import Swap from "@/components/home/swap/Swap";
-import SettingsModal from "@/components/models/SettingsModal";
 import { useWeb3ModalState } from "@web3modal/wagmi/react";
 import { useState } from "react";
+
 
 export default function Home() {
   const { selectedNetworkId } = useWeb3ModalState();

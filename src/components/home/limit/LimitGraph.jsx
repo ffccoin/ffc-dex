@@ -15,7 +15,7 @@ export default function LimitGraph() {
           show: false,
         },
         type: "candlestick",
-        height:350,
+        height: 350,
       },
       title: {
         text: "Trading Data",
@@ -32,50 +32,54 @@ export default function LimitGraph() {
           enabled: true,
         },
         labels: {
-          formatter: function(val) {
+          formatter: function (val) {
             return val.toFixed(6); // Adjust the number of decimal places as needed
-          }
-        }
-      
+          },
+        },
       },
-      
     },
   });
 
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`/api/ohlcv`);
+      const data = response.data.data.EVM.DEXTradeByTokens;
+      console.log(response.data.data.EVM.DEXTradeByTokens);
+      const firstItem = data[0];
+      const firstDate = new Date(firstItem.Block.Date);
+      data.forEach((item) => {
+        console.log(item.Block.Date);
+      });
+      console.log("Date of the first item:", new Date(firstDate));
 
+      const seriesData = data.map((item) => ({
+        x: new Date(item.Block.Date).getTime(),
+        y: [
+          parseFloat(item.Trade.open),
+          parseFloat(item.Trade.high),
+          parseFloat(item.Trade.low),
+          parseFloat(item.Trade.close),
+        ],
+      }));
 
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`/api/ohlcv`);
-        const data = response.data.data.EVM.DEXTradeByTokens   
-        console.log(response.data.data.EVM.DEXTradeByTokens)
-        const firstItem = data[0];
-        const firstDate = new Date(firstItem.Block.Date);
-        console.log("Date of the first item:", new Date(firstDate));
-
-        const seriesData = data.map((item) => ({
-          x: new Date(item.Block.Date).getTime(),
-          y: [parseFloat(item.Trade.open), parseFloat(item.Trade.high), parseFloat(item.Trade.low), parseFloat(item.Trade.close)],
-        }));
-
-        setChartData((prevChartData) => ({
-          ...prevChartData,
-          series: [{ data: seriesData }],
-        }));
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-
+      setChartData((prevChartData) => ({
+        ...prevChartData,
+        series: [{ data: seriesData }],
+      }));
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   return (
     <div>
-      <button  onClick ={()=>fetchData()} className="bg-primary1 text-sm justify-self-end text-black rounded-full px-4 py-2 min-w-fit">
-                  Select a token
-                </button>
+      <button
+        onClick={() => fetchData()}
+        className="bg-primary1 text-sm justify-self-end text-black rounded-full px-4 py-2 min-w-fit"
+      >
+        Select a token
+      </button>
       <div id="chart">
-        
         <ReactApexChart
           options={chartData.options}
           series={chartData.series}

@@ -1,4 +1,3 @@
-import Header from "@/components/headers/Header";
 import "./globals.css";
 import PreloaderProvider from "./PreloaderProvider";
 import { Web3Modal } from "@/context/Web3Modal";

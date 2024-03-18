@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import SettingsModal from "../models/SettingsModal";
+import { useState } from "react";
 
 const HomeHeader = ({
   selectedSlippage = null,
