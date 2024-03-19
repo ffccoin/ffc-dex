@@ -6,13 +6,14 @@ import SwapBalance from "@/components/home/swap/SwapBalance";
 import SelectATokenSendModal from "@/components/models/SelectATokenSendModal";
 import { useWeb3ModalState } from "@web3modal/wagmi/react";
 import React, { useEffect, useState } from "react";
+import { useAccount } from "wagmi";
 
 const SendPage = () => {
   const [amount, setAmount] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [token, setToken] = useState(null);
   const [changeToken, setChangeToken] = useState(1);
-  const { address } = useWeb3ModalState();
+  const { address } = useAccount();
   const [walletAddressToSendTokens, setWalletAddressToSendTokens] =
     useState("");
   const handleAmountChange = (e) => {

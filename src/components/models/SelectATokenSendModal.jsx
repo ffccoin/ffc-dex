@@ -25,7 +25,7 @@ const SelectATokenSendModal = ({
 
   useEffect(() => {
     setToken(null);
-    setTokenAmount(0);
+    setTokenAmount(null);
     if (selectedNetworkId == 56) {
       setTokenList(tokenList56);
     } else {
