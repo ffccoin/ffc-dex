@@ -6,7 +6,7 @@ import { DNA } from "react-loader-spinner";
 import TransactionSuccessModal from "../../models/TransactionSuccessModal";
 import SelectATokenModal from "../../models/SelectATokenModal";
 import { tokenList1 } from "@/lists/tokenList1";
-import { useSendTransaction, useAccount, useConnect } from "wagmi";
+import { useSendTransaction, useAccount, useConnect, useConnectorClient } from "wagmi";
 import { tokenList56 } from "@/lists/tokenList56";
 import SwitchTokenButton from "../swap/SwitchTokenButton";
 import SwapBalance from "../swap/SwapBalance";
@@ -14,7 +14,6 @@ import PerTokenPrice from "../swap/PerTokenPrice";
 import Web3 from "web3";
 import LimitButton from "./LimitButton";
 import {
-  seriesNonceManagerContractAddresses,
   ChainId,
   Erc20Facade,
   LimitOrderBuilder,
@@ -26,6 +25,7 @@ import {
   Web3ProviderConnector,
 } from "@1inch/limit-order-protocol-utils";
 import { useClient } from "wagmi";
+import { clientToWeb3js, useWeb3jsSigner } from "@/components/web3/useWeb3";
 
 export default function Limit({ slippage, networkId, apiUrl }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -40,6 +40,9 @@ export default function Limit({ slippage, networkId, apiUrl }) {
   const [isLoading, setIsLoading] = useState(false);
   const [successfulTransaction, setSuccessfulTransaction] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const chainId = ChainId.ethereumMainnet;
+  const { data :client } = useConnectorClient({ chainId:1 });
+
 
   const [loadingValue, setLoadingValue] = useState(false);
 
@@ -136,14 +139,16 @@ export default function Limit({ slippage, networkId, apiUrl }) {
     }
   }
 
+
   function limit() {
-    const web3 = new Web3(
-      "https://mainnet.infura.io/v3/b725d626b2e9485f9e5ae8366b22cb55"
-    );
-    web3.eth.getBlockNumber().then(console.log);
+    // const web3 = new Web3(
+    //   "https://mainnet.infura.io/v3/b725d626b2e9485f9e5ae8366b22cb55"
+    // );
+    const chainId = 1;
+    const web3 = new clientToWeb3js(client)
     const connector = new Web3ProviderConnector(web3);
-    const chainId = ChainId.ethereumMainnet;
-    const walletAddress = "0xd337163ef588f2ee7cdd30a3387660019be415c9";
+    const connector2 = new (web3);
+    const walletAddress = address;
     const contractAddress = "0x7643b8c2457c1f36dc6e3b8f8e112fdf6da7698a";
     const limitOrderBuilder = new LimitOrderBuilder(
       contractAddress,
@@ -151,7 +156,7 @@ export default function Limit({ slippage, networkId, apiUrl }) {
       connector
     );
     const salt = web3.utils.randomHex(32);
-
+    console.log(connector)
     const limitOrder = limitOrderBuilder.buildLimitOrder({
       makerAssetAddress: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
       takerAssetAddress: "0x111111111117dc0aa78b770fa6a738034120c302",
@@ -172,15 +177,14 @@ export default function Limit({ slippage, networkId, apiUrl }) {
       limitOrderBuilder.buildLimitOrderTypedData(limitOrder);
 
     console.log(limitOrderTypedData);
-    const limitOrderHash =
-      limitOrderBuilder.buildLimitOrderHash(limitOrderTypedData);
-    console.log(limitOrderHash);
 
     const limitOrderSignature = limitOrderBuilder.buildOrderSignature(
       walletAddress,
       limitOrderTypedData
     );
-    x;
+    const limitOrderHash =
+      limitOrderBuilder.buildLimitOrderHash(limitOrderTypedData);
+    console.log(limitOrderHash);
   }
 
   function openModal(asset) {

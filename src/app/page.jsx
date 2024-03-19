@@ -5,7 +5,7 @@ import HomeHeader from "@/components/headers/HomeHeader";
 import Swap from "@/components/home/swap/Swap";
 import { useWeb3ModalState } from "@web3modal/wagmi/react";
 import { useState } from "react";
-
+import BlockComponent from "./block";
 
 export default function Home() {
   const { selectedNetworkId } = useWeb3ModalState();
@@ -21,7 +21,8 @@ export default function Home() {
   return (
     <main className="overflow-hidden h-full flex items-center justify-center px-4 relative">
       <LinkedParticlesAnimation />
-      <div className="bg-gray22/50 z-50 py-4 sm:px-2 rounded-2xl flex flex-col items-center justify-center w-fit">
+      <BlockComponent/>
+      {/* <div className="bg-gray22/50 z-50 py-4 sm:px-2 rounded-2xl flex flex-col items-center justify-center w-fit">
         <HomeHeader
           selectedSlippage={selectedSlippage}
           setSelectedSlippage={setSelectedSlippage}
@@ -31,7 +32,7 @@ export default function Home() {
           networkId={selectedNetworkId}
           apiUrl={apiUrl}
         />
-      </div>
+      </div> */}
     </main>
   );
 }
