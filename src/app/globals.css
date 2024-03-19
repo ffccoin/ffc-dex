@@ -74,6 +74,19 @@ button {
   pointer-events: none;
 }
 
+/* Removing arrows from input text */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
 /* .text-gradient-9 {
   background: -webkit-linear-gradient(
     91deg,
