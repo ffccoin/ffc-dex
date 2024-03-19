@@ -4,8 +4,7 @@ import LinkedParticlesAnimation from "@/components/animations/LinkedParticlesAni
 import HomeHeader from "@/components/headers/HomeHeader";
 import SwapBalance from "@/components/home/swap/SwapBalance";
 import SelectATokenSendModal from "@/components/models/SelectATokenSendModal";
-import { useWeb3ModalState } from "@web3modal/wagmi/react";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAccount } from "wagmi";
 
 const SendPage = () => {
