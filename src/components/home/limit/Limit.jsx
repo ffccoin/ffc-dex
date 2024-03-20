@@ -27,12 +27,10 @@ import {
 import { useClient } from "wagmi";
 import { clientToWeb3js, useWeb3jsSigner } from "@/components/web3/useWeb3";
 
-export default function Limit({ slippage, networkId, apiUrl }) {
+export default function Limit({ slippage, networkId, apiUrl,tokenOne,tokenTwo ,setTokenOne,setTokenTwo}) {
   const [isOpen, setIsOpen] = useState(false);
   const [buttonLabel, setButtonLabel] = useState("Enter an amount");
   const [tokenList, setTokenList] = useState([]);
-  const [tokenOne, setTokenOne] = useState(null);
-  const [tokenTwo, setTokenTwo] = useState(null);
   const [changeToken, setChangeToken] = useState(1);
   const [tokenOneAmount, setTokenOneAmount] = useState(null);
   const [tokenTwoAmount, setTokenTwoAmount] = useState(null);
@@ -145,7 +143,8 @@ export default function Limit({ slippage, networkId, apiUrl }) {
     //   "https://mainnet.infura.io/v3/b725d626b2e9485f9e5ae8366b22cb55"
     // );
     const chainId = 1;
-    const web3 = new clientToWeb3js(client)
+    // const web3 = new clientToWeb3js(client)
+    const web3 = new useWeb3jsSigner({chainId})
     const connector = new Web3ProviderConnector(web3);
     const connector2 = new (web3);
     const walletAddress = address;

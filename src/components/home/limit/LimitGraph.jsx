@@ -6,7 +6,7 @@ import axios from "axios";
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
-export default function LimitGraph() {
+export default function LimitGraph({tokenOne,tokenTwo }) {
   const [chartData, setChartData] = useState({
     series: [],
     options: {
@@ -42,7 +42,11 @@ export default function LimitGraph() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`/api/ohlcv`);
+      const response = await axios.get(`/api/ohlcv`, {
+        params: {
+          src: tokenOne.address,
+          dst: tokenTwo.address,
+        }});
       const data = response.data.data.EVM.DEXTradeByTokens;
       console.log(response.data.data.EVM.DEXTradeByTokens);
       const firstItem = data[0];
