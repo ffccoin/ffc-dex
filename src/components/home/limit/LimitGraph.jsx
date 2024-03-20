@@ -15,7 +15,7 @@ export default function LimitGraph() {
           show: false,
         },
         type: "candlestick",
-        height: 350,
+        height: 290,
       },
       title: {
         text: "Trading Data",
@@ -73,22 +73,24 @@ export default function LimitGraph() {
 
   return (
     <div>
-      <button
-        onClick={() => fetchData()}
-        className="bg-primary1 text-sm justify-self-end text-black rounded-full px-4 py-2 min-w-fit"
-      >
-        Select a token
-      </button>
-      <div id="chart">
+       
+      <div id="chart" className="bg-gray22/50 z-50  rounded-2xl max-h-[400px] h-full ">
         <ReactApexChart
           options={chartData.options}
           series={chartData.series}
           type="candlestick"
           height={380}
-          width={1040}
+          width={840}
         />
       </div>
-      <div id="html-dist"></div>
+      <button
+        onClick={() => fetchData()}
+        className="bg-primary1 text-sm justify-self-end text-black rounded-full px-4 py-2 min-w-fit"
+      >
+        genrate graph
+      </button>
+     
     </div>
+
   );
 }

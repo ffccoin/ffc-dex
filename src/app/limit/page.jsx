@@ -22,12 +22,16 @@ const LimitPage = () => {
   return (
     <div className="overflow-hidden h-full flex flex-col items-center justify-center mt-20">
       <LinkedParticlesAnimation />
+      <div className="flex ">
+      <LimitGraph/>
       <div className="overflow-hidden h-full flex items-center justify-center px-4 relative">
-        <div className="bg-gray22/50 z-50 py-4 sm:px-2 px-4 rounded-2xl flex flex-col items-center justify-center w-full max-w-[512px] max-h-[400px] h-full mx-4">
+        <div className="bg-gray22/50 z-50 py-4 sm:px-2 px-4 rounded-2xl flex flex-col items-center justify-center w-full max-w-[512px] max-h-[500px] h-full mx-4">
           <HomeHeader noSettings />
           <Limit networkId={selectedNetworkId} apiUrl={apiUrl} />
         </div>
       </div>
+      </div>
+      
     </div>
   );
 };
