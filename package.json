@@ -21,6 +21,7 @@
     "alchemy-sdk": "^3.1.2",
     "apexcharts": "^3.47.0",
     "axios": "^1.6.7",
+    "big-integer": "^1.6.52",
     "bufferutil": "^4.0.8",
     "encoding": "^0.1.13",
     "ethers": "^6.11.1",

@@ -17,7 +17,7 @@ import SwitchTokenButton from "../swap/SwitchTokenButton";
 import SwapBalance from "../swap/SwapBalance";
 import PerTokenPrice from "../swap/PerTokenPrice";
 import Web3 from "web3";
-const ethers = require( "ethers");
+const ethers = require("ethers");
 
 import LimitButton from "./LimitButton";
 import {
@@ -33,7 +33,10 @@ import {
 } from "@1inch/limit-order-protocol-utils";
 import { useClient } from "wagmi";
 import { clientToWeb3js, useWeb3jsSigner } from "@/components/web3/useWeb3";
-const ethers = require("ethers");
+import { BrowserProvider, parseUnits } from "ethers";
+import bigInt from "big-integer";
+import { createWalletClient, custom } from "viem";
+import { mainnet } from "viem/chains";
 
 export default function Limit({
   slippage,
@@ -152,9 +155,17 @@ export default function Limit({
     }
   }
 
-  function limit() {
+  async function limit() {
     const chainId = 1;
-    const provider = new ethers.BrowserProvider(window.ethereum);
+    // const provider = new BrowserProvider(window.ethereum,chainId);
+    const [account] = await window.ethereum.request({
+      method: "eth_requestAccounts",
+    });
+    const provider = createWalletClient({
+      account,
+      chain: mainnet,
+      transport: custom(window.ethereum),
+    });
     const connector = new Web3ProviderConnector(provider);
     const walletAddress = address;
     const contractAddress = "0x7643b8c2457c1f36dc6e3b8f8e112fdf6da7698a";
@@ -163,35 +174,34 @@ export default function Limit({
       chainId,
       connector
     );
-    console.log(connector)
+    console.log(connector);
+    bigInt("32678475982390480923");
     const limitOrder = limitOrderBuilder.buildLimitOrder({
-      makerAssetAddress: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
-      takerAssetAddress: "0x111111111117dc0aa78b770fa6a738034120c302",
-      makerAddress: "0xfb3c7ebccccAA12B5A884d612393969Adddddddd",
+      salt: bigInt("32678475982390480923"),
+      makerAsset: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      takerAsset: "0x6b175474e89094c44da98b954eedeac495271d0f",
+      maker: "0xfb3c7ebccccAA12B5A884d612393969Adddddddd",
+      receiver: "0x0000000000000000000000000000000000000000",
+      allowedSender: "0x0000000000000000000000000000000000000000",
       makingAmount: "100",
-      salt: salt,
       takingAmount: "200",
-      // predicate = '0x',
-      // permit = '0x',
-      // receiver = ZERO_ADDRESS,
-      // allowedSender = ZERO_ADDRESS,
-      // getMakingAmount = ZERO_ADDRESS,
-      // getTakingAmount = ZERO_ADDRESS,
-      // preInteraction  = '0x',
-      // postInteraction = '0x',
+      offsets:
+        "3666552747586172848286066858439618331958618072439065963670861217005568",
+      interactions:
+        "0x20b83f2d000000000000000000000000000000000000000000000000000000000000006400000000000000000000000000000000000000000000000000000000000000c87e2d2183000000000000000000000000000000000000000000000000000000000000006400000000000000000000000000000000000000000000000000000000000000c8",
     });
     const limitOrderTypedData =
       limitOrderBuilder.buildLimitOrderTypedData(limitOrder);
 
     console.log(limitOrderTypedData);
 
-    const limitOrderSignature = limitOrderBuilder.buildOrderSignature(
-      walletAddress,
-      limitOrderTypedData
-    );
-    const limitOrderHash =
-      limitOrderBuilder.buildLimitOrderHash(limitOrderTypedData);
-    console.log(limitOrderHash);
+    // const limitOrderSignature = limitOrderBuilder.buildOrderSignature(
+    //   walletAddress,
+    //   limitOrderTypedData
+    // );
+    // const limitOrderHash =
+    //   limitOrderBuilder.buildLimitOrderHash(limitOrderTypedData);
+    // console.log(limitOrderHash);
   }
 
   function openModal(asset) {
