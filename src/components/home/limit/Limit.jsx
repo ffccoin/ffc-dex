@@ -6,12 +6,17 @@ import { DNA } from "react-loader-spinner";
 import TransactionSuccessModal from "../../models/TransactionSuccessModal";
 import SelectATokenModal from "../../models/SelectATokenModal";
 import { tokenList1 } from "@/lists/tokenList1";
-import { useSendTransaction, useAccount, useConnect, useConnectorClient } from "wagmi";
+import {
+  useSendTransaction,
+  useAccount,
+  useConnect,
+  useConnectorClient,
+} from "wagmi";
 import { tokenList56 } from "@/lists/tokenList56";
 import SwitchTokenButton from "../swap/SwitchTokenButton";
 import SwapBalance from "../swap/SwapBalance";
 import PerTokenPrice from "../swap/PerTokenPrice";
-import Web3 from "web3";
+// import Web3 from "web3";
 import LimitButton from "./LimitButton";
 import {
   ChainId,
@@ -26,8 +31,17 @@ import {
 } from "@1inch/limit-order-protocol-utils";
 import { useClient } from "wagmi";
 import { clientToWeb3js, useWeb3jsSigner } from "@/components/web3/useWeb3";
+const ethers = require("ethers");
 
-export default function Limit({ slippage, networkId, apiUrl,tokenOne,tokenTwo ,setTokenOne,setTokenTwo}) {
+export default function Limit({
+  slippage,
+  networkId,
+  apiUrl,
+  tokenOne,
+  tokenTwo,
+  setTokenOne,
+  setTokenTwo,
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const [buttonLabel, setButtonLabel] = useState("Enter an amount");
   const [tokenList, setTokenList] = useState([]);
@@ -39,8 +53,7 @@ export default function Limit({ slippage, networkId, apiUrl,tokenOne,tokenTwo ,s
   const [successfulTransaction, setSuccessfulTransaction] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const chainId = ChainId.ethereumMainnet;
-  const { data :client } = useConnectorClient({ chainId:1 });
-
+  const { data: client } = useConnectorClient({ chainId: 1 });
 
   const [loadingValue, setLoadingValue] = useState(false);
 
@@ -137,16 +150,17 @@ export default function Limit({ slippage, networkId, apiUrl,tokenOne,tokenTwo ,s
     }
   }
 
-
   function limit() {
     // const web3 = new Web3(
     //   "https://mainnet.infura.io/v3/b725d626b2e9485f9e5ae8366b22cb55"
     // );
     const chainId = 1;
     // const web3 = new clientToWeb3js(client)
-    const web3 = new useWeb3jsSigner({chainId})
-    const connector = new Web3ProviderConnector(web3);
-    const connector2 = new (web3);
+    // const web3 = new useWeb3jsSigner({chainId})
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    const connector = new Web3ProviderConnector(provider);
+    console.log("EHTERS PROVIDER", connector);
+    // const connector2 = new (web3);
     const walletAddress = address;
     const contractAddress = "0x7643b8c2457c1f36dc6e3b8f8e112fdf6da7698a";
     const limitOrderBuilder = new LimitOrderBuilder(
@@ -154,15 +168,18 @@ export default function Limit({ slippage, networkId, apiUrl,tokenOne,tokenTwo ,s
       chainId,
       connector
     );
-    const salt = web3.utils.randomHex(32);
-    console.log(connector)
+    const genRanHex = (size) =>
+      [...Array(size)]
+        .map(() => Math.floor(Math.random() * 16).toString(16))
+        .join("");
+    console.log(connector);
     const limitOrder = limitOrderBuilder.buildLimitOrder({
       makerAssetAddress: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
       takerAssetAddress: "0x111111111117dc0aa78b770fa6a738034120c302",
       makerAddress: "0xfb3c7ebccccAA12B5A884d612393969Adddddddd",
       makingAmount: "100",
       takingAmount: "200",
-      salt: salt,
+      salt: 9007199254740991n,
       // predicate = '0x',
       // permit = '0x',
       // receiver = ZERO_ADDRESS,

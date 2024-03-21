@@ -6,10 +6,6 @@ import React from "react";
 import Limit from "@/components/home/limit/Limit";
 import { useWeb3ModalState } from "@web3modal/wagmi/react";
 import { useState } from "react";
-import { Web3 } from "web3";
-import { useMemo } from "react";
-import { Chain, Client, Transport } from "viem";
-import { Config, useClient, useConnectorClient } from "wagmi";
 
 const LimitPage = () => {
   const [tokenOne, setTokenOne] = useState(null);
