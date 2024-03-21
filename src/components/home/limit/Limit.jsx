@@ -16,7 +16,9 @@ import { tokenList56 } from "@/lists/tokenList56";
 import SwitchTokenButton from "../swap/SwitchTokenButton";
 import SwapBalance from "../swap/SwapBalance";
 import PerTokenPrice from "../swap/PerTokenPrice";
-// import Web3 from "web3";
+import Web3 from "web3";
+const ethers = require( "ethers");
+
 import LimitButton from "./LimitButton";
 import {
   ChainId,
@@ -151,16 +153,9 @@ export default function Limit({
   }
 
   function limit() {
-    // const web3 = new Web3(
-    //   "https://mainnet.infura.io/v3/b725d626b2e9485f9e5ae8366b22cb55"
-    // );
     const chainId = 1;
-    // const web3 = new clientToWeb3js(client)
-    // const web3 = new useWeb3jsSigner({chainId})
     const provider = new ethers.BrowserProvider(window.ethereum);
     const connector = new Web3ProviderConnector(provider);
-    console.log("EHTERS PROVIDER", connector);
-    // const connector2 = new (web3);
     const walletAddress = address;
     const contractAddress = "0x7643b8c2457c1f36dc6e3b8f8e112fdf6da7698a";
     const limitOrderBuilder = new LimitOrderBuilder(
@@ -168,18 +163,14 @@ export default function Limit({
       chainId,
       connector
     );
-    const genRanHex = (size) =>
-      [...Array(size)]
-        .map(() => Math.floor(Math.random() * 16).toString(16))
-        .join("");
-    console.log(connector);
+    console.log(connector)
     const limitOrder = limitOrderBuilder.buildLimitOrder({
       makerAssetAddress: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
       takerAssetAddress: "0x111111111117dc0aa78b770fa6a738034120c302",
       makerAddress: "0xfb3c7ebccccAA12B5A884d612393969Adddddddd",
       makingAmount: "100",
+      salt: salt,
       takingAmount: "200",
-      salt: 9007199254740991n,
       // predicate = '0x',
       // permit = '0x',
       // receiver = ZERO_ADDRESS,
