@@ -18,26 +18,12 @@ import SwapBalance from "../swap/SwapBalance";
 import PerTokenPrice from "../swap/PerTokenPrice";
 import Web3 from "web3";
 const ethers = require("ethers");
-
+import { LimitOrder, MakerTraits, Address } from "@1inch/limit-order-sdk";
+import { Wallet } from "ethers";
+import { Api, getLimitOrderV4Domain } from "@1inch/limit-order-sdk";
+const { AxiosProviderConnector } = require("@1inch/limit-order-sdk/axios");
 import LimitButton from "./LimitButton";
-import {
-  ChainId,
-  Erc20Facade,
-  LimitOrderBuilder,
-  LimitOrderProtocolFacade,
-  LimitOrderPredicateBuilder,
-  NonceSeriesV2,
-  SeriesNonceManagerFacade,
-  SeriesNonceManagerPredicateBuilder,
-  Web3ProviderConnector,
-} from "@1inch/limit-order-protocol-utils";
-import { useClient } from "wagmi";
-import { clientToWeb3js, useWeb3jsSigner } from "@/components/web3/useWeb3";
-import { BrowserProvider, parseUnits } from "ethers";
-import bigInt from "big-integer";
-import { createWalletClient, custom } from "viem";
-import { mainnet } from "viem/chains";
-
+import { ChainId } from "@1inch/limit-order-protocol-utils";
 export default function Limit({
   slippage,
   networkId,
@@ -57,7 +43,7 @@ export default function Limit({
   const [isLoading, setIsLoading] = useState(false);
   const [successfulTransaction, setSuccessfulTransaction] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const chainId = ChainId.ethereumMainnet;
+  // const chainId = ChainId.ethereumMainnet;
   const { data: client } = useConnectorClient({ chainId: 1 });
 
   const [loadingValue, setLoadingValue] = useState(false);
@@ -156,52 +142,67 @@ export default function Limit({
   }
 
   async function limit() {
+    const privKey =
+      "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"; //String(process.env.PRIVATE_KEY);
     const chainId = 1;
-    // const provider = new BrowserProvider(window.ethereum,chainId);
-    const [account] = await window.ethereum.request({
-      method: "eth_requestAccounts",
-    });
-    const provider = createWalletClient({
-      account,
-      chain: mainnet,
-      transport: custom(window.ethereum),
-    });
-    const connector = new Web3ProviderConnector(provider);
-    const walletAddress = address;
-    const contractAddress = "0x7643b8c2457c1f36dc6e3b8f8e112fdf6da7698a";
-    const limitOrderBuilder = new LimitOrderBuilder(
-      contractAddress,
-      chainId,
-      connector
+
+    const maker = new ethers.Wallet(privKey);
+    const expiresIn = 120n; // 2m
+    const expiration = BigInt(Math.floor(Date.now() / 1000)) + expiresIn;
+
+    // see MakerTraits.ts
+    const makerTraits = MakerTraits.default()
+      .withExpiration(expiration)
+      .enablePermit2()
+      .allowPartialFills() // If you wish to allow partial fills
+      .allowMultipleFills(); // And assuming multiple fills are also okay
+
+    const order = new LimitOrder(
+      {
+        makerAsset: new Address("0x55d398326f99059fF775485246999027B3197955"), //BUSD
+        takerAsset: new Address("0x111111111117dc0aa78b770fa6a738034120c302"), //1INCH
+        makingAmount: 1_000000n, // 1 USDT
+        takingAmount: 1_00000000000000000n, // 10 1INCH
+        maker: new Address(maker.address),
+        salt: BigInt(Math.floor(Math.random() * 100000000)),
+        receiver: new Address(maker.address),
+      },
+      makerTraits
     );
-    console.log(connector);
-    bigInt("32678475982390480923");
-    const limitOrder = limitOrderBuilder.buildLimitOrder({
-      salt: bigInt("32678475982390480923"),
-      makerAsset: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-      takerAsset: "0x6b175474e89094c44da98b954eedeac495271d0f",
-      maker: "0xfb3c7ebccccAA12B5A884d612393969Adddddddd",
-      receiver: "0x0000000000000000000000000000000000000000",
-      allowedSender: "0x0000000000000000000000000000000000000000",
-      makingAmount: "100",
-      takingAmount: "200",
-      offsets:
-        "3666552747586172848286066858439618331958618072439065963670861217005568",
-      interactions:
-        "0x20b83f2d000000000000000000000000000000000000000000000000000000000000006400000000000000000000000000000000000000000000000000000000000000c87e2d2183000000000000000000000000000000000000000000000000000000000000006400000000000000000000000000000000000000000000000000000000000000c8",
+
+    const domain = getLimitOrderV4Domain(chainId);
+    const typedData = order.getTypedData(domain);
+    const signature = await maker.signTypedData(
+      typedData.domain,
+      { Order: typedData.types.Order },
+      typedData.message
+    );
+
+    const api = new Api({
+      networkId: chainId, // ethereum
+      authKey: String(process.env.NEXT_PUBLIC_ONE_INCH_API_KEY), // get it at https://portal.1inch.dev/
+      httpConnector: new AxiosProviderConnector(),
     });
-    const limitOrderTypedData =
-      limitOrderBuilder.buildLimitOrderTypedData(limitOrder);
 
-    console.log(limitOrderTypedData);
+    // submit order
+    try {
+      // @1inch/limit-order-sdk/dist/api/api.js, must edit the `submitOrder` method to return the promise
+      let result = await api.submitOrder(order, signature);
+      console.log("result", result);
+    } catch (e) {
+      console.log(e);
+    }
 
-    // const limitOrderSignature = limitOrderBuilder.buildOrderSignature(
-    //   walletAddress,
-    //   limitOrderTypedData
-    // );
-    // const limitOrderHash =
-    //   limitOrderBuilder.buildLimitOrderHash(limitOrderTypedData);
-    // console.log(limitOrderHash);
+    // wait a 1.05 seconds after submitting the order to query it
+    await new Promise((resolve) => setTimeout(resolve, 1050));
+
+    // get order by hash
+    const limitOrderV4Domain = getLimitOrderV4Domain(chainId);
+    console.log("LimitOrderV4Domain", limitOrderV4Domain);
+    const hash = order.getOrderHash(limitOrderV4Domain.verifyingContract);
+    console.log("hash", hash);
+    const orderInfo = await api.getOrderByHash(hash);
+    console.log("orderInfo", orderInfo);
   }
 
   function openModal(asset) {

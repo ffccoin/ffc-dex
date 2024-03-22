@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@1inch/limit-order-protocol-utils": "^4.0.35-alpha",
+    "@1inch/limit-order-sdk": "^4.6.2",
     "@headlessui/react": "^1.7.18",
     "@moonpay/moonpay-react": "^1.6.1",
     "@tanstack/react-query": "^5.25.0",
