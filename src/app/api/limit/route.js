@@ -64,7 +64,7 @@ export async function getLimitOrder(req, res) {
   // get order by hash
   const limitOrderV4Domain = getLimitOrderV4Domain(chainId);
   console.log("LimitOrderV4Domain", limitOrderV4Domain);
-  const hash = order.getOrderHash(limitOrderV4Domain.verifyingContract);
+  const hash = order.getOrderHash(limitOrderV4Domain.chainId);
   console.log("hash", hash);
   const orderInfo = await api.getOrderByHash(hash);
   console.log("orderInfo", orderInfo);
