@@ -7,6 +7,7 @@ import Limit from "@/components/home/limit/Limit";
 import { useWeb3ModalState } from "@web3modal/wagmi/react";
 import { useState } from "react";
 import { SignMessage } from "@/components/home/limit/test";
+import { useSelector } from "react-redux";
 
 const LimitPage = () => {
   const [tokenOne, setTokenOne] = useState(null);
@@ -18,20 +19,28 @@ const LimitPage = () => {
   } else if (selectedNetworkId === 56) {
     apiUrl = `https://bsc.api.0x.org/swap/v1/price`;
   }
+  const order = useSelector((state) => state.order);
+  console.log("Redux", order);
   return (
     <div className="overflow-hidden h-full flex flex-col items-center justify-center mt-20">
       {/* <LinkedParticlesAnimation /> */}
       <div className="flex ">
-      <LimitGraph tokenOne={tokenOne} tokenTwo={tokenTwo}/>
-      <div className="overflow-hidden h-full flex items-center justify-center px-4 relative">
-        <div className="bg-gray22/50 z-50 py-4 sm:px-2 px-4 rounded-2xl flex flex-col items-center justify-center w-full max-w-[512px] max-h-[500px] h-full mx-4">
-          <HomeHeader noSettings />
-          {/* <SignMessage/> */}
-          <Limit networkId={selectedNetworkId} tokenOne={tokenOne} tokenTwo={tokenTwo}apiUrl={apiUrl}  setTokenOne={setTokenOne} setTokenTwo={setTokenTwo}/>
+        <LimitGraph tokenOne={tokenOne} tokenTwo={tokenTwo} />
+        <div className="overflow-hidden h-full flex items-center justify-center px-4 relative">
+          <div className="bg-gray22/50 z-50 py-4 sm:px-2 px-4 rounded-2xl flex flex-col items-center justify-center w-full max-w-[512px] max-h-[500px] h-full mx-4">
+            <HomeHeader noSettings />
+            {/* <SignMessage/> */}
+            <Limit
+              networkId={selectedNetworkId}
+              tokenOne={tokenOne}
+              tokenTwo={tokenTwo}
+              apiUrl={apiUrl}
+              setTokenOne={setTokenOne}
+              setTokenTwo={setTokenTwo}
+            />
+          </div>
         </div>
       </div>
-      </div>
-      
     </div>
   );
 };

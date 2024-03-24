@@ -28,6 +28,8 @@ const { AxiosProviderConnector } = require("@1inch/limit-order-sdk/axios");
 import LimitButton from "./LimitButton";
 import { useWalletClient } from "wagmi";
 import { useVerifyTypedData } from "wagmi";
+import { useAppDispatch } from "@/lib/hooks";
+import { setOrder } from "@/lib/features/limit/orderSlice";
 
 export default function Limit({
   slippage,
@@ -40,7 +42,7 @@ export default function Limit({
 }) {
   const account = useAccount();
   const { signTypedDataAsync } = useSignTypedData();
-
+  const dispatch = useAppDispatch();
   // const {  data: SignTypedDataData,signTypedData } = useSignTypedData();
   const [isOpen, setIsOpen] = useState(false);
   const [buttonLabel, setButtonLabel] = useState("Enter an amount");
@@ -171,6 +173,7 @@ export default function Limit({
       },
       makerTraits
     );
+    dispatch(setOrder(order));
     const domain = getLimitOrderV4Domain(chainId);
     const typedData = order.getTypedData(domain);
     const signature = await signTypedDataAsync({
@@ -194,14 +197,12 @@ export default function Limit({
         ],
       },
       primaryType: "Order",
-      message:  typedData.message  
+      message: typedData.message,
     });
-   console.log(order)
-   const serializedOrder = order.toString();
-   const res = await axios.post('/api/limit', {
-    order: serializedOrder,
-    signature: signature,
-  });
+    const res = await axios.post("/api/limit", {
+      order: order,
+      signature: signature,
+    });
   };
 
   function openModal(asset) {

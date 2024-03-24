@@ -1,6 +1,7 @@
 import "./globals.css";
 import PreloaderProvider from "./PreloaderProvider";
 import { Web3Modal } from "@/context/Web3Modal";
+import StoreProvider from "./StoreProvider";
 
 export const metadata = {
   title: "Force Finance Coin | DEX",
@@ -11,9 +12,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <Web3Modal>
-          <PreloaderProvider>{children}</PreloaderProvider>
-        </Web3Modal>
+        <StoreProvider>
+          <Web3Modal>
+            <PreloaderProvider>{children}</PreloaderProvider>
+          </Web3Modal>
+        </StoreProvider>
       </body>
     </html>
   );
