@@ -6,7 +6,7 @@ import axios from "axios";
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
-export default function LimitGraph({tokenOne,tokenTwo }) {
+export default function LimitGraph({ tokenOne, tokenTwo }) {
   const [chartData, setChartData] = useState({
     series: [],
     options: {
@@ -27,10 +27,36 @@ export default function LimitGraph({tokenOne,tokenTwo }) {
       xaxis: {
         type: "datetime",
       },
-      yaxis: {
-        tooltip: {
-          enabled: true,
+      tooltip: {
+        enabled: true,
+        hideEmptySeries: true,
+        theme: false,
+        style: {
+          fontSize: "12px",
+          fontFamily: undefined,
         },
+        fixed: {
+          enabled: false,
+          position: "topRight",
+          offsetX: 0,
+          offsetY: 0,
+        },
+        x: {
+          show: true,
+          format: "dd MMM",
+          formatter: undefined,
+        },
+        y: {
+          show: true,
+          formatter: function (val) {
+            return val.toFixed(6); // Adjust the number of decimal places as needed
+          },
+          title: {
+            formatter: (seriesName) => seriesName,
+          },
+        },
+      },
+      yaxis: {
         labels: {
           formatter: function (val) {
             return val.toFixed(6); // Adjust the number of decimal places as needed
@@ -41,12 +67,14 @@ export default function LimitGraph({tokenOne,tokenTwo }) {
   });
 
   const fetchData = async () => {
+    console.log("jjo");
     try {
-      const response = await axios.get(`/api/ohlcv`, {
-        params: {
-          src: tokenOne.address,
-          dst: tokenTwo.address,
-        }});
+      const response = await axios.get(`/api/ohlcv`);
+      // , {
+      //   params: {
+      //     src: tokenOne.address,
+      //     dst: tokenTwo.address,
+      //   }});
       const data = response.data.data.EVM.DEXTradeByTokens;
       console.log(response.data.data.EVM.DEXTradeByTokens);
       const firstItem = data[0];
@@ -77,8 +105,10 @@ export default function LimitGraph({tokenOne,tokenTwo }) {
 
   return (
     <div>
-       
-      <div id="chart" className="bg-gray22/50 z-50  rounded-2xl max-h-[400px] h-full ">
+      <div
+        id="chart"
+        className="bg-gray22/50 z-50  rounded-2xl max-h-[400px] h-full "
+      >
         <ReactApexChart
           options={chartData.options}
           series={chartData.series}
@@ -93,8 +123,6 @@ export default function LimitGraph({tokenOne,tokenTwo }) {
       >
         genrate graph
       </button>
-     
     </div>
-
   );
 }

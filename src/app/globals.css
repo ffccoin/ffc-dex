@@ -86,6 +86,10 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+.apexcharts-tooltip {
+  background: rgb(24 30 37 / 0.75);/* Gray background color */
+  color: #ffffff; /* White text color */
+}
 
 /* .text-gradient-9 {
   background: -webkit-linear-gradient(
