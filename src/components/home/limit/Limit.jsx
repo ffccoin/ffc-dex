@@ -12,6 +12,8 @@ import {
   useAccount,
   useConnect,
   useConnectorClient,
+  useSignMessage,
+  useSignTypedData,
 } from "wagmi";
 import { tokenList56 } from "@/lists/tokenList56";
 import SwitchTokenButton from "../swap/SwitchTokenButton";
@@ -24,7 +26,9 @@ import { Wallet } from "ethers";
 import { Api, getLimitOrderV4Domain } from "@1inch/limit-order-sdk";
 const { AxiosProviderConnector } = require("@1inch/limit-order-sdk/axios");
 import LimitButton from "./LimitButton";
-import { ChainId } from "@1inch/limit-order-protocol-utils";
+import { useWalletClient } from "wagmi";
+import { useVerifyTypedData } from "wagmi";
+
 export default function Limit({
   slippage,
   networkId,
@@ -34,6 +38,10 @@ export default function Limit({
   setTokenOne,
   setTokenTwo,
 }) {
+  const account = useAccount();
+  const { signTypedDataAsync } = useSignTypedData();
+
+  // const {  data: SignTypedDataData,signTypedData } = useSignTypedData();
   const [isOpen, setIsOpen] = useState(false);
   const [buttonLabel, setButtonLabel] = useState("Enter an amount");
   const [tokenList, setTokenList] = useState([]);
@@ -45,7 +53,7 @@ export default function Limit({
   const [successfulTransaction, setSuccessfulTransaction] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   // const chainId = ChainId.ethereumMainnet;
-  const { data: client } = useConnectorClient({ chainId: 1 });
+  // const { data: client } = useConnectorClient({ chainId: 1 });
 
   const [loadingValue, setLoadingValue] = useState(false);
 
@@ -141,74 +149,60 @@ export default function Limit({
       console.error("Error fetching price:", error);
     }
   }
-  async function limit() {
-    const res = await axios.get(`/api/limit`);
-    console.log(res.data)
-  }
-
-  // async function limit() {
-  //   const privKey =
-  //     "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"; //String(process.env.PRIVATE_KEY);
-  //   const chainId = 1;
-
-  //   const maker = new ethers.Wallet(privKey);
-  //   const expiresIn = 120n; // 2m
-  //   const expiration = BigInt(Math.floor(Date.now() / 1000)) + expiresIn;
-
-  //   // see MakerTraits.ts
-  //   const makerTraits = MakerTraits.default()
-  //     .withExpiration(expiration)
-  //     .enablePermit2()
-  //     .allowPartialFills() // If you wish to allow partial fills
-  //     .allowMultipleFills(); // And assuming multiple fills are also okay
-
-  //   const order = new LimitOrder(
-  //     {
-  //       makerAsset: new Address("0x55d398326f99059fF775485246999027B3197955"), //BUSD
-  //       takerAsset: new Address("0x111111111117dc0aa78b770fa6a738034120c302"), //1INCH
-  //       makingAmount: 1_000000n, // 1 USDT
-  //       takingAmount: 1_00000000000000000n, // 10 1INCH
-  //       maker: new Address(maker.address),
-  //       salt: BigInt(Math.floor(Math.random() * 100000000)),
-  //       receiver: new Address(maker.address),
-  //     },
-  //     makerTraits
-  //   );
-
-  //   const domain = getLimitOrderV4Domain(chainId);
-  //   const typedData = order.getTypedData(domain);
-  //   const signature = await maker.signTypedData(
-  //     typedData.domain,
-  //     { Order: typedData.types.Order },
-  //     typedData.message
-  //   );
-
-  //   const api = new Api({
-  //     networkId: chainId, // ethereum
-  //     authKey: String(process.env.NEXT_PUBLIC_ONE_INCH_API_KEY), // get it at https://portal.1inch.dev/
-  //     httpConnector: new AxiosProviderConnector(),
-  //   });
-
-  //   // submit order
-  //   try {
-  //     // @1inch/limit-order-sdk/dist/api/api.js, must edit the `submitOrder` method to return the promise
-  //     let result = await api.submitOrder(order, signature);
-  //     console.log("result", result);
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-
-  //   // wait a 1.05 seconds after submitting the order to query it
-  //   await new Promise((resolve) => setTimeout(resolve, 1050));
-
-  //   // get order by hash
-  //   const limitOrderV4Domain = getLimitOrderV4Domain(chainId);
-  //   console.log("LimitOrderV4Domain", limitOrderV4Domain);
-  //   const hash = order.getOrderHash(limitOrderV4Domain.verifyingContract);
-  //   console.log("hash", hash);
-  //   const orderInfo = await api.getOrderByHash(hash);
-  //   console.log("orderInfo", orderInfo);
-  // }
+  const limit = async () => {
+    const expiresIn = 120n; // 2m
+    const chainId = 1;
+    const expiration = BigInt(Math.floor(Date.now() / 1000)) + expiresIn;
+    // see MakerTraits.ts
+    const makerTraits = MakerTraits.default()
+      .withExpiration(expiration)
+      .enablePermit2()
+      .allowPartialFills() // If you wish to allow partial fills
+      .allowMultipleFills(); // And assuming multiple fills are also okay
+    const order = new LimitOrder(
+      {
+        makerAsset: new Address("0x55d398326f99059fF775485246999027B3197955"), //BUSD
+        takerAsset: new Address("0x111111111117dc0aa78b770fa6a738034120c302"), //1INCH
+        makingAmount: 1_000000n, // 1 USDT
+        takingAmount: 1_00000000000000000n, // 10 1INCH
+        maker: new Address(address),
+        salt: BigInt(Math.floor(Math.random() * 100000000)),
+        receiver: new Address(address),
+      },
+      makerTraits
+    );
+    const domain = getLimitOrderV4Domain(chainId);
+    const typedData = order.getTypedData(domain);
+    const signature = await signTypedDataAsync({
+      domain: typedData.domain,
+      types: {
+        EIP712Domain: [
+          { name: "name", type: "string" },
+          { name: "version", type: "string" },
+          { name: "chainId", type: "uint256" },
+          { name: "verifyingContract", type: "address" },
+        ],
+        Order: [
+          { name: "salt", type: "uint256" },
+          { name: "maker", type: "address" },
+          { name: "receiver", type: "address" },
+          { name: "makerAsset", type: "address" },
+          { name: "takerAsset", type: "address" },
+          { name: "makingAmount", type: "uint256" },
+          { name: "takingAmount", type: "uint256" },
+          { name: "makerTraits", type: "uint256" },
+        ],
+      },
+      primaryType: "Order",
+      message:  typedData.message  
+    });
+   console.log(order)
+   const serializedOrder = order.toString();
+   const res = await axios.post('/api/limit', {
+    order: serializedOrder,
+    signature: signature,
+  });
+  };
 
   function openModal(asset) {
     setChangeToken(asset);
