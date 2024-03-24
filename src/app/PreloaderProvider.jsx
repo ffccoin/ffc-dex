@@ -21,7 +21,8 @@ const PreloaderProvider = ({ children }) => {
           {pathname !== "/login" && <BottomBar />}
         </div>
       ) : (
-        <LoadingPage />
+        // <LoadingPage />
+        <></>
       )}
     </main>
   );

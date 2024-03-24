@@ -19,7 +19,7 @@ const LimitPage = () => {
   }
   return (
     <div className="overflow-hidden h-full flex flex-col items-center justify-center mt-20">
-      <LinkedParticlesAnimation />
+      {/* <LinkedParticlesAnimation /> */}
       <div className="flex ">
       <LimitGraph tokenOne={tokenOne} tokenTwo={tokenTwo}/>
       <div className="overflow-hidden h-full flex items-center justify-center px-4 relative">
