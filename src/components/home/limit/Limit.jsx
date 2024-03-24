@@ -152,32 +152,14 @@ export default function Limit({
     }
   }
   const limit = async () => {
-    const expiresIn = 120n; // 2m
-    const chainId = 1;
-    const expiration = BigInt(Math.floor(Date.now() / 1000)) + expiresIn;
-    // see MakerTraits.ts
-    const makerTraits = MakerTraits.default()
-      .withExpiration(expiration)
-      .enablePermit2()
-      .allowPartialFills() // If you wish to allow partial fills
-      .allowMultipleFills(); // And assuming multiple fills are also okay
-    const order = new LimitOrder(
-      {
-        makerAsset: new Address("0x55d398326f99059fF775485246999027B3197955"), //BUSD
-        takerAsset: new Address("0x111111111117dc0aa78b770fa6a738034120c302"), //1INCH
-        makingAmount: 1_000000n, // 1 USDT
-        takingAmount: 1_00000000000000000n, // 10 1INCH
-        maker: new Address(address),
-        salt: BigInt(Math.floor(Math.random() * 100000000)),
-        receiver: new Address(address),
+    const res = await axios.get(`/api/limit`, {
+      params: {
+        address: address,
       },
-      makerTraits
-    );
-    dispatch(setOrder(order));
-    const domain = getLimitOrderV4Domain(chainId);
-    const typedData = order.getTypedData(domain);
+    });
+    const data = res.data
     const signature = await signTypedDataAsync({
-      domain: typedData.domain,
+      domain:res.data.domain,
       types: {
         EIP712Domain: [
           { name: "name", type: "string" },
@@ -197,25 +179,12 @@ export default function Limit({
         ],
       },
       primaryType: "Order",
-      message: typedData.message,
+      message: res.data.message
+       
     });
-    const api = new Api({
-      networkId: chainId, // ethereum
-      authKey: String(process.env.NEXT_PUBLIC_ONE_INCH_API_KEY), // get it at https://portal.1inch.dev/
-      httpConnector: new AxiosProviderConnector(),
-    });
-    console.log("API:", api);
-    try {
-      // @1inch/limit-order-sdk/dist/api/api.js, must edit the `submitOrder` method to return the promise
-      let result = await api.submitOrder(order, signature);
-      console.log("result", result);
-    } catch (e) {
-      console.log(e);
-    }
-    // const res = await axios.post("/api/limit", {
-    //   order: order,
-    //   signature: signature,
-    // });
+   const res1 = await axios.post('/api/limit', {
+    signature: signature,
+  });
   };
 
   function openModal(asset) {
