@@ -199,10 +199,23 @@ export default function Limit({
       primaryType: "Order",
       message: typedData.message,
     });
-    const res = await axios.post("/api/limit", {
-      order: order,
-      signature: signature,
+    const api = new Api({
+      networkId: chainId, // ethereum
+      authKey: String(process.env.NEXT_PUBLIC_ONE_INCH_API_KEY), // get it at https://portal.1inch.dev/
+      httpConnector: new AxiosProviderConnector(),
     });
+    console.log("API:", api);
+    try {
+      // @1inch/limit-order-sdk/dist/api/api.js, must edit the `submitOrder` method to return the promise
+      let result = await api.submitOrder(order, signature);
+      console.log("result", result);
+    } catch (e) {
+      console.log(e);
+    }
+    // const res = await axios.post("/api/limit", {
+    //   order: order,
+    //   signature: signature,
+    // });
   };
 
   function openModal(asset) {

@@ -39,13 +39,13 @@ export async function POST(req, res) {
     httpConnector: new AxiosProviderConnector(),
   });
   // submit order
-  // try {
-  //   // @1inch/limit-order-sdk/dist/api/api.js, must edit the `submitOrder` method to return the promise
-  //   let result = await api.submitOrder(order, signature);
-  //   console.log("result", result);
-  // } catch (e) {
-  //   console.log(e);
-  // }
+  try {
+    // @1inch/limit-order-sdk/dist/api/api.js, must edit the `submitOrder` method to return the promise
+    let result = await api.submitOrder(order, signature);
+    console.log("result", result);
+  } catch (e) {
+    console.log(e);
+  }
   // // wait a 1.05 seconds after submitting the order to query it
   // await new Promise((resolve) => setTimeout(resolve, 1050));
   // const orderInfo = await api.getOrderByHash(hash);
