@@ -46,9 +46,15 @@ export async function POST(req, res) {
   } catch (e) {
     console.log(e);
   }
-  // // wait a 1.05 seconds after submitting the order to query it
-  // await new Promise((resolve) => setTimeout(resolve, 1050));
-  // const orderInfo = await api.getOrderByHash(hash);
-  // console.log("orderInfo", orderInfo);
+  // wait a 1.05 seconds after submitting the order to query it
+  await new Promise((resolve) => setTimeout(resolve, 1050));
+  
+  // get order by hash
+  const limitOrderV4Domain = getLimitOrderV4Domain(chainId);
+  console.log("LimitOrderV4Domain", limitOrderV4Domain);
+  const hash = order.getOrderHash(limitOrderV4Domain.chainId);
+  console.log("hash", hash);
+  const orderInfo = await api.getOrderByHash(hash);
+  console.log("orderInfo", orderInfo);
   return NextResponse.json("done");
 }
