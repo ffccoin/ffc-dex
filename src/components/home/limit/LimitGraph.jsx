@@ -197,14 +197,14 @@ export default function LimitGraph({ tokenOne, tokenTwo }) {
     <div>
       <div
         id="chart"
-        className="bg-gray22/50 z-50 rounded-2xl lg:h-[450px] h-[] mx-4 l py-4 "
+        className="bg-gray22/50 z-50 rounded-2xl  h-[450px] mx-4 l py-4 "
       >
         {tokenNotSelected ? (
           <div className="bg-[url('/home/graph.svg')] bg-center w-full h-full bg-no-repeat justify-center flex items-center text-gray-600 text-center">
              {loadingValue ? (
                 <InfinitySpin
                 visible={true}
-                width="300"
+                width="250"
                 color="#CBFB45"
                 ariaLabel="infinity-spin-loading"
                 />
