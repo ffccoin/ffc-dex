@@ -13,7 +13,7 @@ import { NextResponse } from "next/server";
 const expiresIn = 300n; // 5 minutes in seconds
 const chainId = 1;
 const expiration = BigInt(Math.floor(Date.now() / 1000)) + expiresIn;
-var order=null;
+var order = null;
 export async function GET(req, res) {
   const { searchParams } = new URL(req.url);
   // const makerAsset = searchParams.get("makerAsset");
@@ -22,11 +22,11 @@ export async function GET(req, res) {
   // const takingAmount = searchParams.get("takingAmount");
   const address = searchParams.get("address");
   const makerTraits = MakerTraits.default()
-  .withExpiration(expiration)
-  .enablePermit2()
-  .allowPartialFills()
-  .allowMultipleFills()
-   order = new LimitOrder(
+    .withExpiration(expiration)
+    .enablePermit2()
+    .allowPartialFills()
+    .allowMultipleFills();
+  order = new LimitOrder(
     {
       makerAsset: new Address("0x55d398326f99059fF775485246999027B3197955"), //BUSD
       takerAsset: new Address("0x111111111117dc0aa78b770fa6a738034120c302"), //1INCH
@@ -44,15 +44,17 @@ export async function GET(req, res) {
   console.log("hash1", hash);
   const domain = getLimitOrderV4Domain(chainId);
   const typedData = order.getTypedData(domain);
-  return NextResponse.json({domain:typedData.domain,message:typedData.message });
-  
+  return NextResponse.json({
+    domain: typedData.domain,
+    message: typedData.message,
+  });
 }
 
 // Define your named exports for the handlers
 export async function POST(req, res) {
-  const res1 = await req.json()
+  const res1 = await req.json();
   const signature = res1.signature;
-  console.log(signature)
+  console.log(signature);
   const limitOrderV4Domain = getLimitOrderV4Domain(chainId);
   console.log("LimitOrderV4Domain", limitOrderV4Domain);
   const hash = order.getOrderHash(limitOrderV4Domain.verifyingContract);
@@ -65,7 +67,9 @@ export async function POST(req, res) {
   // submit order
   try {
     // @1inch/limit-order-sdk/dist/api/api.js, must edit the `submitOrder` method to return the promise
-    let result = await api.submitOrder(order, signature);
+    let result = await api.submitOrder(order, signature).then(() => {
+      console.log("done");
+    });
     console.log("result", result);
   } catch (e) {
     console.log(e);
@@ -128,7 +132,7 @@ export async function POST(req, res) {
 //   // const orderInfo = await api.getOrderByHash(hash);
 //   // console.log("orderInfo", orderInfo);
 //   return NextResponse.json("done");
-  
+
 // }
 
 // Define your named exports for the handlers
