@@ -22,7 +22,7 @@ const LimitPage = () => {
   const order = useSelector((state) => state.order);
   console.log("Redux", order);
   return (
-    <div className="overflow-hidden h-full flex flex-col items-center w-full lg:mt-44">
+    <div className="overflow-hidden h-full flex flex-col items-center w-full lg:mt-44 mt-32">
       <LinkedParticlesAnimation />
       <div className="flex lg:flex-row justify-between  pl-4 flex-col-reverse gap-y-10 max-w-[88rem]">
       <div className="  lg:w-[59vw]">
