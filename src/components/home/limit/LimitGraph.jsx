@@ -3,7 +3,8 @@ import { useEffect, useState, useRef } from "react";
 import dynamic from "next/dynamic";
 import axios from "axios";
 import LimitTime from "./LimitTime";
-import Image from "next/image";
+import { InfinitySpin } from "react-loader-spinner";
+
 
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -11,6 +12,7 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
 export default function LimitGraph({ tokenOne, tokenTwo }) {
   const [selectedOption, setSelectedOption] = useState("1h");
   const [tokenNotSelected, setTokenNotSelected] = useState(true);
+  const [loadingValue, setLoadingValue] = useState(false);
 
   const [chartData, setChartData] = useState({
     series: [],
@@ -142,9 +144,8 @@ export default function LimitGraph({ tokenOne, tokenTwo }) {
     fetchData();
   }, [tokenOne, tokenTwo]);
   const fetchData = async () => {
-    console.log("jjo");
     if (tokenOne && tokenTwo) {
-      setTokenNotSelected(false);
+      setLoadingValue(true);
       try {
         const response = await axios.get(`/api/ohlcv`, {
           params: {
@@ -153,6 +154,10 @@ export default function LimitGraph({ tokenOne, tokenTwo }) {
           },
         });
         const data = response.data.data.EVM.DEXTradeByTokens;
+        if (data.length === 0) {
+          setLoadingValue(false)
+          setTokenNotSelected(true); // Set tokenNotSelected to true if data is empty
+        } else {
         console.log(response.data.data.EVM.DEXTradeByTokens);
         const firstItem = data[0];
         const firstDate = new Date(firstItem.Block.Date);
@@ -175,6 +180,9 @@ export default function LimitGraph({ tokenOne, tokenTwo }) {
           ...prevChartData,
           series: [{ data: seriesData }],
         }));
+        setLoadingValue(false)
+        setTokenNotSelected(false);
+      }
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -192,7 +200,16 @@ export default function LimitGraph({ tokenOne, tokenTwo }) {
         className="bg-gray22/50 z-50 rounded-2xl lg:h-[450px] h-[] mx-4 l py-4 "
       >
         {tokenNotSelected ? (
-          <div className="bg-[url('/home/graph.svg')] bg-center w-full h-full bg-no-repeat justify-center flex items-center text-gray-600 text-center">Token Not Selected</div>
+          <div className="bg-[url('/home/graph.svg')] bg-center w-full h-full bg-no-repeat justify-center flex items-center text-gray-600 text-center">
+             {loadingValue ? (
+                <InfinitySpin
+                visible={true}
+                width="300"
+                color="#CBFB45"
+                ariaLabel="infinity-spin-loading"
+                />
+              ):<>
+              <p>Token Not selected</p></>}</div>
           ) : (
           <>
             <LimitTime
