@@ -87,8 +87,16 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 .apexcharts-tooltip {
-  background: rgb(24 30 37 / 0.75);/* Gray background color */
+  background: #181e25bf; /* Gray background color */
   color: #ffffff; /* White text color */
+  text-align: center;
+}
+.apexcharts-tooltip-title {
+  padding: 0px !important;
+  margin-bottom: 0px !important;
+}
+.apexcharts-canvas {
+  width: 100% !important;
 }
 
 /* .text-gradient-9 {

@@ -22,14 +22,15 @@ const LimitPage = () => {
   const order = useSelector((state) => state.order);
   console.log("Redux", order);
   return (
-    <div className="overflow-hidden h-full flex flex-col items-center justify-center mt-20">
-      {/* <LinkedParticlesAnimation /> */}
-      <div className="flex ">
+    <div className="overflow-hidden h-full flex flex-col items-center w-full lg:mt-44">
+      <LinkedParticlesAnimation />
+      <div className="flex lg:flex-row justify-between  pl-4 flex-col-reverse gap-y-10 max-w-[88rem]">
+      <div className="  lg:w-[59vw]">
         <LimitGraph tokenOne={tokenOne} tokenTwo={tokenTwo} />
-        <div className="overflow-hidden h-full flex items-center justify-center px-4 relative">
+        </div>
+        <div className="overflow-hidden lg:w-[40vw] h-full flex items-center  justify-center relative">
           <div className="bg-gray22/50 z-50 py-4 sm:px-2 px-4 rounded-2xl flex flex-col items-center justify-center w-full max-w-[512px] max-h-[500px] h-full mx-4">
             <HomeHeader noSettings />
-            {/* <SignMessage/> */}
             <Limit
               networkId={selectedNetworkId}
               tokenOne={tokenOne}
@@ -41,7 +42,7 @@ const LimitPage = () => {
           </div>
         </div>
       </div>
-    </div>
+      </div>
   );
 };
 
