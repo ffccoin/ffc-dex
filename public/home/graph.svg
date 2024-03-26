@@ -1,0 +1,9 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink"  xmlns="http://www.w3.org/2000/svg" id="select-token-chart_new" width="800" height="256" viewBox="0 0 800 256" fill="none">
+<path d="M702.705 44.7382C765.112 44.7382 742.462 0 800 0V256H0V150.121C30.982 150.121 44.6269 179.251 73.958 179.45C136.573 179.947 130.956 73.5695 193.571 73.5695C243.496 73.5695 237.255 111.348 299.142 111.348C331.489 111.348 354.268 148.133 390.672 148.133C443.717 148.133 457.135 61.6393 503.004 61.6393C553.449 61.6393 545.752 102.401 588.813 102.401C638.218 102.401 654.34 44.7382 702.705 44.7382Z" fill="url(#paint0_linear_9381_159323)"/>
+<defs>
+<linearGradient id="paint0_linear_9381_159323" x1="400" y1="256" x2="402.676" y2="0.523426" gradientUnits="userSpaceOnUse">
+<stop stop-color="#6C86AD" stop-opacity="0"/>
+<stop offset="1" stop-color="#6C86AD" stop-opacity="0.16"/>
+</linearGradient>
+</defs>
+</svg>
