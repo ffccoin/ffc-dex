@@ -24,7 +24,7 @@ export async function getOhlcv(req, res) {
   //   variables: "{}",
   // });
   const raw = JSON.stringify({
-    "query": `query MyQuery {\n    EVM(dataset: archive) {\n      DEXTradeByTokens(\n        orderBy: {descending: Block_Date}\n        where: {Trade: {Currency: {SmartContract: {is:  "${src}"}},\n          Side: {Currency: {SmartContract: {is:"${dst}"}}}}}\n        limit: {count: 100}\n      ) {\n        Block {\n          Date(interval: {in: days, count: 1})\n        }\n        volume: sum(of: Trade_Amount)\n        Trade {\n          high: Price(maximum: Trade_Price)\n          low: Price(minimum: Trade_Price)\n          open: Price(minimum: Block_Number)\n          close: Price(maximum: Block_Number)\n        }\n      }\n    }\n  }`,
+    "query": `query MyQuery {\n    EVM(dataset: archive) {\n      DEXTradeByTokens(\n        orderBy: {descending: Block_Date}\n        where: {Trade: {Currency: {SmartContract: {is:  "${src}"}},\n          Side: {Currency: {SmartContract: {is:"${dst}"}}}}}\n        limit: {count: 50}\n      ) {\n        Block {\n          Date(interval: {in: days, count: 1})\n        }\n        volume: sum(of: Trade_Amount)\n        Trade {\n          high: Price(maximum: Trade_Price)\n          low: Price(minimum: Trade_Price)\n          open: Price(minimum: Block_Number)\n          close: Price(maximum: Block_Number)\n        }\n      }\n    }\n  }`,
     "variables": "{}"
   });
   const requestOptions = {
@@ -40,7 +40,7 @@ export async function getOhlcv(req, res) {
       requestOptions
     );
     const result = await response.json();
-    console.log(result);
+    console.log(result.data.EVM.DEXTradeByTokens);
     return NextResponse.json(result);
   } catch (error) {
     console.error(error);
