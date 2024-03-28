@@ -29,17 +29,7 @@
     "extensions": {
           "eip2612": true
     }
-}, {
-  "chainId": 1,
-  "address": "0x08c32b0726c5684024ea6e141c50ade9690bbdcc",
-  "name": "Stratos Token",
-  "decimals": 18,
-  "symbol": "STOS",
-  "logoURI": "https://tokens.1inch.io/0x08c32b0726c5684024ea6e141c50ade9690bbdcc.png",
-  "tags": [
-        "tokens"
-  ]
-},
+}, 
 {
   "chainId": 1,
   "address": "0x3845badade8e6dff049820680d1f14bd3903a5d0",
@@ -176,17 +166,7 @@
       "tokens"
     ]
   },
-  {
-    "chainId": 1,
-    "address": "0xadb2437e6f65682b85f814fbc12fec0508a7b1d0",
-    "name": "UniCrypt",
-    "decimals": 18,
-    "symbol": "UNCX",
-    "logoURI": "https://tokens.1inch.io/0xadb2437e6f65682b85f814fbc12fec0508a7b1d0.png",
-    "tags": [
-      "tokens"
-    ]
-  },
+  
   {
     "chainId": 1,
     "address": "0x71ab77b7dbb4fa7e017bc15090b2163221420282",
@@ -217,17 +197,7 @@
   "tags": [
         "tokens"
   ]
-},{
-  "chainId": 1,
-  "address": "0x08c32b0726c5684024ea6e141c50ade9690bbdcc",
-  "name": "Stratos Token",
-  "decimals": 18,
-  "symbol": "STOS",
-  "logoURI": "https://tokens.1inch.io/0x08c32b0726c5684024ea6e141c50ade9690bbdcc.png",
-  "tags": [
-        "tokens"
-  ]
-},   {
+},  {
   "chainId": 1,
   "address": "0x1abaea1f7c830bd89acc67ec4af516284b1bc33c",
   "name": "Euro Coin",
@@ -248,29 +218,6 @@
   "decimals": 18,
   "symbol": "CAPS",
   "logoURI": "https://tokens.1inch.io/0x03be5c903c727ee2c8c4e9bc0acc860cca4715e2.png",
-  "tags": [
-        "tokens"
-  ]
-},{
-  "chainId": 1,
-  "address": "0x8254e26e453eb5abd29b3c37ac9e8da32e5d3299",
-  "name": "RBX",
-  "decimals": 18,
-  "symbol": "RBX",
-  "logoURI": "https://tokens.1inch.io/0x8254e26e453eb5abd29b3c37ac9e8da32e5d3299.png",
-  "tags": [
-        "tokens"
-  ],
-  "extensions": {
-        "eip2612": true
-  }
-}, {
-  "chainId": 1,
-  "address": "0x6468e79a80c0eab0f9a2b574c8d5bc374af59414",
-  "name": "E-RADIX",
-  "decimals": 18,
-  "symbol": "eXRD",
-  "logoURI": "https://tokens.1inch.io/0x6468e79a80c0eab0f9a2b574c8d5bc374af59414.png",
   "tags": [
         "tokens"
   ]
@@ -316,16 +263,6 @@
   ]
 },  {
   "chainId": 1,
-  "address": "0x509a38b7a1cc0dcd83aa9d06214663d9ec7c7f4a",
-  "name": "BlocksquareToken",
-  "decimals": 18,
-  "symbol": "BST",
-  "logoURI": "https://tokens.1inch.io/0x509a38b7a1cc0dcd83aa9d06214663d9ec7c7f4a.png",
-  "tags": [
-        "tokens"
-  ]
-},{
-  "chainId": 1,
   "address": "0x3b9be07d622accaed78f479bc0edabfd6397e320",
   "name": "Lossless Token",
   "decimals": 18,
@@ -348,36 +285,6 @@
         "eip2612": true
   }
 }, {
-  "chainId": 1,
-  "address": "0xdf801468a808a32656d2ed2d2d80b72a129739f4",
-  "name": "Somnium Space Cubes",
-  "decimals": 8,
-  "symbol": "CUBE",
-  "logoURI": "https://tokens.1inch.io/0xdf801468a808a32656d2ed2d2d80b72a129739f4.png",
-  "tags": [
-        "tokens"
-  ]
-},  {
-  "chainId": 1,
-  "address": "0x76417e660df3e5c90c0361674c192da152a806e4",
-  "name": "Zerogoki USD",
-  "decimals": 18,
-  "symbol": "zUSD",
-  "logoURI": "https://tokens.1inch.io/0x76417e660df3e5c90c0361674c192da152a806e4.png",
-  "tags": [
-        "tokens"
-  ]
-}, {
-  "chainId": 1,
-  "address": "0x509a38b7a1cc0dcd83aa9d06214663d9ec7c7f4a",
-  "name": "BlocksquareToken",
-  "decimals": 18,
-  "symbol": "BST",
-  "logoURI": "https://tokens.1inch.io/0x509a38b7a1cc0dcd83aa9d06214663d9ec7c7f4a.png",
-  "tags": [
-        "tokens"
-  ]
-},{
   "chainId": 1,
   "address": "0xe5caef4af8780e59df925470b050fb23c43ca68c",
   "name": "Ferrum Network Token",
@@ -408,17 +315,7 @@
           "tokens"
     ]
 },
-  {
-    "chainId": 1,
-    "address": "0x256d1fce1b1221e8398f65f9b36033ce50b2d497",
-    "name": "Alvey Chain",
-    "decimals": 18,
-    "symbol": "wALV",
-    "logoURI": "https://tokens.1inch.io/0x256d1fce1b1221e8398f65f9b36033ce50b2d497.png",
-    "tags": [
-      "tokens"
-    ]
-  },
+  
   {
     "chainId": 1,
     "address": "0x467719ad09025fcc6cf6f8311755809d45a5e5f3",
@@ -433,17 +330,7 @@
       "eip2612": true
     }
   },
-  {
-    "chainId": 1,
-    "address": "0x960b236a07cf122663c4303350609a66a7b288c0",
-    "name": "Aragon Network Token",
-    "decimals": 18,
-    "symbol": "ANTv1",
-    "logoURI": "https://tokens.1inch.io/0x960b236a07cf122663c4303350609a66a7b288c0.png",
-    "tags": [
-      "tokens"
-    ]
-  },
+  
   {
     "chainId": 1,
     "address": "0x57b946008913b82e4df85f501cbaed910e58d26c",
@@ -455,17 +342,7 @@
       "tokens"
     ]
   },
-  {
-    "chainId": 1,
-    "address": "0x69af81e73a73b40adf4f3d4223cd9b1ece623074",
-    "name": "Mask Network",
-    "decimals": 18,
-    "symbol": "MASK_NTWRK",
-    "logoURI": "https://tokens.1inch.io/0x69af81e73a73b40adf4f3d4223cd9b1ece623074.png",
-    "tags": [
-      "tokens"
-    ]
-  },
+  
   {
     "chainId": 1,
     "address": "0x6e2a43be0b1d33b726f0ca3b8de60b3482b8b050",
@@ -512,13 +389,7 @@
     "address": "0xdac17f958d2ee523a2206206994597c13d831ec7",
     "decimals": 6
   },
-  {
-    "symbol": "GUSD",
-    "logoURI": "https://cdn.moralis.io/eth/0x056fd409e1d7a124bd7017459dfea2f387b6d5cd.png",
-    "name": "Gemini USD",
-    "address": "0x056Fd409E1d7A124BD7017459dFEa2F387b6d5Cd",
-    "decimals": 2
-  },
+  
   {
     "symbol": "DAI",
     "logoURI": "https://cdn.moralis.io/eth/0x6b175474e89094c44da98b954eedeac495271d0f.png",

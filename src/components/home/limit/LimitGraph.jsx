@@ -5,7 +5,6 @@ import axios from "axios";
 import LimitTime from "./LimitTime";
 import { InfinitySpin } from "react-loader-spinner";
 
-
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
@@ -13,7 +12,7 @@ export default function LimitGraph({ tokenOne, tokenTwo }) {
   const [selectedOption, setSelectedOption] = useState("1h");
   const [tokenNotSelected, setTokenNotSelected] = useState(true);
   const [loadingValue, setLoadingValue] = useState(false);
-
+  const [opt, setOpt] = useState("5m");
   const [chartData, setChartData] = useState({
     series: [],
     options: {
@@ -48,6 +47,33 @@ export default function LimitGraph({ tokenOne, tokenTwo }) {
         type: "datetime",
         tooltip: {
           enabled: false,
+        },
+        labels: {
+          formatter: function (value, timestamp) {
+            const date = new Date(timestamp);
+            // Determine the format based on the selected option
+            let formatOptions = {};
+            console.log(selectedOptionRef.current);
+            if (selectedOptionRef.current === "5m" || selectedOptionRef.current === "15m" ) {
+              // If the selected option is 1d or 1w, format to display only the date
+              formatOptions = {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+              };
+            } else {
+              // If the selected option is not 1d or 1w, format to display date and time
+              formatOptions = {
+                month: "short",
+                day: "numeric",
+              };
+            }
+
+            // Get the formatted date/time string
+            const formattedString = date.toLocaleString([], formatOptions);
+
+            return formattedString; // Return the formatted date/time string
+          },
         },
         axisBorder: {
           show: true,
@@ -117,7 +143,7 @@ export default function LimitGraph({ tokenOne, tokenTwo }) {
       yaxis: {
         labels: {
           formatter: function (val) {
-            return val.toFixed(6); // Adjust the number of decimal places as needed
+            return val.toFixed(4); // Adjust the number of decimal places as needed
           },
         },
         axisBorder: {
@@ -140,49 +166,52 @@ export default function LimitGraph({ tokenOne, tokenTwo }) {
       },
     },
   });
+  const selectedOptionRef = useRef(selectedOption);
+  useEffect(() => {
+    selectedOptionRef.current = selectedOption;
+  }, [selectedOption]);
   useEffect(() => {
     fetchData();
-  }, [tokenOne, tokenTwo]);
+  }, [tokenOne, tokenTwo, selectedOption]);
   const fetchData = async () => {
     if (tokenOne && tokenTwo) {
       setLoadingValue(true);
       try {
         const response = await axios.get(`/api/ohlcv`, {
           params: {
-            src: tokenOne.address,
-            dst: tokenTwo.address,
+            src: tokenOne.symbol,
+            dst: tokenTwo.symbol,
+            timeperiod: selectedOption,
           },
         });
-        const data = response.data.data.EVM.DEXTradeByTokens;
+        const data = response.data.Data.Data;
+        console.log(data);
+        const firstItem = data[0];
+        const timestamp = firstItem.time;
+        const milliseconds = timestamp * 1000;
+        const dateObject = new Date(milliseconds);
+        const timeString = dateObject.toLocaleTimeString();
+        console.log("Converted local time:", timeString);
         if (data.length === 0) {
-          setLoadingValue(false)
+          setLoadingValue(false);
           setTokenNotSelected(true); // Set tokenNotSelected to true if data is empty
         } else {
-        console.log(response.data.data.EVM.DEXTradeByTokens);
-        const firstItem = data[0];
-        const firstDate = new Date(firstItem.Block.Date);
-        data.forEach((item) => {
-          console.log(item.Block.Date);
-        });
-        console.log("Date of the first item:", new Date(firstDate));
-
-        const seriesData = data.map((item) => ({
-          x: new Date(item.Block.Date).getTime(),
-          y: [
-            parseFloat(item.Trade.open),
-            parseFloat(item.Trade.high),
-            parseFloat(item.Trade.low),
-            parseFloat(item.Trade.close),
-          ],
-        }));
-
-        setChartData((prevChartData) => ({
-          ...prevChartData,
-          series: [{ data: seriesData }],
-        }));
-        setLoadingValue(false)
-        setTokenNotSelected(false);
-      }
+          const seriesData = data.map((item) => ({
+            x: new Date(item.time * 1000),
+            y: [
+              parseFloat(item.open),
+              parseFloat(item.high),
+              parseFloat(item.low),
+              parseFloat(item.close),
+            ],
+          }));
+          setChartData((prevChartData) => ({
+            ...prevChartData,
+            series: [{ data: seriesData }],
+          }));
+          setLoadingValue(false);
+          setTokenNotSelected(false);
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -197,32 +226,51 @@ export default function LimitGraph({ tokenOne, tokenTwo }) {
     <div>
       <div
         id="chart"
-        className="bg-gray22/50 z-50 rounded-2xl  h-[450px] mx-4 l py-4 "
+        className="bg-gray22/50 z-50 rounded-2xl  h-[450px] mx-4 l py-4 overflow-hidden "
       >
         {tokenNotSelected ? (
           <div className="bg-[url('/home/graph.svg')] bg-center w-full h-full bg-no-repeat justify-center flex items-center text-gray-600 text-center">
-             {loadingValue ? (
-                <InfinitySpin
+            {loadingValue ? (
+              <InfinitySpin
                 visible={true}
                 width="250"
                 color="#CBFB45"
                 ariaLabel="infinity-spin-loading"
-                />
-              ):<>
-              <p>Token Not selected</p></>}</div>
-          ) : (
+              />
+            ) : (
+              <>
+                <p>Token Not selected</p>
+              </>
+            )}
+          </div>
+        ) : (
           <>
-            <LimitTime
-              selectedOption={selectedOption}
-              setSelectedOption={setSelectedOption}
-            />
-            <ReactApexChart
-              options={chartData.options}
-              series={chartData.series}
-              type="candlestick"
-              width={"100%"}
-              height={380}
-            />
+            {loadingValue ? (
+              <div className="bg-[url('/home/graph.svg')] bg-center w-full h-full bg-no-repeat justify-center flex items-center text-gray-600 text-center">
+                <InfinitySpin
+                  visible={true}
+                  width="250"
+                  color="#CBFB45"
+                  ariaLabel="infinity-spin-loading"
+                />
+              </div>
+            ) : (
+              <>
+                <LimitTime
+                  selectedOption={selectedOption}
+                  setSelectedOption={setSelectedOption}
+                  tokenOne={tokenOne}
+                  tokenTwo={tokenTwo}
+                />
+                <ReactApexChart
+                  options={chartData.options}
+                  series={chartData.series}
+                  type="candlestick"
+                  width={"100%"}
+                  height={380}
+                />
+              </>
+            )}
           </>
         )}
       </div>
