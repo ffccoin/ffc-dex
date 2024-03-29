@@ -5,7 +5,6 @@ import axios from "axios";
 import LimitTime from "./LimitTime";
 import { InfinitySpin } from "react-loader-spinner";
 
-
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
@@ -155,34 +154,34 @@ export default function LimitGraph({ tokenOne, tokenTwo }) {
         });
         const data = response.data.data.EVM.DEXTradeByTokens;
         if (data.length === 0) {
-          setLoadingValue(false)
+          setLoadingValue(false);
           setTokenNotSelected(true); // Set tokenNotSelected to true if data is empty
         } else {
-        console.log(response.data.data.EVM.DEXTradeByTokens);
-        const firstItem = data[0];
-        const firstDate = new Date(firstItem.Block.Date);
-        data.forEach((item) => {
-          console.log(item.Block.Date);
-        });
-        console.log("Date of the first item:", new Date(firstDate));
+          console.log(response.data.data.EVM.DEXTradeByTokens);
+          const firstItem = data[0];
+          const firstDate = new Date(firstItem.Block.Date);
+          data.forEach((item) => {
+            console.log(item.Block.Date);
+          });
+          console.log("Date of the first item:", new Date(firstDate));
 
-        const seriesData = data.map((item) => ({
-          x: new Date(item.Block.Date).getTime(),
-          y: [
-            parseFloat(item.Trade.open),
-            parseFloat(item.Trade.high),
-            parseFloat(item.Trade.low),
-            parseFloat(item.Trade.close),
-          ],
-        }));
+          const seriesData = data.map((item) => ({
+            x: new Date(item.Block.Date).getTime(),
+            y: [
+              parseFloat(item.Trade.open),
+              parseFloat(item.Trade.high),
+              parseFloat(item.Trade.low),
+              parseFloat(item.Trade.close),
+            ],
+          }));
 
-        setChartData((prevChartData) => ({
-          ...prevChartData,
-          series: [{ data: seriesData }],
-        }));
-        setLoadingValue(false)
-        setTokenNotSelected(false);
-      }
+          setChartData((prevChartData) => ({
+            ...prevChartData,
+            series: [{ data: seriesData }],
+          }));
+          setLoadingValue(false);
+          setTokenNotSelected(false);
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -197,20 +196,24 @@ export default function LimitGraph({ tokenOne, tokenTwo }) {
     <div>
       <div
         id="chart"
-        className="bg-gray22/50 z-50 rounded-2xl  h-[450px] mx-4 l py-4 "
+        className="bg-gray22 z-50 rounded-2xl h-[450px] mx-4 py-4 "
       >
         {tokenNotSelected ? (
           <div className="bg-[url('/home/graph.svg')] bg-center w-full h-full bg-no-repeat justify-center flex items-center text-gray-600 text-center">
-             {loadingValue ? (
-                <InfinitySpin
+            {loadingValue ? (
+              <InfinitySpin
                 visible={true}
                 width="250"
                 color="#CBFB45"
                 ariaLabel="infinity-spin-loading"
-                />
-              ):<>
-              <p>Token Not selected</p></>}</div>
-          ) : (
+              />
+            ) : (
+              <>
+                <p>Token Not selected</p>
+              </>
+            )}
+          </div>
+        ) : (
           <>
             <LimitTime
               selectedOption={selectedOption}
