@@ -4,23 +4,27 @@ import LinkedParticlesAnimation from "@/components/animations/LinkedParticlesAni
 import HomeHeader from "@/components/headers/HomeHeader";
 import SwapBalance from "@/components/home/swap/SwapBalance";
 import SelectATokenSendModal from "@/components/models/SelectATokenSendModal";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useAccount } from "wagmi";
-import { useSendTransaction } from "wagmi";
-import { parseEther } from "viem";
+import { useChainId, useWriteContract } from "wagmi";
 const SendPage = () => {
-  const { data: hash, sendTransaction } = useSendTransaction();
-  const [amount, setAmount] = useState(null);
+  const [amount, setAmount] = useState("");
+  const chainId = useChainId();
+  const { writeContractAsync } = useWriteContract();
   const [isOpen, setIsOpen] = useState(false);
   const [token, setToken] = useState(null);
   const [changeToken, setChangeToken] = useState(1);
   const { address } = useAccount();
   const [walletAddressToSendTokens, setWalletAddressToSendTokens] =
     useState("");
-  const handleAmountChange = (e) => {
-    setAmount(e.target.value);
-  };
+  const amountRef = useRef(null); // Create a ref for the amount input field
+  const walletAddressToSendTokensRef  = useRef(null); // Create a ref for the amount input field
 
+  const handleAmountChange = () => {
+    // Access the current value of the input field using the ref
+    const amountValue = amountRef.current.value;
+    console.log(amountValue); // Log the current value
+  };
   const handleWalletAddressToSendTokensChange = (e) => {
     setWalletAddressToSendTokens(e.target.value);
   };
@@ -28,11 +32,217 @@ const SendPage = () => {
     setChangeToken(asset);
     setIsOpen(true);
   }
-  function send() {
-    const to = walletAddressToSendTokens
-    sendTransaction({ to, value: parseEther(amount) })
-    console.log(to +"amount"+amount)
+  async function send() {
+    try {
+      const usdtAbi = [
+        {
+          type: "event",
+          name: "Approval",
+          inputs: [
+            {
+              indexed: true,
+              name: "owner",
+              type: "address",
+            },
+            {
+              indexed: true,
+              name: "spender",
+              type: "address",
+            },
+            {
+              indexed: false,
+              name: "value",
+              type: "uint256",
+            },
+          ],
+        },
+        {
+          type: "event",
+          name: "Transfer",
+          inputs: [
+            {
+              indexed: true,
+              name: "from",
+              type: "address",
+            },
+            {
+              indexed: true,
+              name: "to",
+              type: "address",
+            },
+            {
+              indexed: false,
+              name: "value",
+              type: "uint256",
+            },
+          ],
+        },
+        {
+          type: "function",
+          name: "allowance",
+          stateMutability: "view",
+          inputs: [
+            {
+              name: "owner",
+              type: "address",
+            },
+            {
+              name: "spender",
+              type: "address",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+            },
+          ],
+        },
+        {
+          type: "function",
+          name: "approve",
+          stateMutability: "nonpayable",
+          inputs: [
+            {
+              name: "spender",
+              type: "address",
+            },
+            {
+              name: "amount",
+              type: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "bool",
+            },
+          ],
+        },
+        {
+          type: "function",
+          name: "balanceOf",
+          stateMutability: "view",
+          inputs: [
+            {
+              name: "account",
+              type: "address",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+            },
+          ],
+        },
+        {
+          type: "function",
+          name: "decimals",
+          stateMutability: "view",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "uint8",
+            },
+          ],
+        },
+        {
+          type: "function",
+          name: "name",
+          stateMutability: "view",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "string",
+            },
+          ],
+        },
+        {
+          type: "function",
+          name: "symbol",
+          stateMutability: "view",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "string",
+            },
+          ],
+        },
+        {
+          type: "function",
+          name: "totalSupply",
+          stateMutability: "view",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+            },
+          ],
+        },
+        {
+          type: "function",
+          name: "transfer",
+          stateMutability: "nonpayable",
+          inputs: [
+            {
+              name: "recipient",
+              type: "address",
+            },
+            {
+              name: "amount",
+              type: "uint256",
+            },
+          ],
+          outputs: [],
+        },
+        {
+          type: "function",
+          name: "transferFrom",
+          stateMutability: "nonpayable",
+          inputs: [
+            {
+              name: "sender",
+              type: "address",
+            },
+            {
+              name: "recipient",
+              type: "address",
+            },
+            {
+              name: "amount",
+              type: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "bool",
+            },
+          ],
+        },
+      ];
+      const amountValue = amountRef.current.value;
+      const walletAddress = walletAddressToSendTokensRef.current.value;
 
+      console.log(amountValue);
+
+      const data = await writeContractAsync({
+        chainId: chainId,
+        address: token.address, // change to receipient address
+        functionName: "transfer",
+        abi: usdtAbi,
+        args: [walletAddress, amountValue],
+      });
+      console.log(data);
+    } catch (error) {
+      console.error("Error sending transaction:", error);
+      // Handle error appropriately, e.g., show a message to the user
+    }
   }
   return (
     <div className="overflow-hidden h-full flex items-center justify-center px-4 relative">
@@ -58,6 +268,7 @@ const SendPage = () => {
                   placeholder="$0"
                   name="amount"
                   id="amount"
+                  ref={amountRef}
                   autoComplete="off"
                   value={amount}
                   onChange={handleAmountChange}
@@ -118,6 +329,7 @@ const SendPage = () => {
             type="text"
             className="bg-transparent outline-none placeholder:text-gray15 w-full"
             placeholder="Wallet Address"
+            ref={walletAddressToSendTokensRef}
             value={walletAddressToSendTokens}
             onChange={handleWalletAddressToSendTokensChange}
             autoComplete="off"
