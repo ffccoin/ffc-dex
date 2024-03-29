@@ -54,7 +54,10 @@ export default function LimitGraph({ tokenOne, tokenTwo }) {
             // Determine the format based on the selected option
             let formatOptions = {};
             console.log(selectedOptionRef.current);
-            if (selectedOptionRef.current === "5m" || selectedOptionRef.current === "15m" ) {
+            if (
+              selectedOptionRef.current === "5m" ||
+              selectedOptionRef.current === "15m"
+            ) {
               // If the selected option is 1d or 1w, format to display only the date
               formatOptions = {
                 hour: "2-digit",
