@@ -17,14 +17,6 @@ export const tokenList56 = [
       "https://tokens.1inch.io/0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82.png",
   },
   {
-    address: "0x0231f91e02debd20345ae8ab7d71a41f8e140ce7",
-    name: "BSC Wrapped Jupiter",
-    decimals: 18,
-    symbol: "bwJUP",
-    logoURI:
-      "https://tokens.1inch.io/0x0231f91e02debd20345ae8ab7d71a41f8e140ce7.png",
-  },
-  {
     address: "0x570a5d26f7765ecb712c0924e4de545b89fd43df",
     name: "SOLANA",
     decimals: 18,
@@ -311,15 +303,6 @@ export const tokenList56 = [
     logoURI:
       "https://tokens.1inch.io/0xa184088a740c695e156f91f5cc086a06bb78b827.png",
   },
-  {
-    address: "0x334b3ecb4dca3593bccc3c7ebd1a1c1d1780fbf1",
-    name: "Venus DAI",
-    decimals: 8,
-    symbol: "vDAI",
-    logoURI:
-      "https://tokens.1inch.io/0x334b3ecb4dca3593bccc3c7ebd1a1c1d1780fbf1.png",
-  },
-
   {
     address: "0x250632378e573c6be1ac2f97fcdf00515d0aa91b",
     name: "Binance Beacon ETH",

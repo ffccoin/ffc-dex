@@ -28,16 +28,7 @@ export const tokenList1 = [
       eip2612: true,
     },
   },
-  {
-    chainId: 1,
-    address: "0x08c32b0726c5684024ea6e141c50ade9690bbdcc",
-    name: "Stratos Token",
-    decimals: 18,
-    symbol: "STOS",
-    logoURI:
-      "https://tokens.1inch.io/0x08c32b0726c5684024ea6e141c50ade9690bbdcc.png",
-    tags: ["tokens"],
-  },
+ 
   {
     chainId: 1,
     address: "0x3845badade8e6dff049820680d1f14bd3903a5d0",
