@@ -27,14 +27,16 @@ export default function LimitGraph({ tokenOne, tokenTwo }) {
           },
         },
       },
-
       chart: {
         toolbar: {
           show: false,
         },
+        zoom: {
+          enabled: false,
+        },
         type: "candlestick",
         height: 380,
-        width: "100%",
+        width: "90%",
       },
       title: {
         text: "",
@@ -269,7 +271,7 @@ export default function LimitGraph({ tokenOne, tokenTwo }) {
                   options={chartData.options}
                   series={chartData.series}
                   type="candlestick"
-                  width={"100%"}
+                  width={"95%"}
                   height={380}
                 />
               </>
