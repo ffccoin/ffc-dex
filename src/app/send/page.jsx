@@ -6,8 +6,10 @@ import SwapBalance from "@/components/home/swap/SwapBalance";
 import SelectATokenSendModal from "@/components/models/SelectATokenSendModal";
 import { useState } from "react";
 import { useAccount } from "wagmi";
-
+import { useSendTransaction } from "wagmi";
+import { parseEther } from "viem";
 const SendPage = () => {
+  const { data: hash, sendTransaction } = useSendTransaction();
   const [amount, setAmount] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [token, setToken] = useState(null);
@@ -26,7 +28,12 @@ const SendPage = () => {
     setChangeToken(asset);
     setIsOpen(true);
   }
+  function send() {
+    const to = walletAddressToSendTokens
+    sendTransaction({ to, value: parseEther(amount) })
+    console.log(to +"amount"+amount)
 
+  }
   return (
     <div className="overflow-hidden h-full flex items-center justify-center px-4 relative">
       <LinkedParticlesAnimation />
@@ -116,7 +123,10 @@ const SendPage = () => {
             autoComplete="off"
           />
         </div>
-        <button className="rounded-lg bg-gray22/80 text-center py-4 text-xl font-bold w-full gap-y-1">
+        <button
+          className="rounded-lg bg-gray22/80 text-center py-4 text-xl font-bold w-full gap-y-1"
+          onClick={() => send()}
+        >
           {walletAddressToSendTokens === "" ? "Select recipient" : "Send"}
         </button>
       </div>
