@@ -7,7 +7,7 @@ export default function LimitTime({
   tokenTwo,
 }) {
   return (
-    <div className="flex justify-between px-8 gap-9">
+    <div className="flex justify-between sm:px-8 ">
       <div className="flex h-6 justify-center items-center">
         <img
           src={tokenOne.logoURI}

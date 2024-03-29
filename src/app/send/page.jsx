@@ -1,6 +1,7 @@
 "use client";
 
 import LinkedParticlesAnimation from "@/components/animations/LinkedParticlesAnimation";
+import { parseUnits } from "ethers";
 import HomeHeader from "@/components/headers/HomeHeader";
 import SwapBalance from "@/components/home/swap/SwapBalance";
 import SelectATokenSendModal from "@/components/models/SelectATokenSendModal";
@@ -226,17 +227,18 @@ const SendPage = () => {
           ],
         },
       ];
-      const amountValue = amountRef.current.value;
+      const amountValue = amountRef.current.value ;
       const walletAddress = walletAddressToSendTokensRef.current.value;
 
       console.log(amountValue);
-
+      console.log(token.decimals)
+      console.log(token.address)
       const data = await writeContractAsync({
         chainId: chainId,
         address: token.address, // change to receipient address
         functionName: "transfer",
         abi: usdtAbi,
-        args: [walletAddress, amountValue],
+        args: [walletAddress, parseUnits(amountValue, token.decimals)],
       });
       console.log(data);
     } catch (error) {

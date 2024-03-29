@@ -30,6 +30,7 @@ import { useWalletClient } from "wagmi";
 import { useVerifyTypedData } from "wagmi";
 import { useAppDispatch } from "@/lib/hooks";
 import { setOrder } from "@/lib/features/limit/orderSlice";
+import LimitExpiry from "./LimitExpiry";
 
 export default function Limit({
   slippage,
@@ -42,6 +43,7 @@ export default function Limit({
 }) {
   const account = useAccount();
   const { signTypedDataAsync } = useSignTypedData();
+  const [selectedOption, setSelectedOption] = useState("1day");
   const dispatch = useAppDispatch();
   // const {  data: SignTypedDataData,signTypedData } = useSignTypedData();
   const [isOpen, setIsOpen] = useState(false);
@@ -326,6 +328,10 @@ export default function Limit({
               </div>
             )}
           </div>
+          <LimitExpiry
+            setSelectedOption={setSelectedOption}
+            selectedOption={selectedOption}
+          />
           {tokenOne && tokenTwo && (
             <div className="bg-gray24 my-2 px-2 py-3 rounded-2xl">
               <PerTokenPrice
