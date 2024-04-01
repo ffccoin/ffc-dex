@@ -28,9 +28,8 @@ const { AxiosProviderConnector } = require("@1inch/limit-order-sdk/axios");
 import LimitButton from "./LimitButton";
 import { useWalletClient } from "wagmi";
 import { useVerifyTypedData } from "wagmi";
-import { useAppDispatch } from "@/lib/hooks";
-import { setOrder } from "@/lib/features/limit/orderSlice";
 import LimitExpiry from "./LimitExpiry";
+import { useDispatch } from "react-redux";
 
 export default function Limit({
   slippage,
@@ -44,7 +43,6 @@ export default function Limit({
   const account = useAccount();
   const { signTypedDataAsync } = useSignTypedData();
   const [selectedOption, setSelectedOption] = useState("1day");
-  const dispatch = useAppDispatch();
   // const {  data: SignTypedDataData,signTypedData } = useSignTypedData();
   const [isOpen, setIsOpen] = useState(false);
   const [buttonLabel, setButtonLabel] = useState("Enter an amount");

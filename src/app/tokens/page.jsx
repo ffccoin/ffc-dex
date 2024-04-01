@@ -18,7 +18,9 @@ const TokensPage = () => {
             <VolumeGraph />
           </div>
         </div>
-        <TokensTable />
+        <div className="px-10">
+          <TokensTable />
+        </div>
       </div>
     </div>
   );
