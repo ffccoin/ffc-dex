@@ -1,5 +1,6 @@
 "use client";
-
+import { useWeb3Modal } from "@web3modal/wagmi/react";
+import { ThreeDots } from "react-loader-spinner";
 import LinkedParticlesAnimation from "@/components/animations/LinkedParticlesAnimation";
 import { parseUnits } from "ethers";
 import HomeHeader from "@/components/headers/HomeHeader";
@@ -9,8 +10,11 @@ import { useState, useRef } from "react";
 import { useAccount } from "wagmi";
 import { useChainId, useWriteContract } from "wagmi";
 const SendPage = () => {
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState(null);
   const chainId = useChainId();
+  const[isLoading,setIsLoading]=useState(false);
+  const { isConnected } = useAccount();
+  const { open } = useWeb3Modal();
   const { writeContractAsync } = useWriteContract();
   const [isOpen, setIsOpen] = useState(false);
   const [token, setToken] = useState(null);
@@ -18,12 +22,12 @@ const SendPage = () => {
   const { address } = useAccount();
   const [walletAddressToSendTokens, setWalletAddressToSendTokens] =
     useState("");
-  const amountRef = useRef(null); // Create a ref for the amount input field
-  const walletAddressToSendTokensRef  = useRef(null); // Create a ref for the amount input field
+  const amountRef = useRef(null); 
+  const walletAddressToSendTokensRef = useRef(null); 
 
-  const handleAmountChange = () => {
-    // Access the current value of the input field using the ref
+  const handleAmountChange = (e) => {
     const amountValue = amountRef.current.value;
+    setAmount(e.target.value)
     console.log(amountValue); // Log the current value
   };
   const handleWalletAddressToSendTokensChange = (e) => {
@@ -35,6 +39,7 @@ const SendPage = () => {
   }
   async function send() {
     try {
+      setIsLoading(true)
       const usdtAbi = [
         {
           type: "event",
@@ -227,12 +232,11 @@ const SendPage = () => {
           ],
         },
       ];
-      const amountValue = amountRef.current.value ;
+      const amountValue = amountRef.current.value;
       const walletAddress = walletAddressToSendTokensRef.current.value;
-
       console.log(amountValue);
-      console.log(token.decimals)
-      console.log(token.address)
+      console.log(token.decimals);
+      console.log(token.address);
       const data = await writeContractAsync({
         chainId: chainId,
         address: token.address, // change to receipient address
@@ -240,10 +244,13 @@ const SendPage = () => {
         abi: usdtAbi,
         args: [walletAddress, parseUnits(amountValue, token.decimals)],
       });
+      setIsLoading(false);
       console.log(data);
     } catch (error) {
       console.error("Error sending transaction:", error);
       // Handle error appropriately, e.g., show a message to the user
+      setIsLoading(false);
+
     }
   }
   return (
@@ -337,12 +344,42 @@ const SendPage = () => {
             autoComplete="off"
           />
         </div>
+        {isConnected ? (
         <button
-          className="rounded-lg bg-gray22/80 text-center py-4 text-xl font-bold w-full gap-y-1"
+          className={`w-full rounded-lg text-center py-4 text-xl font-bold  gap-y-1  ${
+            amount === "" || walletAddressToSendTokens === "" || !walletAddressToSendTokens  || !token || token === null
+            ? "bg-gray22/80  text-neutralLight "
+              : "bg-primary1 text-black"
+          }
+              ${!isLoading && "py-3"}
+              `}
           onClick={() => send()}
         >
-          {walletAddressToSendTokens === "" ? "Select recipient" : "Send"}
+          {isLoading ? (
+            <div className="flex w-full justify-center items-center">
+              <ThreeDots
+                visible={true}
+                height="30"
+                width="50"
+                color="#000000"
+                radius="9"
+                ariaLabel="three-dots-loading"
+                wrapperStyle={{}}
+                wrapperClass=""
+              />
+            </div>
+          ) : (
+            "Send"
+          )}
         </button>
+      ) : (
+        <button
+          onClick={() => open({ view: "Connect" })}
+          className="w-full bg-primary1 rounded-lg text-center py-4 text-xl font-bold  gap-y-1  text-black"
+        >
+          Connect Wallet
+        </button>
+      )}
       </div>
     </div>
   );
@@ -367,3 +404,6 @@ const chevronDown = (
 );
 
 export default SendPage;
+
+
+

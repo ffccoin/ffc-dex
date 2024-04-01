@@ -3,6 +3,7 @@ import qs from "qs";
 import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
+
 import { DNA } from "react-loader-spinner";
 import TransactionSuccessModal from "../../models/TransactionSuccessModal";
 import SelectATokenModal from "../../models/SelectATokenModal";
@@ -159,6 +160,7 @@ export default function Limit({
       },
     });
     const data = res.data
+    console.log(res.data.domain)
     const signature = await signTypedDataAsync({
       domain:res.data.domain,
       types: {
@@ -183,6 +185,14 @@ export default function Limit({
       message: res.data.message
        
     });
+    // const encoder = new ethers.TypedDataEncoder([
+    //   { name: "name", type: "string" },
+    //   { name: "version", type: "string" },
+    //   { name: "chainId", type: "uint256" },
+    //   { name: "verifyingContract", type: "address" },
+    // ]);
+    // const hash = encoder.hash(data)
+    // console.log(hash);
    const res1 = await axios.post('/api/limit', {
     signature: signature,
   });
