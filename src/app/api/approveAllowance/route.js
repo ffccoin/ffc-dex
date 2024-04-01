@@ -8,8 +8,6 @@ export async function getSwapData(req, res) {
   const { searchParams } = new URL(req.url);
   const src = searchParams.get("src");
   const selectedNetworkId = searchParams.get("selectedNetworkId");
-
-
   const url = `https://api.1inch.dev/swap/v6.0/${selectedNetworkId}/approve/transaction`;
   const config = {
     headers: {

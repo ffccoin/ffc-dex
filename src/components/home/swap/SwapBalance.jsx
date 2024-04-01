@@ -1,4 +1,5 @@
 import React from "react";
+import { setBalance } from "viem/actions";
 import { useBalance } from "wagmi";
 
 export default function SwapBalance({ address, token }) {
