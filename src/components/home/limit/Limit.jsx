@@ -9,28 +9,16 @@ import TransactionSuccessModal from "../../models/TransactionSuccessModal";
 import SelectATokenModal from "../../models/SelectATokenModal";
 import { tokenList1 } from "@/lists/tokenList1";
 import {
-  useSendTransaction,
   useAccount,
-  useConnect,
-  useConnectorClient,
-  useSignMessage,
   useSignTypedData,
 } from "wagmi";
 import { tokenList56 } from "@/lists/tokenList56";
 import SwitchTokenButton from "../swap/SwitchTokenButton";
 import SwapBalance from "../swap/SwapBalance";
 import PerTokenPrice from "../swap/PerTokenPrice";
-import Web3 from "web3";
-const ethers = require("ethers");
 import { LimitOrder, MakerTraits, Address } from "@1inch/limit-order-sdk";
-import { Wallet } from "ethers";
 import { Api, getLimitOrderV4Domain } from "@1inch/limit-order-sdk";
-const { AxiosProviderConnector } = require("@1inch/limit-order-sdk/axios");
-import LimitButton from "./LimitButton";
-import { useWalletClient } from "wagmi";
-import { useVerifyTypedData } from "wagmi";
 import LimitExpiry from "./LimitExpiry";
-import { useDispatch } from "react-redux";
 
 export default function Limit({
   slippage,
