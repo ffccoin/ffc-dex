@@ -64,8 +64,6 @@ export default function Swap({ slippage, networkId, apiUrl }) {
   }, [tokenOneAmount]);
 
   useEffect(() => {
-    console.log("tx UseEffect called");
-    console.log(txDetails);
     if (txDetails.to && isConnected) {
       sendTransaction1();
       setIsLoading(false);
@@ -188,8 +186,6 @@ export default function Swap({ slippage, networkId, apiUrl }) {
               from: address,
             },
           });
-          console.log("helo");
-          console.log(res.data);
           setTxDetails({
             to: res.data.to,
             data: res.data.data,
@@ -213,9 +209,7 @@ export default function Swap({ slippage, networkId, apiUrl }) {
           data: approve.data.data,
           value: approve.data.value,
         });
-        console.log("not approved");
         setButtonLabel("Swap");
-
         return;
       }
     }

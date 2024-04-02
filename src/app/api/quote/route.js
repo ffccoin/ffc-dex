@@ -24,7 +24,6 @@ export async function getSwapData(req, res) {
 
   try {
     const response = await axios.get(url, config);
-    console.log(response.data);
     return NextResponse.json({ message: "helo", data: response.data });
   } catch (error) {
     console.error(error);

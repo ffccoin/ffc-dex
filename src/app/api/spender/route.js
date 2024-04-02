@@ -10,7 +10,6 @@ export async function getApproveSpender(req, res) {
 
   try {
     const response = await axios.get(url);
-    console.log(response.data);
     return NextResponse.json({ data: response.data });
   } catch (error) {
     console.error(error);

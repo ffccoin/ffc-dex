@@ -152,48 +152,83 @@ export default function Limit({
     }
   }
   const limit = async () => {
-    const res = await axios.get('/api/limit', {
-      params: {
-        address: address,
+    // const res = await axios.get("/api/limit", {
+    //   params: {
+    //     address: address,
+    //   },
+    // });
+    // const data = res.data;
+    // console.log("res.data.domain = ", res.data.domain);
+    // const signature = await signTypedDataAsync({
+    //   domain: {...res.data.domain, chainId: '1'},
+    //   types: {
+    //     EIP712Domain: [
+    //       { name: "name", type: "string" },
+    //       { name: "version", type: "string" },
+    //       { name: "chainId", type: "uint256" },
+    //       { name: "verifyingContract", type: "address" },
+    //     ],
+    //     Order: [
+    //       { name: "salt", type: "uint256" },
+    //       { name: "maker", type: "address" },
+    //       { name: "receiver", type: "address" },
+    //       { name: "makerAsset", type: "address" },
+    //       { name: "takerAsset", type: "address" },
+    //       { name: "makingAmount", type: "uint256" },
+    //       { name: "takingAmount", type: "uint256" },
+    //       { name: "makerTraits", type: "uint256" },
+    //     ],
+    //   },
+    //   primaryType: "Order",
+    //   message: res.data.message,
+    // });
+    // console.log("signature = ", signature);
+    // const res1 = await axios.post("/api/limit", {
+    //   signature: signature,
+    // });
+    const expiresIn = 120n; // 2m
+    const expiration = BigInt(Math.floor(Date.now() / 1000)) + expiresIn;
+    const makerTraits = MakerTraits.default()
+      .withExpiration(expiration)
+      .allowPartialFills()
+      .allowMultipleFills();
+
+    console.log("MAKER TRAITS:::", makerTraits.value.value.toString());
+
+    const order = new LimitOrder(
+      {
+        makerAsset: new Address("0x55d398326f99059fF775485246999027B3197955"),
+        takerAsset: new Address("0x111111111117dc0aa78b770fa6a738034120c302"), //1INCH
+        makingAmount: 1_000000n, // 1 USDT
+        takingAmount: 1_00000000000000000n, // 10 1INCH
+        maker: address,
+        receiver: address,
       },
-    });
-    const data = res.data
-    console.log(res.data.domain)
+      makerTraits
+    );
+    console.log("ORDER:::", order);
+    const salt = order.salt;
+    console.log("Salt:::", salt);
+    const domain = getLimitOrderV4Domain(1);
+    console.log("DOMAIN:::", domain);
+    const typedData = order.getTypedData(domain);
+    console.log("TYPED DATA:::", typedData);
+    const converted = { ...typedData.domain, chainId: "1" };
     const signature = await signTypedDataAsync({
-      domain:res.data.domain,
-      types: {
-        EIP712Domain: [
-          { name: "name", type: "string" },
-          { name: "version", type: "string" },
-          { name: "chainId", type: "uint256" },
-          { name: "verifyingContract", type: "address" },
-        ],
-        Order: [
-          { name: "salt", type: "uint256" },
-          { name: "maker", type: "address" },
-          { name: "receiver", type: "address" },
-          { name: "makerAsset", type: "address" },
-          { name: "takerAsset", type: "address" },
-          { name: "makingAmount", type: "uint256" },
-          { name: "takingAmount", type: "uint256" },
-          { name: "makerTraits", type: "uint256" },
-        ],
-      },
-      primaryType: "Order",
-      message: res.data.message
-       
+      domain: converted,
+      types: typedData.types,
+      primaryType: typedData.primaryType,
+      message: typedData.message,
     });
-    // const encoder = new ethers.TypedDataEncoder([
-    //   { name: "name", type: "string" },
-    //   { name: "version", type: "string" },
-    //   { name: "chainId", type: "uint256" },
-    //   { name: "verifyingContract", type: "address" },
-    // ]);
-    // const hash = encoder.hash(data)
-    // console.log(hash);
-   const res1 = await axios.post('/api/limit', {
-    signature: signature,
-  });
+    console.log("SIGNATURE:::", signature);
+    const orderHash = order.getOrderHash(domain.verifyingContract);
+    const response = await axios.post("/api/limittt", {
+      signature: signature,
+      address: address,
+      salt: salt.toString(),
+      orderHash: orderHash,
+      makerTraits: makerTraits.value.value.toString(),
+    });
   };
 
   function openModal(asset) {

@@ -7,8 +7,6 @@ export async function getOhlcv(req, res) {
   const fsym = searchParams.get("src");
   const tsym = searchParams.get("dst");
   let timeperiod= searchParams.get("timeperiod");
-  console.log(fsym);
-  console.log(tsym);
   let limit = "50";
   if (timeperiod=="1d"){
     limit = "60";
@@ -31,7 +29,6 @@ export async function getOhlcv(req, res) {
   const currentTime = new Date();
   currentTime.setHours(currentTime.getHours() - 1);
   const timestamp = Math.floor(currentTime.getTime() / 1000);
-  console.log("Converted timestamp (one hour earlier):", timestamp);
 
   const apiKey =
     "dc57ff1b96d417fbd89096d05a3ca50db3a2fb2638a4b4bf33cb33603e614007";
@@ -39,7 +36,6 @@ export async function getOhlcv(req, res) {
     try {
     const response = await fetch(apiUrl);
     const data = await response.json();
-    console.log("Historical data:", data.data);
     return NextResponse.json(data);
   } catch (error) {
     console.error(error);

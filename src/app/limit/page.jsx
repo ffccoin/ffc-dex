@@ -20,7 +20,7 @@ const LimitPage = () => {
     apiUrl = `https://bsc.api.0x.org/swap/v1/price`;
   }
   const order = useSelector((state) => state.order);
-  console.log("Redux", order);
+  console.log("Order:", order);
   return (
     <div className="overflow-y-auto overflow-x-hidden flex flex-col items-center w-full justify-center mb-10">
       <LinkedParticlesAnimation />

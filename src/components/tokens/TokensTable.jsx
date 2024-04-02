@@ -57,8 +57,6 @@ const TokensTable = () => {
     },
   };
 
-  console.log("data", data);
-
   return (
     <table className="w-full my-10 text-left rtl:text-right dark:text-gray-400">
       <thead className="h-[58px] bg-[#1E1E1F] text-white">

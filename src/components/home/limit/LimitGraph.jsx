@@ -55,7 +55,6 @@ export default function LimitGraph({ tokenOne, tokenTwo }) {
             const date = new Date(timestamp);
             // Determine the format based on the selected option
             let formatOptions = {};
-            console.log(selectedOptionRef.current);
             if (
               selectedOptionRef.current === "5m" ||
               selectedOptionRef.current === "15m"
@@ -190,13 +189,11 @@ export default function LimitGraph({ tokenOne, tokenTwo }) {
           },
         });
         const data = response.data.Data.Data;
-        console.log(data);
         const firstItem = data[0];
         const timestamp = firstItem.time;
         const milliseconds = timestamp * 1000;
         const dateObject = new Date(milliseconds);
         const timeString = dateObject.toLocaleTimeString();
-        console.log("Converted local time:", timeString);
         if (data.length === 0) {
           setLoadingValue(false);
           setTokenNotSelected(true); // Set tokenNotSelected to true if data is empty
