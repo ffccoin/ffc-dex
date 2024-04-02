@@ -9,16 +9,28 @@ import TransactionSuccessModal from "../../models/TransactionSuccessModal";
 import SelectATokenModal from "../../models/SelectATokenModal";
 import { tokenList1 } from "@/lists/tokenList1";
 import {
+  useSendTransaction,
   useAccount,
+  useConnect,
+  useConnectorClient,
+  useSignMessage,
   useSignTypedData,
 } from "wagmi";
 import { tokenList56 } from "@/lists/tokenList56";
 import SwitchTokenButton from "../swap/SwitchTokenButton";
 import SwapBalance from "../swap/SwapBalance";
 import PerTokenPrice from "../swap/PerTokenPrice";
+import Web3 from "web3";
+const ethers = require("ethers");
 import { LimitOrder, MakerTraits, Address } from "@1inch/limit-order-sdk";
+import { Wallet } from "ethers";
 import { Api, getLimitOrderV4Domain } from "@1inch/limit-order-sdk";
+const { AxiosProviderConnector } = require("@1inch/limit-order-sdk/axios");
+import LimitButton from "./LimitButton";
+import { useWalletClient } from "wagmi";
+import { useVerifyTypedData } from "wagmi";
 import LimitExpiry from "./LimitExpiry";
+import { useDispatch } from "react-redux";
 
 export default function Limit({
   slippage,
@@ -178,10 +190,11 @@ export default function Limit({
     const expiration = BigInt(Math.floor(Date.now() / 1000)) + expiresIn;
     const makerTraits = MakerTraits.default()
       .withExpiration(expiration)
+      .enablePermit2()
       .allowPartialFills()
       .allowMultipleFills();
 
-    console.log("MAKER TRAITS:::", makerTraits.value.value.toString());
+    // console.log("MAKER TRAITS:::", makerTraits.value.value.toString());
 
     const order = new LimitOrder(
       {
@@ -194,13 +207,13 @@ export default function Limit({
       },
       makerTraits
     );
-    console.log("ORDER:::", order);
+    // console.log("ORDER:::", order);
     const salt = order.salt;
-    console.log("Salt:::", salt);
+    // console.log("Salt:::", salt);
     const domain = getLimitOrderV4Domain(1);
-    console.log("DOMAIN:::", domain);
+    // console.log("DOMAIN:::", domain);
     const typedData = order.getTypedData(domain);
-    console.log("TYPED DATA:::", typedData);
+    // console.log("TYPED DATA:::", typedData);
     const converted = { ...typedData.domain, chainId: "1" };
     const signature = await signTypedDataAsync({
       domain: converted,
@@ -209,14 +222,16 @@ export default function Limit({
       message: typedData.message,
     });
     console.log("SIGNATURE:::", signature);
-    const orderHash = order.getOrderHash(domain.verifyingContract);
+    const orderHash = order.getOrderHash(1);
+    console.log("ORDER HASH:::", orderHash);
+    console.log("order built", order.build());
+    // console.log("ORDER:::", order);
     const response = await axios.post("/api/limittt", {
       signature: signature,
-      address: address,
-      salt: salt.toString(),
+      order: { ...order.build(), extension: order.extension.encode() },
       orderHash: orderHash,
-      makerTraits: makerTraits.value.value.toString(),
     });
+    console.log("RESPONSE:::", response);
   };
 
   function openModal(asset) {

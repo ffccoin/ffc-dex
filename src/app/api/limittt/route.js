@@ -1,32 +1,23 @@
 import axios from "axios";
+import { NextResponse } from "next/server";
 
 export async function POST(req, res) {
   const params = await req.json();
-  console.log("RES:::", params);
   const signature = params.signature;
-  const address = params.address;
-  const salt = params.salt;
   const orderHash = params.orderHash;
-  const makerTraits = params.makerTraits;
+  const order = params.order;
 
   console.log("order hash", orderHash);
+  console.log("signature", signature);
 
+  console.log("order", order);
   const result = await axios.post(
-    "https://api.1inch.dev/orderbook/v4.0/1",
+    "https://limit-orders.1inch.io/v4.0/1", // post to this for now.
+    // "https://api.1inch.dev/orderbook/v4.0/1",
     {
       orderHash: orderHash,
       signature: signature,
-      data: {
-        makerAsset: "0x55d398326f99059fF775485246999027B3197955",
-        takerAsset: "0x111111111117dc0aa78b770fa6a738034120c302",
-        maker: address,
-        receiver: address,
-        makingAmount: "100000",
-        takingAmount: "100000000000000000",
-        salt: salt,
-        extension: "0x",
-        makerTraits: makerTraits,
-      },
+      data: order,
     },
     {
       headers: {
@@ -34,4 +25,6 @@ export async function POST(req, res) {
       },
     }
   );
+  console.log("RESULT:::", result);
+  return NextResponse.json(result.data);
 }
