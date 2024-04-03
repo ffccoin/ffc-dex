@@ -5,15 +5,15 @@ import { columns } from "@/components/Table/column";
 import { useAccount } from "wagmi";
 import axios from "axios";
 import tokenList from "@/lists/allToken.json";
+import { formatUnits } from "ethers";
 
 export default function LimitOrders({ networkId }) {
   const [tableData, setTableData] = useState([]);
   const { address, isConnected } = useAccount();
   function getLogoURI(address) {
     for (const token of tokenList) {
-      console.log(address);
       if (token.address.toLowerCase() == address.toLowerCase()) {
-        return token.logoURI;
+        return token;
       }
     }
     return null;
@@ -24,18 +24,35 @@ export default function LimitOrders({ networkId }) {
         const response = await axios.post("/api/getOrders", {
           address: address,
         });
-        console.log("RESPONSE:::", response);
-        console.log("RESPONSE:::", response.data);
+        console.log("RESPONSE", response);
+        console.log("RESPONSE", response.data);
 
         const structuredData = response.data.map((item) => {
-          const logoURI = getLogoURI(item.data.takerAsset);
-          console.log(logoURI);
+          const takerAssetAddress = getLogoURI(item.data.takerAsset);
+          const takerAssetAmount = formatUnits(
+            item.data.takingAmount,
+            takerAssetAddress.decimals
+          );
+          const makerAssetAddress = getLogoURI(item.data.makerAsset);
+          const makerAssetAmount = formatUnits(
+            item.data.makingAmount,
+            makerAssetAddress.decimals
+          );
+
           return {
             makerRate: item.makerRate,
             takerRate: item.takerRate,
             createdAt: item.createDateTime,
-            makerAsset: item.data.makerAsset,
-            takerAsset: logoURI,
+            makerAsset: {
+              logoURI: makerAssetAddress.logoURI,
+              symbol: makerAssetAddress.symbol,
+              amount: makerAssetAmount, // Assuming this is the address of the taker asset
+            },
+            takerAsset: {
+              logoURI: takerAssetAddress.logoURI,
+              symbol: takerAssetAddress.symbol,
+              amount: takerAssetAmount, // Assuming this is the address of the taker asset
+            },
           };
         });
 
@@ -46,7 +63,6 @@ export default function LimitOrders({ networkId }) {
       }
     }
   }
-
   useEffect(() => {
     if (tableData.length == 0) {
       fetchData();
