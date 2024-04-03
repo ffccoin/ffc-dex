@@ -228,7 +228,7 @@ export default function LimitGraph({ tokenOne, tokenTwo }) {
     <div>
       <div
         id="chart"
-        className="bg-gray22/50 z-50 rounded-2xl  h-[450px] mx-4 l py-4 overflow-hidden "
+        className="bg-gray22/50 z-50 rounded-2xl  h-[450px]  py-4 overflow-hidden "
       >
         {tokenNotSelected ? (
           <div className="bg-[url('/home/graph.svg')] bg-center w-full h-full bg-no-repeat justify-center flex items-center text-gray-600 text-center">

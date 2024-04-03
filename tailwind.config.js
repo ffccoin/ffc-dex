@@ -1,54 +1,25 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: ["class"],
   content: [
+    './pages/**/*.{js,jsx}',
+    './components/**/*.{js,jsx}',
+    './app/**/*.{js,jsx}',
+    './src/**/*.{js,jsx}',
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  prefix: "",
   theme: {
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
+      },
+    },
     extend: {
-      // colors: {
-      //   blue1: "#E2F0FF",
-      //   blue2: "#C5DFFF",
-      //   blue3: "#A9CDFF",
-      //   blue4: "#93BDFF",
-      //   blue5: "#5F97FF",
-      //   blue6: "#517DDB",
-      //   blue7: "#385BB7",
-      //   blue8: "#233E93",
-      //   primary1: "#D8EEFF",
-      //   primary2: "#B1DBFF",
-      //   primary3: "#8AC4FF",
-      //   primary4: "#6DAFFF",
-      //   primary5: "#3D8DFF",
-      //   primary6: "#2C6DDB",
-      //   primary7: "#1E50B7",
-      //   primary8: "#133893",
-      //   gray1: "#F3F5F7",
-      //   gray2: "#E7EBEF",
-      //   gray3: "#DAE0E7",
-      //   gray4: "#CED6DF",
-      //   gray5: "#C1CBD7",
-      //   gray6: "#B4C0CF",
-      //   gray7: "#A8B6C7",
-      //   gray8: "#9BACBF",
-      //   gray9: "#8FA2B7",
-      //   gray10: "#8398AF",
-      //   gray11: "#768EA7",
-      //   gray12: "#6A84A0",
-      //   gray13: "#5F7A95",
-      //   gray14: "#587089",
-      //   gray15: "#50657C",
-      //   gray16: "#485B70",
-      //   gray17: "#405064",
-      //   gray18: "#384657",
-      //   gray19: "#303C4B",
-      //   gray20: "#28323E",
-      //   gray21: "#202832",
-      //   gray22: "#181E25",
-      //   gray23: "#101419",
-      //   gray24: "#080A0C",
-      // },
       colors: {
         primary1: "#CBFB45",
         primary2: "#161617",
@@ -83,13 +54,64 @@ module.exports = {
         gray22: "#181E25",
         gray23: "#101419",
         gray24: "#080A0C",
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+        },
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
       },
-      fontFamily: {
+      ontFamily: {
         "apfel-grotezk": "Apfel Grotezk",
         "neue-machina-bold": "Neue Machina Bold",
-        "neue-machina": "Neue Machina",
+        "neue-machina": "Neue Machina",},
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
+      keyframes: {
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+      },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
   },
   plugins: [],
-};
+}

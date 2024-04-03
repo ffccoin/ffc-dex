@@ -7,8 +7,8 @@ export default function LimitTime({
   tokenTwo,
 }) {
   return (
-    <div className="flex justify-between sm:px-8 ">
-      <div className="flex h-6 justify-center items-center">
+    <div className="flex  justify-between sm:px-8 ">
+      <div className="flex h-6 justify-center  md:ml-0 ml-9 items-center">
         <img
           src={tokenOne.logoURI}
           alt={tokenOne.symbol}
@@ -30,7 +30,7 @@ export default function LimitTime({
         </div>
       </div>
 
-      <div className="bg-[#22262e]   flex sm:max-w-60  rounded-2xl py-1 px-1">
+      <div className="bg-[#22262e]   md:flex hidden  sm:max-w-60  rounded-2xl py-1 px-1">
         <button
           className={`time-option-btn ${
             selectedOption === "5m" && "active"

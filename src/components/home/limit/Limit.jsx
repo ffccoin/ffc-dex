@@ -3,16 +3,14 @@ import qs from "qs";
 import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
-
+import { parseUnits } from "ethers";
 import { DNA } from "react-loader-spinner";
 import TransactionSuccessModal from "../../models/TransactionSuccessModal";
 import SelectATokenModal from "../../models/SelectATokenModal";
 import { tokenList1 } from "@/lists/tokenList1";
 import {
-  useSendTransaction,
   useAccount,
   useConnect,
-  useConnectorClient,
   useSignMessage,
   useSignTypedData,
 } from "wagmi";
@@ -20,17 +18,10 @@ import { tokenList56 } from "@/lists/tokenList56";
 import SwitchTokenButton from "../swap/SwitchTokenButton";
 import SwapBalance from "../swap/SwapBalance";
 import PerTokenPrice from "../swap/PerTokenPrice";
-import Web3 from "web3";
-const ethers = require("ethers");
 import { LimitOrder, MakerTraits, Address } from "@1inch/limit-order-sdk";
-import { Wallet } from "ethers";
-import { Api, getLimitOrderV4Domain } from "@1inch/limit-order-sdk";
-const { AxiosProviderConnector } = require("@1inch/limit-order-sdk/axios");
+import {  getLimitOrderV4Domain } from "@1inch/limit-order-sdk";
 import LimitButton from "./LimitButton";
-import { useWalletClient } from "wagmi";
-import { useVerifyTypedData } from "wagmi";
 import LimitExpiry from "./LimitExpiry";
-import { useDispatch } from "react-redux";
 
 export default function Limit({
   slippage,
@@ -44,7 +35,6 @@ export default function Limit({
   const account = useAccount();
   const { signTypedDataAsync } = useSignTypedData();
   const [selectedOption, setSelectedOption] = useState("1day");
-  // const {  data: SignTypedDataData,signTypedData } = useSignTypedData();
   const [isOpen, setIsOpen] = useState(false);
   const [buttonLabel, setButtonLabel] = useState("Enter an amount");
   const [tokenList, setTokenList] = useState([]);
@@ -55,8 +45,6 @@ export default function Limit({
   const [isLoading, setIsLoading] = useState(false);
   const [successfulTransaction, setSuccessfulTransaction] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  // const chainId = ChainId.ethereumMainnet;
-  // const { data: client } = useConnectorClient({ chainId: 1 });
 
   const [loadingValue, setLoadingValue] = useState(false);
 
@@ -75,7 +63,7 @@ export default function Limit({
   useEffect(() => {
     if (tokenOne && tokenTwo) {
       setLoadingValue(true);
-      setButtonLabel("Swap");
+      setButtonLabel("Limit");
       fetchPrices().then(() => setLoadingValue(false));
     }
   }, [tokenOneAmount]);
@@ -152,56 +140,31 @@ export default function Limit({
     }
   }
   const limit = async () => {
-    // const res = await axios.get("/api/limit", {
-    //   params: {
-    //     address: address,
-    //   },
-    // });
-    // const data = res.data;
-    // console.log("res.data.domain = ", res.data.domain);
-    // const signature = await signTypedDataAsync({
-    //   domain: {...res.data.domain, chainId: '1'},
-    //   types: {
-    //     EIP712Domain: [
-    //       { name: "name", type: "string" },
-    //       { name: "version", type: "string" },
-    //       { name: "chainId", type: "uint256" },
-    //       { name: "verifyingContract", type: "address" },
-    //     ],
-    //     Order: [
-    //       { name: "salt", type: "uint256" },
-    //       { name: "maker", type: "address" },
-    //       { name: "receiver", type: "address" },
-    //       { name: "makerAsset", type: "address" },
-    //       { name: "takerAsset", type: "address" },
-    //       { name: "makingAmount", type: "uint256" },
-    //       { name: "takingAmount", type: "uint256" },
-    //       { name: "makerTraits", type: "uint256" },
-    //     ],
-    //   },
-    //   primaryType: "Order",
-    //   message: res.data.message,
-    // });
-    // console.log("signature = ", signature);
-    // const res1 = await axios.post("/api/limit", {
-    //   signature: signature,
-    // });
-    const expiresIn = 120n; // 2m
+    const expirationTimes = {
+      "1day": 60n * 60n * 24n,
+      "1week": 60n * 60n * 24n * 7n,
+      "1month": 60n * 60n * 24n * 30n,
+      "1year": 60n * 60n * 24n * 365n
+    };
+    let expiresIn = expirationTimes[selectedOption];
     const expiration = BigInt(Math.floor(Date.now() / 1000)) + expiresIn;
     const makerTraits = MakerTraits.default()
       .withExpiration(expiration)
       .enablePermit2()
       .allowPartialFills()
       .allowMultipleFills();
+      const makingAmount =parseUnits(tokenOneAmount, tokenOne.decimals)
+      const tokenTwoAmountString = tokenTwoAmount.toString();
+      const takingAmount = parseUnits(tokenTwoAmountString,tokenTwo.decimals)
 
     // console.log("MAKER TRAITS:::", makerTraits.value.value.toString());
 
     const order = new LimitOrder(
       {
-        makerAsset: new Address("0x55d398326f99059fF775485246999027B3197955"),
-        takerAsset: new Address("0x111111111117dc0aa78b770fa6a738034120c302"), //1INCH
-        makingAmount: 1_000000n, // 1 USDT
-        takingAmount: 1_00000000000000000n, // 10 1INCH
+        makerAsset: new Address(tokenOne.address),
+        takerAsset: new Address(tokenTwo.address), //1INCH
+        makingAmount: makingAmount, // 1 USDT
+        takingAmount: takingAmount, // 10 1INCH
         maker: address,
         receiver: address,
       },
@@ -215,17 +178,21 @@ export default function Limit({
     const typedData = order.getTypedData(domain);
     // console.log("TYPED DATA:::", typedData);
     const converted = { ...typedData.domain, chainId: "1" };
-    const signature = await signTypedDataAsync({
+    try{const signature = await signTypedDataAsync({
       domain: converted,
       types: typedData.types,
       primaryType: typedData.primaryType,
       message: typedData.message,
-    });
+    });}
+    catch(error){
+      console.log("User rejected the signing request:", error);
+      return
+    }
     console.log("SIGNATURE:::", signature);
     const orderHash = order.getOrderHash(1);
     console.log("ORDER HASH:::", orderHash);
     console.log("order built", order.build());
-    // console.log("ORDER:::", order);
+    console.log("ORDER:::", order);
     const response = await axios.post("/api/limittt", {
       signature: signature,
       order: { ...order.build(), extension: order.extension.encode() },
@@ -387,18 +354,18 @@ export default function Limit({
               />
             </div>
           )}
-          <button
+          {/* <button
             className="w-full bg-primary1 text-black rounded-full py-3"
             onClick={() => limit()}
           >
             Limit
-          </button>
-          {/* <LimitButton
+          </button> */}
+          <LimitButton
             tokenOneAmount={tokenOneAmount}
             isLoading={isLoading}
-            Limit={limit}
+            limit={limit}
             buttonLabel={buttonLabel}
-          /> */}
+          />
         </div>
       </div>
     </div>

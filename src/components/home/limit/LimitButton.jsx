@@ -4,7 +4,7 @@ import { useWeb3Modal } from "@web3modal/wagmi/react";
 import { ThreeDots } from "react-loader-spinner";
 import { useAccount } from "wagmi";
 
-const LimitButton = ({ tokenOneAmount, isLoading, Limit, buttonLabel }) => {
+const LimitButton = ({ tokenOneAmount, isLoading, limit, buttonLabel }) => {
   const { isConnected } = useAccount();
   const { open } = useWeb3Modal();
   return (
@@ -18,7 +18,7 @@ const LimitButton = ({ tokenOneAmount, isLoading, Limit, buttonLabel }) => {
           }
               ${!isLoading && "py-3"}
               `}
-          onClick={() => swapTokens()}
+          onClick={() => limit()}
         >
           {isLoading ? (
             <div className="flex w-full justify-center items-center">
@@ -40,7 +40,7 @@ const LimitButton = ({ tokenOneAmount, isLoading, Limit, buttonLabel }) => {
       ) : (
         <button
           onClick={() => open({ view: "Connect" })}
-          className="w-full bg-primary1 text-black rounded-full py-3"
+          className="w-full bg-gray22 text-neutralLight rounded-full py-3"
         >
           Connect Wallet
         </button>
