@@ -74,12 +74,16 @@ export const columns = [
     },
   },
   {
-    accessorKey: "takerRate",
-    header: "You Recieve",
-  },
-  {
-    accessorKey: "OrderRates",
-    header: "Order Rates",
+    accessorKey: "orderRates",
+    header: ({ column }) => "Order rates",
+    cell: ({ row }) => {
+      const orderRates = row.getValue("orderRates");
+      return(
+        <div className="flex text-xs gap-1">
+          {orderRates}
+        </div>
+      )
+    }
   },
   {
     accessorKey: "createdAt",

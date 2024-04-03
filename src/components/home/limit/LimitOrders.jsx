@@ -39,9 +39,21 @@ export default function LimitOrders({ networkId }) {
             makerAssetAddress.decimals
           );
 
+          const integer = BigInt(Math.floor(parseFloat(item.makerRate)));
+          const decimal =takerAssetAddress.decimals-makerAssetAddress.decimals
+         console.log(decimal)
+          const makerRates =  formatUnits(
+            integer,
+            decimal
+          );
+        //   const integer2 = BigInt(Math.floor(parseFloat(item.takerRate)));
+        //   const takerRate =  formatUnits(
+        //     integer,
+        //     takerAssetAddress.decimals
+        //   );
+        //   console.log( makerRates/takerRate)
+        //   console.log( takerRate/makerRates)
           return {
-            makerRate: item.makerRate,
-            takerRate: item.takerRate,
             createdAt: item.createDateTime,
             makerAsset: {
               logoURI: makerAssetAddress.logoURI,
@@ -53,6 +65,7 @@ export default function LimitOrders({ networkId }) {
               symbol: takerAssetAddress.symbol,
               amount: takerAssetAmount, // Assuming this is the address of the taker asset
             },
+            orderRates:makerRates
           };
         });
 
