@@ -19,7 +19,7 @@ import SwitchTokenButton from "../swap/SwitchTokenButton";
 import SwapBalance from "../swap/SwapBalance";
 import PerTokenPrice from "../swap/PerTokenPrice";
 import { LimitOrder, MakerTraits, Address } from "@1inch/limit-order-sdk";
-import {  getLimitOrderV4Domain } from "@1inch/limit-order-sdk";
+import { getLimitOrderV4Domain } from "@1inch/limit-order-sdk";
 import LimitButton from "./LimitButton";
 import LimitExpiry from "./LimitExpiry";
 
@@ -144,7 +144,7 @@ export default function Limit({
       "1day": 60n * 60n * 24n,
       "1week": 60n * 60n * 24n * 7n,
       "1month": 60n * 60n * 24n * 30n,
-      "1year": 60n * 60n * 24n * 365n
+      "1year": 60n * 60n * 24n * 365n,
     };
     let expiresIn = expirationTimes[selectedOption];
     const expiration = BigInt(Math.floor(Date.now() / 1000)) + expiresIn;
@@ -153,9 +153,9 @@ export default function Limit({
       .enablePermit2()
       .allowPartialFills()
       .allowMultipleFills();
-      const makingAmount =parseUnits(tokenOneAmount, tokenOne.decimals)
-      const tokenTwoAmountString = tokenTwoAmount.toString();
-      const takingAmount = parseUnits(tokenTwoAmountString,tokenTwo.decimals)
+    const makingAmount = parseUnits(tokenOneAmount, tokenOne.decimals);
+    const tokenTwoAmountString = tokenTwoAmount.toString();
+    const takingAmount = parseUnits(tokenTwoAmountString, tokenTwo.decimals);
 
     // console.log("MAKER TRAITS:::", makerTraits.value.value.toString());
 
@@ -178,27 +178,28 @@ export default function Limit({
     const typedData = order.getTypedData(domain);
     // console.log("TYPED DATA:::", typedData);
     const converted = { ...typedData.domain, chainId: "1" };
-    try{const signature = await signTypedDataAsync({
-      domain: converted,
-      types: typedData.types,
-      primaryType: typedData.primaryType,
-      message: typedData.message,
-    });}
-    catch(error){
+    try {
+      const signature = await signTypedDataAsync({
+        domain: converted,
+        types: typedData.types,
+        primaryType: typedData.primaryType,
+        message: typedData.message,
+      });
+      console.log("SIGNATURE:::", signature);
+      const orderHash = order.getOrderHash(1);
+      console.log("ORDER HASH:::", orderHash);
+      console.log("order built", order.build());
+      console.log("ORDER:::", order);
+      const response = await axios.post("/api/limittt", {
+        signature: signature,
+        order: { ...order.build(), extension: order.extension.encode() },
+        orderHash: orderHash,
+      });
+      console.log("RESPONSE:::", response);
+    } catch (error) {
       console.log("User rejected the signing request:", error);
-      return
+      return;
     }
-    console.log("SIGNATURE:::", signature);
-    const orderHash = order.getOrderHash(1);
-    console.log("ORDER HASH:::", orderHash);
-    console.log("order built", order.build());
-    console.log("ORDER:::", order);
-    const response = await axios.post("/api/limittt", {
-      signature: signature,
-      order: { ...order.build(), extension: order.extension.encode() },
-      orderHash: orderHash,
-    });
-    console.log("RESPONSE:::", response);
   };
 
   function openModal(asset) {
