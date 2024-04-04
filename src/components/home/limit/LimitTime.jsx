@@ -8,28 +8,29 @@ export default function LimitTime({
 }) {
   return (
     <div className="flex  justify-between sm:px-8 ">
-      <div className="flex h-6 justify-center  md:ml-0 ml-9 items-center">
-        <img
-          src={tokenOne.logoURI}
-          alt={tokenOne.symbol}
-          width={23}
-          height={23}
-          quality={100}
-        />{" "}
-        <img
-          src={tokenTwo.logoURI}
-          alt={tokenTwo.symbol}
-          width={23}
-          height={23}
-          quality={100}
-        />
-        <div className="flex sm:ml-3 font-bold items-center">
-          <div>{tokenOne.symbol}/</div>
-          <div>{tokenTwo.symbol}</div>
-          {chevron}
-        </div>
-      </div>
-
+      {tokenOne && tokenTwo && (
+  <div className="flex h-6 justify-center  md:ml-0 ml-9 items-center">
+    <img
+      src={tokenOne.logoURI}
+      alt={tokenOne.symbol}
+      width={23}
+      height={23}
+      quality={100}
+    />
+    <img
+      src={tokenTwo.logoURI}
+      alt={tokenTwo.symbol}
+      width={23}
+      height={23}
+      quality={100}
+    />
+    <div className="flex sm:ml-3 font-bold items-center">
+      <div>{tokenOne.symbol}/</div>
+      <div>{tokenTwo.symbol}</div>
+      {chevron}
+    </div>
+  </div>
+)}
       <div className="bg-[#22262e]   md:flex hidden  sm:max-w-60  rounded-2xl py-1 px-1">
         <button
           className={`time-option-btn ${

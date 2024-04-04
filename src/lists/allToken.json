@@ -1,5 +1,12 @@
 [
   {
+    "name": "Unkown",
+    "address": "0xbf05C4023EEC34",
+    "symbol": "$Unkown",
+    "decimals": 18,
+    "logoURI": "/home/unknown.svg"
+  },
+  {
     "name": "FFC",
     "address": "0xbf05C4023E735ab912E2c34c0f391702efEC34",
     "symbol": "$FFC",

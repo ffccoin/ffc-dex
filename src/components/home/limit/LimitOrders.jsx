@@ -16,7 +16,7 @@ export default function LimitOrders({ networkId }) {
         return token;
       }
     }
-    return null;
+    return tokenList[0]
   }
   async function fetchData() {
     if (isConnected) {

@@ -11,6 +11,7 @@ import { tokenList1 } from "@/lists/tokenList1";
 import {
   useAccount,
   useConnect,
+  useSendTransaction,
   useSignMessage,
   useSignTypedData,
 } from "wagmi";
@@ -47,6 +48,18 @@ export default function Limit({
   const [searchQuery, setSearchQuery] = useState("");
 
   const [loadingValue, setLoadingValue] = useState(false);
+  const [txDetails, setTxDetails] = useState({
+    to: null,
+    data: null,
+    value: null,
+  });
+  const {
+    data: hash,
+    error,
+    isPending,
+    isSuccess,
+    sendTransaction,
+  } = useSendTransaction();
 
   useEffect(() => {
     setTokenOne(null);
@@ -59,6 +72,12 @@ export default function Limit({
       setTokenList(tokenList1);
     }
   }, [networkId]);
+  useEffect(() => {
+    if (txDetails.to && isConnected) {
+      sendTransaction1();
+      setIsLoading(false);
+    }
+  }, [txDetails]);
 
   useEffect(() => {
     if (tokenOne && tokenTwo) {
@@ -67,7 +86,14 @@ export default function Limit({
       fetchPrices().then(() => setLoadingValue(false));
     }
   }, [tokenOneAmount]);
-
+  async function sendTransaction1() {
+    sendTransaction({
+      from: address,
+      to: txDetails.to,
+      data: txDetails.data,
+      value: txDetails.value,
+    });
+  }
   const filteredTokenList = tokenList.filter((token) => {
     const tokenName = token.symbol.toLowerCase();
     const tokenAddress = token.address.toLowerCase();
@@ -140,65 +166,109 @@ export default function Limit({
     }
   }
   const limit = async () => {
-    const expirationTimes = {
-      "1day": 60n * 60n * 24n,
-      "1week": 60n * 60n * 24n * 7n,
-      "1month": 60n * 60n * 24n * 30n,
-      "1year": 60n * 60n * 24n * 365n,
-    };
-    let expiresIn = expirationTimes[selectedOption];
-    const expiration = BigInt(Math.floor(Date.now() / 1000)) + expiresIn;
-    const makerTraits = MakerTraits.default()
-      .withExpiration(expiration)
-      .enablePermit2()
-      .allowPartialFills()
-      .allowMultipleFills();
-    const makingAmount = parseUnits(tokenOneAmount, tokenOne.decimals);
-    const tokenTwoAmountString = tokenTwoAmount.toString();
-    const takingAmount = parseUnits(tokenTwoAmountString, tokenTwo.decimals);
+    if (isConnected) {
+      if (buttonLabel == "Limit") {
+        setIsLoading(true);
+        let tokenOneAmountNum = parseFloat(tokenOneAmount);
+        let amount = tokenOneAmountNum * Math.pow(10, tokenOne.decimals);
+        const res1 = await axios.get(`/api/allowance`, {
+          params: {
+            src: tokenOne.address,
+            address: address,
+            selectedNetworkId: networkId,
+          },
+        });
+        if (res1.data.data.allowance == "0") {
+          setButtonLabel("Increase Allowance");
+          setIsLoading(false);
+          return;
+        } else {
+          const expirationTimes = {
+            "1day": 60n * 60n * 24n,
+            "1week": 60n * 60n * 24n * 7n,
+            "1month": 60n * 60n * 24n * 30n,
+            "1year": 60n * 60n * 24n * 365n,
+          };
+          let expiresIn = expirationTimes[selectedOption];
+          const expiration = BigInt(Math.floor(Date.now() / 1000)) + expiresIn;
+          const makerTraits = MakerTraits.default()
+            .withExpiration(expiration)
+            .enablePermit2()
+            .allowPartialFills()
+            .allowMultipleFills();
+          const makingAmount = parseUnits(tokenOneAmount, tokenOne.decimals);
+          const tokenTwoAmountString = tokenTwoAmount.toString();
+          const takingAmount = parseUnits(
+            tokenTwoAmountString,
+            tokenTwo.decimals
+          );
 
-    // console.log("MAKER TRAITS:::", makerTraits.value.value.toString());
+          // console.log("MAKER TRAITS:::", makerTraits.value.value.toString());
 
-    const order = new LimitOrder(
-      {
-        makerAsset: new Address(tokenOne.address),
-        takerAsset: new Address(tokenTwo.address), //1INCH
-        makingAmount: makingAmount, // 1 USDT
-        takingAmount: takingAmount, // 10 1INCH
-        maker: address,
-        receiver: address,
-      },
-      makerTraits
-    );
-    // console.log("ORDER:::", order);
-    const salt = order.salt;
-    // console.log("Salt:::", salt);
-    const domain = getLimitOrderV4Domain(1);
-    // console.log("DOMAIN:::", domain);
-    const typedData = order.getTypedData(domain);
-    // console.log("TYPED DATA:::", typedData);
-    const converted = { ...typedData.domain, chainId: "1" };
-    try {
-      const signature = await signTypedDataAsync({
-        domain: converted,
-        types: typedData.types,
-        primaryType: typedData.primaryType,
-        message: typedData.message,
-      });
-      console.log("SIGNATURE:::", signature);
-      const orderHash = order.getOrderHash(1);
-      console.log("ORDER HASH:::", orderHash);
-      console.log("order built", order.build());
-      console.log("ORDER:::", order);
-      const response = await axios.post("/api/limittt", {
-        signature: signature,
-        order: { ...order.build(), extension: order.extension.encode() },
-        orderHash: orderHash,
-      });
-      console.log("RESPONSE:::", response);
-    } catch (error) {
-      console.log("User rejected the signing request:", error);
-      return;
+          const order = new LimitOrder(
+            {
+              makerAsset: new Address(tokenOne.address),
+              takerAsset: new Address(tokenTwo.address), //1INCH
+              makingAmount: makingAmount, // 1 USDT
+              takingAmount: takingAmount, // 10 1INCH
+              maker: address,
+              receiver: address,
+            },
+            makerTraits
+          );
+          // console.log("ORDER:::", order);
+          const salt = order.salt;
+          // console.log("Salt:::", salt);
+          const domain = getLimitOrderV4Domain(networkId);
+          // console.log("DOMAIN:::", domain);
+          const typedData = order.getTypedData(domain);
+          // console.log("TYPED DATA:::", typedData);
+          const converted = {
+            ...typedData.domain,
+            chainId: networkId.toString(),
+          };
+          try {
+            const signature = await signTypedDataAsync({
+              domain: converted,
+              types: typedData.types,
+              primaryType: typedData.primaryType,
+              message: typedData.message,
+            });
+            console.log("SIGNATURE:::", signature);
+            const orderHash = order.getOrderHash(networkId);
+            console.log("ORDER HASH:::", orderHash);
+            console.log("order built", order.build());
+            console.log("ORDER:::", order);
+            const response = await axios.post("/api/limittt", {
+              signature: signature,
+              order: { ...order.build(), extension: order.extension.encode() },
+              orderHash: orderHash,
+              networkId: networkId,
+            });
+            console.log("RESPONSE:::", response);
+          } catch (error) {
+            setIsLoading(false);
+            console.log("User rejected the signing request:", error);
+            return;
+          }
+        }
+      } else if (buttonLabel == "Increase Allowance") {
+        setIsLoading(true);
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        const approve = await axios.get(`/api/approveAllowance`, {
+          params: {
+            src: tokenOne.address,
+            selectedNetworkId: networkId,
+          },
+        });
+        setTxDetails({
+          to: approve.data.to,
+          data: approve.data.data,
+          value: approve.data.value,
+        });
+        setButtonLabel("Limit");
+        return;
+      }
     }
   };
 

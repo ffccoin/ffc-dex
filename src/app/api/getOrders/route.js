@@ -13,7 +13,9 @@ export async function POST(req, res) {
       Authorization: "Bearer JJdEhrKq5Co25lD2iYcnLA6jKjl4BaDQ",
     },
     params: {
-      limit: 100,
+      "limit": 60,
+      "statuses": "1,2,3",
+      "sortBy": "createDateTime"
     },
   };
   try {
