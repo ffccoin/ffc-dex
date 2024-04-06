@@ -16,7 +16,17 @@ export default function LimitOrders({ networkId }) {
         return token;
       }
     }
-    return tokenList[0]
+    return tokenList[0];
+  }
+  function makeReadable(value, decimals = 2) {
+    // Round the value to the desired number of decimal places for readability
+    const roundedValue = Number(value.toFixed(decimals));
+    // Format the rounded value with comma separation
+    const formattedValue = roundedValue.toLocaleString("en-US", {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    });
+    return formattedValue;
   }
   async function fetchData() {
     if (isConnected) {
@@ -39,20 +49,17 @@ export default function LimitOrders({ networkId }) {
             makerAssetAddress.decimals
           );
 
-          const integer = BigInt(Math.floor(parseFloat(item.makerRate)));
-          const decimal =takerAssetAddress.decimals-makerAssetAddress.decimals
-         console.log(decimal)
-          const makerRates =  formatUnits(
-            integer,
-            decimal
-          );
-        //   const integer2 = BigInt(Math.floor(parseFloat(item.takerRate)));
-        //   const takerRate =  formatUnits(
-        //     integer,
-        //     takerAssetAddress.decimals
-        //   );
-        //   console.log( makerRates/takerRate)
-        //   console.log( takerRate/makerRates)
+          const decimal =
+            takerAssetAddress.decimals - makerAssetAddress.decimals;
+          console.log(decimal);
+          //   const integer2 = BigInt(Math.floor(parseFloat(item.takerRate)));
+          //   const takerRate =  formatUnits(
+          //     integer,
+          //     takerAssetAddress.decimals
+          //   );
+          //   console.log( makerRates/takerRate)
+          //   console.log( takerRate/makerRates)
+
           return {
             createdAt: item.createDateTime,
             makerAsset: {
@@ -65,7 +72,7 @@ export default function LimitOrders({ networkId }) {
               symbol: takerAssetAddress.symbol,
               amount: takerAssetAmount, // Assuming this is the address of the taker asset
             },
-            orderRates:makerRates
+            orderRates: makeReadable(makerAssetAmount),
           };
         });
 

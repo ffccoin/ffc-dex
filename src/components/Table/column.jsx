@@ -29,7 +29,7 @@ export const columns = [
                     <p className="text-xs">{parseFloat(amount).toFixed(6)}</p>
                   </HoverCardTrigger>
                   <HoverCardContent className="bg-[#23272f] w-auto">
-                  <p className="text-xs">{amount}</p>
+                    <p className="text-xs">{amount}</p>
                   </HoverCardContent>
                 </HoverCard>
               </div>
@@ -63,7 +63,7 @@ export const columns = [
                     <p className="text-xs">{parseFloat(amount).toFixed(6)}</p>
                   </HoverCardTrigger>
                   <HoverCardContent className="bg-[#23272f] w-auto">
-                  <p className="text-xs">{amount}</p>
+                    <p className="text-xs">{amount}</p>
                   </HoverCardContent>
                 </HoverCard>
               </div>
@@ -78,12 +78,8 @@ export const columns = [
     header: ({ column }) => "Order rates",
     cell: ({ row }) => {
       const orderRates = row.getValue("orderRates");
-      return(
-        <div className="flex text-xs gap-1">
-          {orderRates}
-        </div>
-      )
-    }
+      return <div className="flex text-xs gap-1">{orderRates}</div>;
+    },
   },
   {
     accessorKey: "createdAt",
@@ -91,16 +87,16 @@ export const columns = [
     cell: ({ row }) => {
       const createdAt = row.getValue("createdAt");
       const utcDate = new Date(createdAt);
-      const options = { hour: '2-digit', minute: '2-digit' };
+      const options = { hour: "2-digit", minute: "2-digit" };
       const localDateString = utcDate.toLocaleDateString(); // Get local date
       const localTimeString = utcDate.toLocaleTimeString(undefined, options);
 
-      return(
+      return (
         <div className="flex text-xs gap-1">
           <p className="">{localDateString}</p>
           <p className="text-gray12">{localTimeString}</p>
         </div>
-      )
-    }
+      );
+    },
   },
 ];

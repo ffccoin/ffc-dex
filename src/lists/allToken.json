@@ -368,6 +368,13 @@
     "decimals": 18
   },
   {
+    "symbol": "1INCH",
+    "logoURI": "/1inch_token.png",
+    "name": "1inch Token",
+    "address": "0x111111111117dC0aa78b770fA6A738034120C302",
+    "decimals": 18
+  },
+  {
     "symbol": "WBTC",
     "logoURI": "https://cdn.moralis.io/eth/0x2260fac5e5542a773aa44fbcfedf7c193bc2c599.png",
     "name": "Wrapped Bitcoin",
