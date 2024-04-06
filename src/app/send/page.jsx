@@ -6,13 +6,16 @@ import { parseUnits } from "ethers";
 import HomeHeader from "@/components/headers/HomeHeader";
 import SwapBalance from "@/components/home/swap/SwapBalance";
 import SelectATokenSendModal from "@/components/models/SelectATokenSendModal";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useAccount } from "wagmi";
 import { useChainId, useWriteContract } from "wagmi";
+import TransactionSuccessModal from "@/components/models/TransactionSuccessModal";
 const SendPage = () => {
   const [amount, setAmount] = useState(null);
+  const [balance, setBalance] = useState(0);
+  const [buttonLabel, setButtonLabel] = useState("Enter an amount");
   const chainId = useChainId();
-  const[isLoading,setIsLoading]=useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { isConnected } = useAccount();
   const { open } = useWeb3Modal();
   const { writeContractAsync } = useWriteContract();
@@ -20,18 +23,24 @@ const SendPage = () => {
   const [token, setToken] = useState(null);
   const [changeToken, setChangeToken] = useState(1);
   const { address } = useAccount();
+  const [successfulTransaction, setSuccessfulTransaction] = useState(false);
+
   const [walletAddressToSendTokens, setWalletAddressToSendTokens] =
     useState("");
-  const amountRef = useRef(null); 
-  const walletAddressToSendTokensRef = useRef(null); 
+  const amountRef = useRef(null);
+  const walletAddressToSendTokensRef = useRef(null);
 
   const handleAmountChange = (e) => {
     const amountValue = amountRef.current.value;
-    setAmount(e.target.value)
+    setAmount(amountValue);
+    // setButtonLabel("send");
     console.log(amountValue); // Log the current value
   };
+
   const handleWalletAddressToSendTokensChange = (e) => {
-    setWalletAddressToSendTokens(e.target.value);
+    const walletAddress = walletAddressToSendTokensRef.current.value;
+    setWalletAddressToSendTokens(walletAddress);
+    console.log(walletAddress);
   };
   function openModal(asset) {
     setChangeToken(asset);
@@ -39,7 +48,7 @@ const SendPage = () => {
   }
   async function send() {
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       const usdtAbi = [
         {
           type: "event",
@@ -245,14 +254,52 @@ const SendPage = () => {
         args: [walletAddress, parseUnits(amountValue, token.decimals)],
       });
       setIsLoading(false);
+      setSuccessfulTransaction(true);
       console.log(data);
     } catch (error) {
       console.error("Error sending transaction:", error);
-      // Handle error appropriately, e.g., show a message to the user
       setIsLoading(false);
-
     }
   }
+  useEffect(() => {
+    if (
+      amountRef.current.value &&
+      walletAddressToSendTokensRef.current.value &&
+      token &&
+      balance > parseFloat(amountRef.current.value)
+    ) {
+      setButtonLabel("Send");
+    } else {
+      if (!amountRef.current.value) {
+        setButtonLabel("Enter amouunt");
+        console.log("amount:", amount);
+        console.log("balance:", balance);
+      } else if (!token) {
+        setButtonLabel("Select Token");
+        console.log("amount:", amount);
+        console.log("balance:", balance);
+      } else if (balance < parseFloat(amountRef.current.value)) {
+        setButtonLabel("insufficient balance");
+        console.log("amount:", amount);
+        console.log("balance:", balance);
+      } else if (!walletAddressToSendTokensRef.current.value) {
+        console.log("amount:", amount);
+        console.log(
+          "walletAddressToSendTokensRef:",
+          walletAddressToSendTokensRef.current.value
+        );
+        console.log(
+          "walletAddressToSendTokensRef:",
+          walletAddressToSendTokensRef
+        );
+        setButtonLabel("Enter Wallet Address");
+      } else {
+      }
+    }
+
+    console.log("amount:", amount);
+    console.log("balance:", balance);
+  }, [balance, amount, token, walletAddressToSendTokens]);
   return (
     <div className="overflow-hidden h-full flex items-center justify-center px-4 relative">
       <LinkedParticlesAnimation />
@@ -266,6 +313,10 @@ const SendPage = () => {
           tokenAmount={amount}
           setTokenAmount={setAmount}
           changeToken={changeToken}
+        />
+        <TransactionSuccessModal
+          isOpen={successfulTransaction}
+          onClose={() => setSuccessfulTransaction(false)}
         />
         <div className="flex flex-col gap-y-[2px] w-full h-full mt-3">
           <div className="flex flex-col bg-gray22/80 rounded-t-lg pb-10">
@@ -312,7 +363,11 @@ const SendPage = () => {
                       {token.symbol}
                     </span>
                     {token && address ? (
-                      <SwapBalance address={address} token={token.address} />
+                      <SwapBalance
+                        address={address}
+                        token={token.address}
+                        setBalance={setBalance}
+                      />
                     ) : (
                       <span className="text-sm text-gray10">Balance: 0.0</span>
                     )}
@@ -338,6 +393,8 @@ const SendPage = () => {
             type="text"
             className="bg-transparent outline-none placeholder:text-gray15 w-full"
             placeholder="Wallet Address"
+            name="walletAddressToSendTokens"
+            id="walletAddressToSendTokens"
             ref={walletAddressToSendTokensRef}
             value={walletAddressToSendTokens}
             onChange={handleWalletAddressToSendTokensChange}
@@ -345,41 +402,47 @@ const SendPage = () => {
           />
         </div>
         {isConnected ? (
-        <button
-          className={`w-full rounded-lg text-center py-4 text-xl font-bold  gap-y-1  ${
-            amount === "" || walletAddressToSendTokens === "" || !walletAddressToSendTokens  || !token || token === null
-            ? "bg-gray22/80  text-neutralLight "
-              : "bg-primary1 text-black"
-          }
+          <button
+            disabled={buttonLabel !== "Send"}
+            className={`w-full rounded-lg text-center py-4 text-xl font-bold  gap-y-1  ${
+              amount === "" ||
+              walletAddressToSendTokens === "" ||
+              !walletAddressToSendTokens ||
+              !token ||
+              token === null ||
+              buttonLabel == "insufficient balance"
+                ? "bg-gray22/80  text-neutralLight "
+                : "bg-primary1 text-black"
+            }
               ${!isLoading && "py-3"}
               `}
-          onClick={() => send()}
-        >
-          {isLoading ? (
-            <div className="flex w-full justify-center items-center">
-              <ThreeDots
-                visible={true}
-                height="30"
-                width="50"
-                color="#000000"
-                radius="9"
-                ariaLabel="three-dots-loading"
-                wrapperStyle={{}}
-                wrapperClass=""
-              />
-            </div>
-          ) : (
-            "Send"
-          )}
-        </button>
-      ) : (
-        <button
-          onClick={() => open({ view: "Connect" })}
-          className="w-full bg-primary1 rounded-lg text-center py-4 text-xl font-bold  gap-y-1  text-black"
-        >
-          Connect Wallet
-        </button>
-      )}
+            onClick={() => send()}
+          >
+            {isLoading ? (
+              <div className="flex w-full justify-center items-center">
+                <ThreeDots
+                  visible={true}
+                  height="30"
+                  width="50"
+                  color="#000000"
+                  radius="9"
+                  ariaLabel="three-dots-loading"
+                  wrapperStyle={{}}
+                  wrapperClass=""
+                />
+              </div>
+            ) : (
+              <>{buttonLabel}</>
+            )}
+          </button>
+        ) : (
+          <button
+            onClick={() => open({ view: "Connect" })}
+            className="w-full bg-primary1 rounded-lg text-center py-4 text-xl font-bold  gap-y-1  text-black"
+          >
+            Connect Wallet
+          </button>
+        )}
       </div>
     </div>
   );
@@ -404,6 +467,3 @@ const chevronDown = (
 );
 
 export default SendPage;
-
-
-

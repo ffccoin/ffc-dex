@@ -26,7 +26,7 @@ export const columns = [
                 <p className="text-gray12">{makerAssetName}</p>
                 <HoverCard>
                   <HoverCardTrigger>
-                    <p className="text-xs">{parseFloat(amount).toFixed(6)}</p>
+                    <p className="text-xs">{parseFloat(amount).toFixed(4)}</p>
                   </HoverCardTrigger>
                   <HoverCardContent className="bg-[#23272f] w-auto">
                     <p className="text-xs">{amount}</p>
@@ -60,7 +60,7 @@ export const columns = [
                 <p className="text-gray12">{takerAssetName}</p>
                 <HoverCard>
                   <HoverCardTrigger>
-                    <p className="text-xs">{parseFloat(amount).toFixed(6)}</p>
+                    <p className="text-xs">{parseFloat(amount).toFixed(4)}</p>
                   </HoverCardTrigger>
                   <HoverCardContent className="bg-[#23272f] w-auto">
                     <p className="text-xs">{amount}</p>
@@ -92,7 +92,7 @@ export const columns = [
             <HoverCard>
               <HoverCardTrigger>
                 <span className="text-white">
-                {parseFloat(makerOrderRates.trim()).toFixed(1)}
+                  {parseFloat(makerOrderRates.trim()).toFixed(1)}
                 </span>{" "}
               </HoverCardTrigger>
               <HoverCardContent className="bg-[#23272f] w-auto">
@@ -107,7 +107,7 @@ export const columns = [
             <HoverCard>
               <HoverCardTrigger>
                 <span className="text-white">
-                {parseFloat(takerOrderRates.trim()).toFixed(1)}
+                  {parseFloat(takerOrderRates.trim()).toFixed(1)}
                 </span>{" "}
               </HoverCardTrigger>
               <HoverCardContent className="bg-[#23272f] w-auto">

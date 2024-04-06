@@ -2,12 +2,12 @@ import React from "react";
 import { setBalance } from "viem/actions";
 import { useBalance } from "wagmi";
 
-export default function SwapBalance({ address, token }) {
+export default function SwapBalance({ address, token, setBalance }) {
   const result = useBalance({
     address: address,
     token: token,
   });
-
+  setBalance(result.data?.formatted);
   return (
     <div className="flex flex-row gap-x-2">
       <p className="text-sm font-normal">Balance :</p>
