@@ -32,7 +32,7 @@ const LimitPage = () => {
           <LimitGraph tokenOne={tokenOne} tokenTwo={tokenTwo} />
           <LimitOrders />
         </div>
-        <div className=" lg:w-[40vw] flex items-center w-[97vw] justify-center  ">
+        <div className=" lg:w-[40vw] flex lg:mt-40 justify-center w-[97vw] h-screen">
           <div className="bg-gray22/50 z-50 py-4 sm:px-2 px-4 rounded-2xl flex flex-col items-center justify-center w-full max-w-[512px] max-h-[500px] h-full mx-4">
             <HomeHeader noSettings />
             <Limit

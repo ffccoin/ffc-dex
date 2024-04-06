@@ -77,8 +77,47 @@ export const columns = [
     accessorKey: "orderRates",
     header: ({ column }) => "Order rates",
     cell: ({ row }) => {
+      const takerAsset = row.getValue("takerAsset");
+      const makerAsset = row.getValue("makerAsset");
+      const makerAssetName = makerAsset.symbol;
+      const takerAssetName = takerAsset.symbol;
       const orderRates = row.getValue("orderRates");
-      return <div className="flex text-xs gap-1">{orderRates}</div>;
+      const takerOrderRates = orderRates.takerOrderRates;
+      const makerOrderRates = orderRates.makerOrderRates;
+
+      return (
+        <div className="flex flex-col text-xs">
+          <div className="text-gray12">
+            1 {makerAssetName} ={" "}
+            <HoverCard>
+              <HoverCardTrigger>
+                <span className="text-white">
+                {parseFloat(makerOrderRates.trim()).toFixed(1)}
+                </span>{" "}
+              </HoverCardTrigger>
+              <HoverCardContent className="bg-[#23272f] w-auto">
+                <p className="text-xs">{makerOrderRates}</p>
+              </HoverCardContent>
+            </HoverCard>
+            <span>{takerAssetName}</span>
+          </div>
+
+          <div className="text-gray12">
+            1 {takerAssetName} ={" "}
+            <HoverCard>
+              <HoverCardTrigger>
+                <span className="text-white">
+                {parseFloat(takerOrderRates.trim()).toFixed(1)}
+                </span>{" "}
+              </HoverCardTrigger>
+              <HoverCardContent className="bg-[#23272f] w-auto">
+                <p className="text-xs">{takerOrderRates}</p>
+              </HoverCardContent>
+            </HoverCard>
+            <span>{makerAssetName}</span>
+          </div>
+        </div>
+      );
     },
   },
   {

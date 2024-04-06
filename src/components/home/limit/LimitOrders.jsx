@@ -18,16 +18,16 @@ export default function LimitOrders({ networkId }) {
     }
     return tokenList[0];
   }
-  function makeReadable(value, decimals = 2) {
-    // Round the value to the desired number of decimal places for readability
-    const roundedValue = Number(value.toFixed(decimals));
-    // Format the rounded value with comma separation
-    const formattedValue = roundedValue.toLocaleString("en-US", {
-      minimumFractionDigits: decimals,
-      maximumFractionDigits: decimals,
-    });
-    return formattedValue;
-  }
+  // function makeReadable(value, decimals = 2) {
+  //   // Round the value to the desired number of decimal places for readability
+  //   const roundedValue = Number(value.toFixed(decimals));
+  //   // Format the rounded value with comma separation
+  //   const formattedValue = roundedValue.toLocaleString("en-US", {
+  //     minimumFractionDigits: decimals,
+  //     maximumFractionDigits: decimals,
+  //   });
+  //   return formattedValue;
+  // }
   async function fetchData() {
     if (isConnected) {
       try {
@@ -49,16 +49,17 @@ export default function LimitOrders({ networkId }) {
             makerAssetAddress.decimals
           );
 
-          const decimal =
-            takerAssetAddress.decimals - makerAssetAddress.decimals;
-          console.log(decimal);
-          //   const integer2 = BigInt(Math.floor(parseFloat(item.takerRate)));
-          //   const takerRate =  formatUnits(
-          //     integer,
-          //     takerAssetAddress.decimals
-          //   );
-          //   console.log( makerRates/takerRate)
-          //   console.log( takerRate/makerRates)
+          let takerOrderRates = BigInt(
+            Math.floor(parseFloat(item.takerRate).toString())
+          );
+          let makerOrderRates = BigInt(
+            Math.floor(parseFloat(item.makerRate).toString())
+          );
+
+          // Assuming formatUnits and other variables are properly defined elsewhere
+          takerOrderRates = formatUnits(takerOrderRates,12);
+          makerOrderRates = formatUnits(makerOrderRates,1);
+
 
           return {
             createdAt: item.createDateTime,
@@ -72,7 +73,10 @@ export default function LimitOrders({ networkId }) {
               symbol: takerAssetAddress.symbol,
               amount: takerAssetAmount, // Assuming this is the address of the taker asset
             },
-            orderRates: makeReadable(makerAssetAmount),
+            orderRates: {
+              takerOrderRates: takerOrderRates,
+              makerOrderRates: makerOrderRates,
+            },
           };
         });
 

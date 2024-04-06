@@ -16,6 +16,23 @@ export default function LimitGraph({ tokenOne, tokenTwo }) {
   const [chartData, setChartData] = useState({
     series: [],
     options: {
+      annotations: {
+        yaxis: [
+          {
+            y: 6.4200,
+            borderColor: '#00E396',
+            label: {
+              borderColor: '#00E396',
+              style: {
+                color: '#000',
+                background: '#00E396',  
+                textAlign: 'center'              
+              },
+              text: '$0.0000000000'
+            }
+          }
+        ]
+      },
       plotOptions: {
         candlestick: {
           colors: {

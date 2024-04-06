@@ -27,7 +27,7 @@ export default function LimitTime({
           <div className="flex sm:ml-3 font-bold items-center">
             <div>{tokenOne.symbol}/</div>
             <div>{tokenTwo.symbol}</div>
-            {chevron}
+            {/* {chevron} */}
           </div>
         </div>
       )}
