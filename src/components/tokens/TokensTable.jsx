@@ -1,11 +1,14 @@
 "use client";
 
 import { useGetCoinsQuery } from "@/libs/services/coins";
+import axios from "axios";
 import Image from "next/image";
 
-const TokensTable = () => {
-  const { data, error, isLoading } = useGetCoinsQuery();
-  const coins = data?.data;
+const TokensTable = async () => {
+  const response = await axios.get("/api/tokens");
+  const isLoading = false;
+  const data = await response.data;
+  console.log("DATA", response);
   function convertToInternationalCurrencySystem(labelValue) {
     // Nine Zeroes for Billions
     return Math.abs(Number(labelValue)) >= 1.0e9
@@ -19,44 +22,6 @@ const TokensTable = () => {
       : Math.abs(Number(labelValue));
   }
 
-  const h1Variants = {
-    hide: {
-      opacity: 0,
-      x: -50,
-    },
-    show: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        duration: 0.5,
-      },
-    },
-  };
-  const viewMoreVariants = {
-    hide: {
-      opacity: 0,
-      x: 50,
-    },
-    show: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        duration: 0.5,
-      },
-    },
-  };
-  const tableVariants = {
-    hide: {
-      opacity: 0,
-    },
-    show: {
-      opacity: 1,
-      transition: {
-        duration: 0.5,
-      },
-    },
-  };
-
   return (
     <table className="w-full my-10 text-left rtl:text-right dark:text-gray-400">
       <thead className="h-[58px] bg-[#1E1E1F] text-white">
@@ -65,22 +30,22 @@ const TokensTable = () => {
             #
           </th>
           <th scope="col" className="px-6 py-3 font-neue-machina-bold">
-            Name
+            Token Name
           </th>
           <th scope="col" className="px-6 py-3 font-neue-machina-bold">
-            Last Price
+            Price
           </th>
           <th scope="col" className="px-6 py-3 font-neue-machina-bold">
-            24th Change
+            1 hour
+          </th>
+          <th scope="col" className="px-6 py-3 font-neue-machina-bold">
+            1 day
+          </th>
+          <th scope="col" className="px-6 py-3 font-neue-machina-bold">
+            FDV
           </th>
           <th scope="col" className="px-6 py-3 font-neue-machina-bold">
             Chart
-          </th>
-          <th scope="col" className="px-6 py-3 font-neue-machina-bold">
-            Market Cap
-          </th>
-          <th scope="col" className="px-6 py-3 font-neue-machina-bold">
-            Trade
           </th>
         </tr>
       </thead>
@@ -88,10 +53,6 @@ const TokensTable = () => {
         {isLoading ? (
           <tr>
             <td>Loading</td>
-          </tr>
-        ) : error ? (
-          <tr>
-            <td>Error</td>
           </tr>
         ) : (
           data.map((coin, index) => (
@@ -103,38 +64,42 @@ const TokensTable = () => {
                 {index + 1}
               </th>
               <td className="flex items-center gap-x-3.5 px-6 py-4 text-neutralLight">
-                <Image src={coin.image} width={36} height={36} />
+                {/* <Image src={coin.image} width={36} height={36} /> */}
                 <p>
                   {coin.name} <span className="uppercase">{coin.symbol}</span>
                 </p>
               </td>
               <td className="px-6 py-4 text-neutralLight">
-                ${convertToInternationalCurrencySystem(coin.current_price)}
+                ${convertToInternationalCurrencySystem(coin.quote.USD.price)}
               </td>
               <td className="px-6 text-white">
                 <div className="flex items-center gap-x-1">
-                  {coin.price_change_percentage_24h > 0 ? arrowUp : arrowDown}
-                  <span>{coin.price_change_percentage_24h}%</span>
+                  {coin.quote.USD.percent_change_1h > 0 ? arrowUp : arrowDown}
+                  <span>{coin.quote.USD.percent_change_1h}%</span>
                 </div>
+              </td>
+              <td className="px-6 py-4">
+                <div className="flex items-center gap-x-1">
+                  {coin.quote.USD.percent_change_24h > 0 ? arrowUp : arrowDown}
+                  <span>{coin.quote.USD.percent_change_24h}%</span>
+                </div>
+              </td>
+              <td className="px-6 py-4">
+                $
+                {convertToInternationalCurrencySystem(
+                  coin.quote.USD.fully_diluted_market_cap
+                )}
               </td>
               <td className="px-6 py-4">
                 <Image
                   src={
-                    coin.price_change_24h > 0
+                    coin.quote.USD.percent_change_24h > 0
                       ? "/tokens/yellow-chart.svg"
                       : "/tokens/red-chart.svg"
                   }
                   width={67}
                   height={20}
                 />
-              </td>
-              <td className="px-6 py-4">
-                ${convertToInternationalCurrencySystem(coin.market_cap)}
-              </td>
-              <td className="px-6 py-4">
-                <button className="grid h-[34px] w-[92px] place-items-center rounded-[10px] border border-primary1">
-                  <h4 className="text-white">Buy</h4>
-                </button>
               </td>
             </tr>
           ))
