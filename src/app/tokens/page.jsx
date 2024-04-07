@@ -18,7 +18,7 @@ const TokensPage = () => {
             <VolumeGraph />
           </div>
         </div>
-        <div className="px-10">
+        <div className="px-10 mt-10 max-w-screen overflow-auto h-screen">
           <TokensTable />
         </div>
       </div>

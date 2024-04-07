@@ -65,8 +65,11 @@ const TokensTable = async () => {
               </th>
               <td className="flex items-center gap-x-3.5 px-6 py-4 text-neutralLight">
                 {/* <Image src={coin.image} width={36} height={36} /> */}
-                <p>
-                  {coin.name} <span className="uppercase">{coin.symbol}</span>
+                <p className="text-white">
+                  {coin.name}{" "}
+                  <span className="uppercase text-neutralLight">
+                    {coin.symbol}
+                  </span>
                 </p>
               </td>
               <td className="px-6 py-4 text-neutralLight">
