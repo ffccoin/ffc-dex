@@ -64,7 +64,7 @@ const TokensTable = async () => {
                 {index + 1}
               </th>
               <td className="flex items-center gap-x-3.5 px-6 py-4 text-neutralLight">
-                {/* <Image src={coin.image} width={36} height={36} /> */}
+                <img src={coin.logoUrl} alt={coin.name}width={36} height={36} className="rounded-full" />
                 <p className="text-white">
                   {coin.name}{" "}
                   <span className="uppercase text-neutralLight">
