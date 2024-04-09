@@ -1,12 +1,17 @@
 "use client";
-
-import { useGetCoinsQuery } from "@/libs/services/coins";
+import Link from "next/link";
+import { useSelector, useDispatch } from "react-redux";
+import { SetCoin } from "@/redux/reducers/coinSlice";
 import axios from "axios";
 import Image from "next/image";
-
+import { useRouter } from "next/navigation";
 const TokensTable = async () => {
+  const router = useRouter();
+  const dispatch = useDispatch();
+
   const response = await axios.get("/api/tokens");
   const isLoading = false;
+
   const data = await response.data;
   console.log("DATA", response);
   function convertToInternationalCurrencySystem(labelValue) {
@@ -21,6 +26,12 @@ const TokensTable = async () => {
       ? (Math.abs(Number(labelValue)) / 1.0e3).toFixed(2) + "K"
       : Math.abs(Number(labelValue));
   }
+  const handleRowClick = (coin) => {
+    // Navigate to the dynamic route with query parameters
+    console.log(coin);
+    router.push(`/tokens/${coin.symbol}`);
+    dispatch(SetCoin(coin));
+  };
 
   return (
     <table className="w-full my-10 text-left rtl:text-right dark:text-gray-400">
@@ -56,7 +67,10 @@ const TokensTable = async () => {
           </tr>
         ) : (
           data.map((coin, index) => (
-            <tr className="h-[58px] even:bg-[#1E1E1F]">
+            <tr
+              className="h-[58px] even:bg-[#1E1E1F] cursor-pointer"
+              onClick={() => handleRowClick(coin)}
+            >
               <th
                 scope="row"
                 className="whitespace-nowrap px-6 py-4 font-medium text-neutralLight"
@@ -64,7 +78,13 @@ const TokensTable = async () => {
                 {index + 1}
               </th>
               <td className="flex items-center gap-x-3.5 px-6 py-4 text-neutralLight">
-                <img src={coin.logoUrl} alt={coin.name}width={36} height={36} className="rounded-full" />
+                <img
+                  src={coin.logoUrl}
+                  alt={coin.name}
+                  width={36}
+                  height={36}
+                  className="rounded-full"
+                />
                 <p className="text-white">
                   {coin.name}{" "}
                   <span className="uppercase text-neutralLight">
@@ -100,6 +120,7 @@ const TokensTable = async () => {
                       ? "/tokens/yellow-chart.svg"
                       : "/tokens/red-chart.svg"
                   }
+                  alt={coin.id}
                   width={67}
                   height={20}
                 />
