@@ -5,6 +5,7 @@ import { useGetCoinsQuery } from "@/libs/services/coins";
 import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 const TokensTable = async () => {
   const router = useRouter();
   const dispatch = useDispatch();
