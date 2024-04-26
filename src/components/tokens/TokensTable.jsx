@@ -1,5 +1,6 @@
 "use client";
 
+import { formatCurrency, formatNumber } from "@/lib/formatter";
 import { useGetCoinsQuery } from "@/libs/services/coins";
 import axios from "axios";
 import Image from "next/image";
@@ -73,25 +74,24 @@ const TokensTable = async () => {
                 </p>
               </td>
               <td className="px-6 py-4 text-neutralLight">
-                ${convertToInternationalCurrencySystem(coin.quote.USD.price)}
+                {formatCurrency(coin.quote.USD.price)}
               </td>
               <td className="px-6 text-white">
                 <div className="flex items-center gap-x-1">
                   {coin.quote.USD.percent_change_1h > 0 ? arrowUp : arrowDown}
-                  <span>{coin.quote.USD.percent_change_1h}%</span>
+                  <span>{formatNumber(coin.quote.USD.percent_change_1h)}%</span>
                 </div>
               </td>
               <td className="px-6 py-4">
                 <div className="flex items-center gap-x-1">
                   {coin.quote.USD.percent_change_24h > 0 ? arrowUp : arrowDown}
-                  <span>{coin.quote.USD.percent_change_24h}%</span>
+                  <span>
+                    {formatNumber(coin.quote.USD.percent_change_24h)}%
+                  </span>
                 </div>
               </td>
               <td className="px-6 py-4">
-                $
-                {convertToInternationalCurrencySystem(
-                  coin.quote.USD.fully_diluted_market_cap
-                )}
+                {formatCurrency(coin.quote.USD.fully_diluted_market_cap)}
               </td>
               <td className="px-6 py-4">
                 <Image
