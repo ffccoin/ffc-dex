@@ -2,11 +2,12 @@
 
 import { formatCurrency, formatNumber } from "@/lib/formatter";
 import { setCoin } from "@/redux/reducers/coinSlice";
+import { useWeb3ModalState } from "@web3modal/wagmi/react";
 import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
-const TokensTable = async () => {
+const TokensTable = async ({ chainId }) => {
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -14,124 +15,130 @@ const TokensTable = async () => {
   const isLoading = false;
 
   const data = await response.data;
+
+  const filterTokensByNetwork = (tokens) => {
+    if (chainId === 1)
+      return tokens.filter((token) => token.platform?.id === 1027);
+    if (chainId === 56)
+      return tokens.filter((token) => token.platform?.id === 56);
+  };
+
+  const filteredData = filterTokensByNetwork(data);
   console.log("DATA", response);
-  function convertToInternationalCurrencySystem(labelValue) {
-    // Nine Zeroes for Billions
-    return Math.abs(Number(labelValue)) >= 1.0e9
-      ? (Math.abs(Number(labelValue)) / 1.0e9).toFixed(2) + "B"
-      : // Six Zeroes for Millions
-      Math.abs(Number(labelValue)) >= 1.0e6
-      ? (Math.abs(Number(labelValue)) / 1.0e6).toFixed(2) + "M"
-      : // Three Zeroes for Thousands
-      Math.abs(Number(labelValue)) >= 1.0e3
-      ? (Math.abs(Number(labelValue)) / 1.0e3).toFixed(2) + "K"
-      : Math.abs(Number(labelValue));
-  }
+
   const handleRowClick = (coin) => {
     // Navigate to the dynamic route with query parameters
     console.log(coin);
-    if (coin.platform === null) {
-      router.push(`/tokens/${coin.symbol}`);
-    } else router.push(`/tokens/${coin.platform.token_address}`);
+    router.push(`/tokens/${coin.id}`);
     dispatch(setCoin(coin));
   };
 
   return (
-    <table className="w-full my-10 text-left rtl:text-right dark:text-gray-400">
-      <thead className="h-[58px] bg-[#1E1E1F] text-white">
-        <tr>
-          <th scope="col" className="px-6 py-3 font-neue-machina-bold">
-            #
-          </th>
-          <th scope="col" className="px-6 py-3 font-neue-machina-bold">
-            Token Name
-          </th>
-          <th scope="col" className="px-6 py-3 font-neue-machina-bold">
-            Price
-          </th>
-          <th scope="col" className="px-6 py-3 font-neue-machina-bold">
-            1 hour
-          </th>
-          <th scope="col" className="px-6 py-3 font-neue-machina-bold">
-            1 day
-          </th>
-          <th scope="col" className="px-6 py-3 font-neue-machina-bold">
-            FDV
-          </th>
-          <th scope="col" className="px-6 py-3 font-neue-machina-bold">
-            Chart
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {isLoading ? (
+    <div className="flex flex-col">
+      <div className="flex justify-between">
+        <span className="text-2xl font-medium">Tokens</span>
+        <w3m-network-button />
+      </div>
+      <table className="w-full my-10 text-left rtl:text-right dark:text-gray-400">
+        <thead className="h-[58px] bg-[#1E1E1F] text-white">
           <tr>
-            <td>Loading</td>
+            <th scope="col" className="px-6 py-3 font-neue-machina-bold">
+              #
+            </th>
+            <th scope="col" className="px-6 py-3 font-neue-machina-bold">
+              Token Name
+            </th>
+            <th scope="col" className="px-6 py-3 font-neue-machina-bold">
+              Price
+            </th>
+            <th scope="col" className="px-6 py-3 font-neue-machina-bold">
+              1 hour
+            </th>
+            <th scope="col" className="px-6 py-3 font-neue-machina-bold">
+              1 day
+            </th>
+            <th scope="col" className="px-6 py-3 font-neue-machina-bold">
+              FDV
+            </th>
+            <th scope="col" className="px-6 py-3 font-neue-machina-bold">
+              Chart
+            </th>
           </tr>
-        ) : (
-          data.map((coin, index) => (
-            <tr
-              className="h-[58px] even:bg-[#1E1E1F] cursor-pointer"
-              onClick={() => handleRowClick(coin)}
-            >
-              <th
-                scope="row"
-                className="whitespace-nowrap px-6 py-4 font-medium text-neutralLight"
-              >
-                {index + 1}
-              </th>
-              <td className="flex items-center gap-x-3.5 px-6 py-4 text-neutralLight">
-                <img
-                  src={coin.logoUrl}
-                  alt={coin.name}
-                  width={36}
-                  height={36}
-                  className="rounded-full"
-                />
-                <p className="text-white">
-                  {coin.name}
-                  <span className="uppercase text-neutralLight">
-                    {coin.symbol}
-                  </span>
-                </p>
-              </td>
-              <td className="px-6 py-4 text-neutralLight">
-                {formatCurrency(coin.quote.USD.price)}
-              </td>
-              <td className="px-6 text-white">
-                <div className="flex items-center gap-x-1">
-                  {coin.quote.USD.percent_change_1h > 0 ? arrowUp : arrowDown}
-                  <span>{formatNumber(coin.quote.USD.percent_change_1h)}%</span>
-                </div>
-              </td>
-              <td className="px-6 py-4">
-                <div className="flex items-center gap-x-1">
-                  {coin.quote.USD.percent_change_24h > 0 ? arrowUp : arrowDown}
-                  <span>
-                    {formatNumber(coin.quote.USD.percent_change_24h)}%
-                  </span>
-                </div>
-              </td>
-              <td className="px-6 py-4">
-                {formatCurrency(coin.quote.USD.fully_diluted_market_cap)}
-              </td>
-              <td className="px-6 py-4">
-                <Image
-                  src={
-                    coin.quote.USD.percent_change_24h > 0
-                      ? "/tokens/yellow-chart.svg"
-                      : "/tokens/red-chart.svg"
-                  }
-                  alt={coin.id}
-                  width={67}
-                  height={20}
-                />
-              </td>
+        </thead>
+        <tbody>
+          {isLoading ? (
+            <tr>
+              <td>Loading</td>
             </tr>
-          ))
-        )}
-      </tbody>
-    </table>
+          ) : (
+            filteredData.map((coin, index) => (
+              <tr
+                className="h-[58px] even:bg-[#1E1E1F] cursor-pointer"
+                onClick={() => handleRowClick(coin)}
+              >
+                <th
+                  scope="row"
+                  className="whitespace-nowrap px-6 py-4 font-medium text-neutralLight"
+                >
+                  {index + 1}
+                </th>
+                <td className="flex items-center gap-x-3.5 px-6 py-4 text-neutralLight">
+                  <img
+                    src={coin.logoUrl}
+                    alt={coin.name}
+                    width={36}
+                    height={36}
+                    className="rounded-full"
+                  />
+                  <p className="text-white">
+                    {coin.name}
+                    <span className="ml-1 uppercase text-neutralLight">
+                      {coin.symbol}
+                    </span>
+                  </p>
+                </td>
+                <td className="px-6 py-4 text-neutralLight">
+                  {formatCurrency(coin.quote.USD.price)}
+                </td>
+                <td className="px-6 text-white">
+                  <div className="flex items-center gap-x-1">
+                    {coin.quote.USD.percent_change_1h > 0 ? arrowUp : arrowDown}
+                    <span>
+                      {formatNumber(coin.quote.USD.percent_change_1h)}%
+                    </span>
+                  </div>
+                </td>
+                <td className="px-6 py-4">
+                  <div className="flex items-center gap-x-1">
+                    {coin.quote.USD.percent_change_24h > 0
+                      ? arrowUp
+                      : arrowDown}
+                    <span>
+                      {formatNumber(coin.quote.USD.percent_change_24h)}%
+                    </span>
+                  </div>
+                </td>
+                <td className="px-6 py-4">
+                  {formatCurrency(coin.quote.USD.fully_diluted_market_cap)}
+                </td>
+                <td className="px-6 py-4">
+                  <Image
+                    src={
+                      coin.quote.USD.percent_change_24h > 0
+                        ? "/tokens/yellow-chart.svg"
+                        : "/tokens/red-chart.svg"
+                    }
+                    alt={coin.id}
+                    width={67}
+                    height={20}
+                  />
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+    </div>
   );
 };
 

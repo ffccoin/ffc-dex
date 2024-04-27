@@ -8,19 +8,19 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
-const TokenDetailsPage = ({ coin }) => {
-  console.log("passed coin", coin?.id);
-
+const TokenDetailsPage = ({ tokenId }) => {
   const [series, setSeries] = useState([]);
+  const [coin, setCoin] = useState(null);
   useEffect(() => {
     getData();
   }, []);
   async function getData() {
-    console.log("symbol", coin?.symbol);
+    console.log("symbol", tokenId);
     const response = await axios.post("/api/tokenHistory", {
-      id: coin?.id,
+      id: tokenId,
     });
     console.log("response", response.data);
+    setCoin(response.data.data.name);
     const processedData = response.data.data.quotes.map((quote) => {
       return {
         x: new Date(quote.timestamp),
@@ -90,7 +90,8 @@ const TokenDetailsPage = ({ coin }) => {
     },
   };
   return (
-    <div className="w-full hidden md:block">
+    <div className="w-full">
+      <h1 className="text-2xl font-medium text-white px-5 pb-10">{coin}</h1>
       <ReactApexChart
         options={options}
         series={series}

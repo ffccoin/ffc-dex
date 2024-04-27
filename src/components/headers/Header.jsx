@@ -14,7 +14,7 @@ const Header = () => {
   const router = useRouter();
   const { isDisconnected } = useAccount();
   return (
-    <header className="grid place-items-center w-full h-[72px] pt-2 fixed bg-gray24 z-50">
+    <header className="grid place-items-center w-full h-[72px] py-2 fixed bg-gray24 z-[9999999]">
       <div className="max-w-[1440px] w-full flex justify-between items-center h-[72px] px-5 sm:px-8">
         <div className="flex items-end gap-x-2">
           <Image src="/logos/logo.svg" width={32} height={32} alt="logo" />

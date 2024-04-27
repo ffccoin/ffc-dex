@@ -1,8 +1,12 @@
+"use client";
+
 import TVLGraph from "@/components/tokens/TVLGraph";
 import TokensTable from "@/components/tokens/TokensTable";
 import VolumeGraph from "@/components/tokens/VolumeGraph";
+import { useChainId } from "wagmi";
 
 const TokensPage = () => {
+  const chainId = useChainId();
   return (
     <div className="flex justify-center">
       <div className="flex flex-col mt-[72px] w-full max-w-[78rem]">
@@ -19,7 +23,7 @@ const TokensPage = () => {
           </div>
         </div>
         <div className="px-10 mt-10 max-w-screen overflow-auto h-screen">
-          <TokensTable />
+          <TokensTable chainId={chainId} />
         </div>
       </div>
     </div>
