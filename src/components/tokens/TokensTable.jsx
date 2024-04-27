@@ -1,36 +1,20 @@
 "use client";
 
 import { formatCurrency, formatNumber } from "@/lib/formatter";
-import { setCoin } from "@/redux/reducers/coinSlice";
-import { useWeb3ModalState } from "@web3modal/wagmi/react";
 import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
+
 const TokensTable = async ({ chainId }) => {
   const router = useRouter();
-  const dispatch = useDispatch();
-
   const response = await axios.get("/api/tokens");
-  const isLoading = false;
-
   const data = await response.data;
-
-  const filterTokensByNetwork = (tokens) => {
-    if (chainId === 1)
-      return tokens.filter((token) => token.platform?.id === 1027);
-    if (chainId === 56)
-      return tokens.filter((token) => token.platform?.id === 56);
-  };
-
-  const filteredData = filterTokensByNetwork(data);
   console.log("DATA", response);
 
   const handleRowClick = (coin) => {
     // Navigate to the dynamic route with query parameters
     console.log(coin);
     router.push(`/tokens/${coin.id}`);
-    dispatch(setCoin(coin));
   };
 
   return (
@@ -66,76 +50,66 @@ const TokensTable = async ({ chainId }) => {
           </tr>
         </thead>
         <tbody>
-          {isLoading ? (
-            <tr>
-              <td>Loading</td>
-            </tr>
-          ) : (
-            filteredData.map((coin, index) => (
-              <tr
-                className="h-[58px] even:bg-[#1E1E1F] cursor-pointer"
-                onClick={() => handleRowClick(coin)}
+          {data.map((coin, index) => (
+            <tr
+              className="h-[58px] even:bg-[#1E1E1F] cursor-pointer"
+              onClick={() => handleRowClick(coin)}
+            >
+              <th
+                scope="row"
+                className="whitespace-nowrap px-6 py-4 font-medium text-neutralLight"
               >
-                <th
-                  scope="row"
-                  className="whitespace-nowrap px-6 py-4 font-medium text-neutralLight"
-                >
-                  {index + 1}
-                </th>
-                <td className="flex items-center gap-x-3.5 px-6 py-4 text-neutralLight">
-                  <img
-                    src={coin.logoUrl}
-                    alt={coin.name}
-                    width={36}
-                    height={36}
-                    className="rounded-full"
-                  />
-                  <p className="text-white">
-                    {coin.name}
-                    <span className="ml-1 uppercase text-neutralLight">
-                      {coin.symbol}
-                    </span>
-                  </p>
-                </td>
-                <td className="px-6 py-4 text-neutralLight">
-                  {formatCurrency(coin.quote.USD.price)}
-                </td>
-                <td className="px-6 text-white">
-                  <div className="flex items-center gap-x-1">
-                    {coin.quote.USD.percent_change_1h > 0 ? arrowUp : arrowDown}
-                    <span>
-                      {formatNumber(coin.quote.USD.percent_change_1h)}%
-                    </span>
-                  </div>
-                </td>
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-x-1">
-                    {coin.quote.USD.percent_change_24h > 0
-                      ? arrowUp
-                      : arrowDown}
-                    <span>
-                      {formatNumber(coin.quote.USD.percent_change_24h)}%
-                    </span>
-                  </div>
-                </td>
-                <td className="px-6 py-4">
-                  {formatCurrency(coin.quote.USD.fully_diluted_market_cap)}
-                </td>
-                <td className="px-6 py-4">
-                  <Image
-                    src={
-                      coin.quote.USD.percent_change_24h > 0
-                        ? "/tokens/yellow-chart.svg"
-                        : "/tokens/red-chart.svg"
-                    }
-                    alt={coin.id}
-                    width={67}
-                    height={20}
-                  />
-                </td>
-              </tr>
-            ))
-          )}
+                {index + 1}
+              </th>
+              <td className="flex items-center gap-x-3.5 px-6 py-4 text-neutralLight">
+                <img
+                  src={coin.logoUrl}
+                  alt={coin.name}
+                  width={36}
+                  height={36}
+                  className="rounded-full"
+                />
+                <p className="text-white">
+                  {coin.name}
+                  <span className="ml-1 uppercase text-neutralLight">
+                    {coin.symbol}
+                  </span>
+                </p>
+              </td>
+              <td className="px-6 py-4 text-neutralLight">
+                {formatCurrency(coin.quote.USD.price)}
+              </td>
+              <td className="px-6 text-white">
+                <div className="flex items-center gap-x-1">
+                  {coin.quote.USD.percent_change_1h > 0 ? arrowUp : arrowDown}
+                  <span>{formatNumber(coin.quote.USD.percent_change_1h)}%</span>
+                </div>
+              </td>
+              <td className="px-6 py-4">
+                <div className="flex items-center gap-x-1">
+                  {coin.quote.USD.percent_change_24h > 0 ? arrowUp : arrowDown}
+                  <span>
+                    {formatNumber(coin.quote.USD.percent_change_24h)}%
+                  </span>
+                </div>
+              </td>
+              <td className="px-6 py-4">
+                {formatCurrency(coin.quote.USD.fully_diluted_market_cap)}
+              </td>
+              <td className="px-6 py-4">
+                <Image
+                  src={
+                    coin.quote.USD.percent_change_24h > 0
+                      ? "/tokens/yellow-chart.svg"
+                      : "/tokens/red-chart.svg"
+                  }
+                  alt={coin.id}
+                  width={67}
+                  height={20}
+                />
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>

@@ -20,7 +20,7 @@ const TokenDetailsPage = ({ tokenId }) => {
       id: tokenId,
     });
     console.log("response", response.data);
-    setCoin(response.data.data.name);
+    setCoin(response.data.data);
     const processedData = response.data.data.quotes.map((quote) => {
       return {
         x: new Date(quote.timestamp),
@@ -91,7 +91,10 @@ const TokenDetailsPage = ({ tokenId }) => {
   };
   return (
     <div className="w-full">
-      <h1 className="text-2xl font-medium text-white px-5 pb-10">{coin}</h1>
+      <h1 className="text-2xl font-medium text-white px-5 pb-10">
+        {coin?.name}{" "}
+        <span className="font-semibold text-gray-400">{coin?.symbol}</span>
+      </h1>
       <ReactApexChart
         options={options}
         series={series}
