@@ -9,16 +9,16 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
 });
 
 const TokenDetailsPage = ({ coin }) => {
-  console.log("passed coin", coin.id);
+  console.log("passed coin", coin?.id);
 
   const [series, setSeries] = useState([]);
   useEffect(() => {
     getData();
   }, []);
   async function getData() {
-    console.log("symbol", coin.symbol);
+    console.log("symbol", coin?.symbol);
     const response = await axios.post("/api/tokenHistory", {
-      id: coin.id,
+      id: coin?.id,
     });
     console.log("response", response.data);
     const processedData = response.data.data.quotes.map((quote) => {

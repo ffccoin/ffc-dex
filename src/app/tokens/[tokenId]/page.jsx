@@ -11,9 +11,9 @@ import Swap from "@/components/home/swap/Swap";
 import TokenDetailsPage from "@/components/tokens/TokenDetailsPage";
 
 const TokensDetailPage = ({ params }) => {
+  const selectedToken = params.tokenId;
+  console.log("token id", selectedToken)
   const [selectedSlippage, setSelectedSlippage] = useState(0.5);
-  const [tokenOne, setTokenOne] = useState(null);
-  const [tokenTwo, setTokenTwo] = useState(null);
   const { selectedNetworkId } = useWeb3ModalState();
   let apiUrl = `https://api.0x.org/swap/v1/price`;
   if (selectedNetworkId === 84531) {
@@ -21,6 +21,8 @@ const TokensDetailPage = ({ params }) => {
   } else if (selectedNetworkId === 56) {
     apiUrl = `https://bsc.api.0x.org/swap/v1/price`;
   }
+
+  const tokenList = "";
   const { name } = useSelector((state) => state.coin);
   console.log("coin :", name);
   return (
@@ -31,14 +33,14 @@ const TokensDetailPage = ({ params }) => {
           <div className="lg:w-[59vw] h-full w-[97vw] lg:mt-40 ">
             {/* <LimitGraph tokenOne={tokenOne} tokenTwo={tokenTwo} /> */}
             {/* <LimitOrders /> */}
-            <TokenDetailsPage coin={name}/>
+            <TokenDetailsPage coin={name} />
           </div>
           <div className=" lg:w-[40vw] flex lg:mt-40 justify-center w-[97vw] h-screen">
             <div className="bg-gray22/50 z-50 py-4 sm:px-2 px-4 rounded-2xl flex flex-col items-center justify-center w-full max-w-[512px] max-h-[500px] h-full mx-4">
               <HomeHeader
                 selectedSlippage={selectedSlippage}
                 setSelectedSlippage={setSelectedSlippage}
-              />{" "}
+              />
               <Swap
                 slippage={selectedSlippage}
                 networkId={selectedNetworkId}

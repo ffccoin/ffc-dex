@@ -6,11 +6,11 @@ const coinSlice = createSlice({
     name: null
   },
   reducers: {
-    SetCoin: (state, action) => {
+    setCoin: (state, action) => {
       state.name = action.payload;
     }
   }
 });
 
-export const { SetCoin } = coinSlice.actions;
+export const { setCoin } = coinSlice.actions;
 export default coinSlice.reducer;

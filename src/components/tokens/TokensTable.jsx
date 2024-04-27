@@ -1,7 +1,7 @@
 "use client";
 
 import { formatCurrency, formatNumber } from "@/lib/formatter";
-import { useGetCoinsQuery } from "@/libs/services/coins";
+import { setCoin } from "@/redux/reducers/coinSlice";
 import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -30,8 +30,10 @@ const TokensTable = async () => {
   const handleRowClick = (coin) => {
     // Navigate to the dynamic route with query parameters
     console.log(coin);
-    router.push(`/tokens/${coin.symbol}`);
-    dispatch(SetCoin(coin));
+    if (coin.platform === null) {
+      router.push(`/tokens/${coin.symbol}`);
+    } else router.push(`/tokens/${coin.platform.token_address}`);
+    dispatch(setCoin(coin));
   };
 
   return (
@@ -87,7 +89,7 @@ const TokensTable = async () => {
                   className="rounded-full"
                 />
                 <p className="text-white">
-                  {coin.name}{" "}
+                  {coin.name}
                   <span className="uppercase text-neutralLight">
                     {coin.symbol}
                   </span>
