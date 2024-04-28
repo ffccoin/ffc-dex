@@ -34,14 +34,14 @@ const Header = () => {
             Swap
           </button>
           <button
-            onClick={() => router.push("/pool")}
+            onClick={() => router.push("/staking")}
             className={`py-2.5 ${
-              pathname === "/pool"
+              pathname === "/staking"
                 ? "border-b border-primary1"
                 : "hover:text-primary1 hover:border-b hover:border-primary1"
             } `}
           >
-            Pool
+            Staking
           </button>
           <button
             onClick={() => router.push("/tokens")}
