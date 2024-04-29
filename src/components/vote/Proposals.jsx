@@ -20,8 +20,7 @@ export default function Proposals() {
             </button>
           </div>
           <p className="mt-2 text-gray12">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste
-            corporis, similique.
+            As part of our ongoing commitment to enhancing the functionality and usability of our decentralized exchange (DEX)
           </p>
         </div>{" "}
         <div className="bg-gray22 px-5 py-[17px] relative rounded-2xl ">
@@ -36,8 +35,7 @@ export default function Proposals() {
             </button>
           </div>
           <p className="mt-2 text-gray12">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste
-            corporis, similique.
+            As part of our ongoing commitment to enhancing the functionality and usability of our decentralized exchange (DEX)
           </p>
         </div>{" "}
         <div className="bg-gray22 px-5 py-[17px] relative rounded-2xl ">
@@ -52,8 +50,7 @@ export default function Proposals() {
             </button>
           </div>
           <p className="mt-2 text-gray12">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste
-            corporis, similique.
+            As part of our ongoing commitment to enhancing the functionality and usability of our decentralized exchange (DEX)
           </p>
         </div>{" "}
         <div className="bg-gray22 px-5 py-[17px] relative rounded-2xl ">
@@ -68,8 +65,7 @@ export default function Proposals() {
             </button>
           </div>
           <p className="mt-2 text-gray12">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste
-            corporis, similique.
+            As part of our ongoing commitment to enhancing the functionality and usability of our decentralized exchange (DEX)
           </p>
         </div>{" "}
         <div className="bg-gray22 px-5 py-[17px] relative rounded-2xl ">
@@ -84,8 +80,7 @@ export default function Proposals() {
             </button>
           </div>
           <p className="mt-2 text-gray12">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste
-            corporis, similique.
+            As part of our ongoing commitment to enhancing the functionality and usability of our decentralized exchange (DEX)
           </p>
         </div>
       </div>
