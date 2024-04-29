@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Section1() {
   return (
-    <div className="mt-7 md:mt-0">
+    <div className="mt-7 md:mt-0 md:mb-0 mb-16">
       <h1 className="text-[32px] font-bold">Staking</h1>
       <div className="flex flex-col mt-8">
         <div className="flex ">

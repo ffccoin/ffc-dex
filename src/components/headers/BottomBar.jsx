@@ -8,7 +8,7 @@ const BottomBar = () => {
   const pathname = usePathname();
   const router = useRouter();
   return (
-    <div className="w-full fixed p-2 bottom-1 md:hidden flex items-center justify-center bg-black">
+    <div className="w-full fixed p-2 z-[51] bottom-1 md:hidden flex items-center justify-center bg-black">
       <div className="flex items-center justify-between w-full max-w-[512px] gap-x-1 border border-gray20 rounded-2xl px-1">
         <div className="w-full grid place-items-center">
           <button

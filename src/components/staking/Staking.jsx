@@ -19,7 +19,6 @@ export default function Staking() {
   function handleClick(value) {
     setIsSelected(value);
   }
-  //   mt-[38vh]
   return (
     <div
       className={`h-fit bg-gray22/50  ${
