@@ -1,5 +1,5 @@
 "use client";
-import LoadingPage from "@/components/animations/loading";
+import Footer from "@/components/Footer";
 import BottomBar from "@/components/headers/BottomBar";
 import Header from "@/components/headers/Header";
 import { usePathname } from "next/navigation";
@@ -19,6 +19,7 @@ const PreloaderProvider = ({ children }) => {
           {pathname !== "/login" && <Header />}
           {children}
           {pathname !== "/login" && <BottomBar />}
+          {pathname !== "/login" && <Footer />}
         </div>
       ) : (
         // <LoadingPage />

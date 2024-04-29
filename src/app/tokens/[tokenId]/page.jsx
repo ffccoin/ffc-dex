@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import Swap from "@/components/home/swap/Swap";
 import TokenDetailsPage from "@/components/tokens/TokenDetailsPage";
 import { tokenList1 } from "@/lists/tokenList1";
+import Footer from "@/components/Footer";
 
 const TokensDetailPage = ({ params }) => {
   const selectedToken = params.tokenId;
@@ -23,9 +24,9 @@ const TokensDetailPage = ({ params }) => {
   const { name } = useSelector((state) => state.coin);
   console.log("coin :", name);
   return (
-    <main className="relative w-full min-h-screen pt-24">
+    <main className="relative flex flex-col items-center w-full justify-center py-24">
       <LinkedParticlesAnimation />
-      <div className="flex w-full flex-col items-center lg:flex-row px-5 gap-5">
+      <div className="flex w-full items-center flex-col h-fullitems-center lg:flex-row px-5 gap-5">
         <TokenDetailsPage tokenId={selectedToken} />
         <div className="bg-gray22/50 rounded-2xl flex flex-col px-4 py-5 w-full z-50 max-w-fit">
           <HomeHeader

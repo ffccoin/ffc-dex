@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { formatCurrency } from "@/lib/formatter";
 
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -91,10 +92,22 @@ const TokenDetailsPage = ({ tokenId }) => {
   };
   return (
     <div className="w-full">
-      <h1 className="text-2xl font-medium text-white px-5 pb-10">
+      <h1 className="text-2xl font-medium text-white px-5 pb-5">
         {coin?.name}{" "}
         <span className="font-semibold text-gray-400">{coin?.symbol}</span>
       </h1>
+      <div className="flex px-5 pb-10 gap-y-2 gap-x-10">
+        <span className="text-white text-sm">
+          Price: {formatCurrency(coin?.quotes[29]?.quote.USD.price)}
+        </span>
+        <span className="text-white text-sm">
+          Volume 24h: {formatCurrency(coin?.quotes[29]?.quote.USD.volume_24h)}
+        </span>
+        <span className="text-white text-sm">
+          Total Supply:{" "}
+          {formatCurrency(coin?.quotes[29]?.quote.USD.total_supply)}
+        </span>
+      </div>
       <ReactApexChart
         options={options}
         series={series}

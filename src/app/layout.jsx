@@ -2,6 +2,7 @@ import "./globals.css";
 import PreloaderProvider from "./PreloaderProvider";
 import { Web3Modal } from "@/context/Web3Modal";
 import StoreProvider from "./StoreProvider";
+import Footer from "@/components/Footer";
 
 export const metadata = {
   title: "Dex Force Finance | Trade Swap and Earn",
@@ -14,8 +15,10 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <StoreProvider>
-          <Web3Modal> 
-            <PreloaderProvider>{children}</PreloaderProvider>
+          <Web3Modal>
+            <PreloaderProvider>
+              {children}
+            </PreloaderProvider>
           </Web3Modal>
         </StoreProvider>
       </body>

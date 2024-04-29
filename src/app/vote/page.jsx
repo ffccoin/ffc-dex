@@ -13,7 +13,7 @@ const VotePage = () => {
     setIsOpen(!isOpen);
   };
   return (
-    <main className="overflow-y-auto h-screen flex justify-center w-full px-4 relative">
+    <main className="flex justify-center w-full px-4 h-fit mb-32 relative">
       <LinkedParticlesAnimation />
       <div className=" w-[87rem] relative ">
         <AnimatePresence>
