@@ -1,9 +1,29 @@
-import React from "react";
+"use client";
+
+import { addProposal } from "@/redux/reducers/proposalsSlice";
 import { motion } from "framer-motion";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 
 const AddProposal = ({ toggleFlash }) => {
+  const [title, setTitle] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [desc, setDesc] = useState("");
+
+  const dispatch = useDispatch();
   const closeModal = () => {
     toggleFlash();
+  };
+  const handleClose = () => {
+    toggleFlash();
+    dispatch(
+      addProposal({
+        title: title,
+        desc: desc,
+        endDate: endDate,
+        status: "Pending",
+      })
+    );
   };
   return (
     <motion.div
@@ -40,8 +60,10 @@ const AddProposal = ({ toggleFlash }) => {
               <input
                 type="text"
                 name="text"
-                id="text"
-                placeholder="please enter your proposal's title"
+                id="title"
+                onChange={(e) => setTitle(e.target.value)}
+                value={title}
+                placeholder="Please enter your proposal's title"
                 className=" w-full resize-none  bg-transparent  outline-none"
               />
             </div>
@@ -55,21 +77,25 @@ const AddProposal = ({ toggleFlash }) => {
               <input
                 type="text"
                 name="text"
-                id="text"
-                placeholder="dd/mm/yy"
+                id="endDate"
+                onChange={(e) => setEndDate(e.target.value)}
+                value={endDate}
+                placeholder="12 April, 2024"
                 className=" w-full resize-none  bg-transparent  outline-none"
               />
             </div>
           </div>
           <div>
             <label for="floating_outlined" class="px-2 text-sm">
-              Summary
+              Description
             </label>
             <div className="relative  w-full bg-gray24/35 items-center justify-center gap-x-2 rounded-lg border border-gray12/5 px-4 py-3">
               <textarea
                 name="text"
-                id="text"
-                placeholder="please write your summary here..."
+                id="desc"
+                onChange={(e) => setDesc(e.target.value)}
+                value={desc}
+                placeholder="Please write your description here..."
                 className="h-16 w-full resize-none  bg-transparent outline-none"
               ></textarea>
             </div>
@@ -77,7 +103,7 @@ const AddProposal = ({ toggleFlash }) => {
 
           <button
             className=" w-full rounded-lg  py-2 text-lg lg:text-xl  font-extrabold   bg-primary1 text-black "
-            onClick={() => closeModal()}
+            onClick={() => handleClose()}
           >
             Upload
           </button>

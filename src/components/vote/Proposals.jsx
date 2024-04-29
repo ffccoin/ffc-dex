@@ -1,6 +1,10 @@
+"use client";
+
 import React from "react";
-// #015667
+import { useSelector } from "react-redux";
+
 export default function Proposals() {
+  const proposals = useSelector((state) => state.proposals.list);
   return (
     <div className="flex flex-col mt-3">
       <div className="flex  sm:flex-row flex-col justify-between">
@@ -8,81 +12,30 @@ export default function Proposals() {
       </div>
 
       <div className="flex flex-col md:mt-10 mt-6 gap-y-4">
-        <div className="bg-gray22 px-5 py-[17px] relative rounded-2xl ">
-          <div className="text-xs flex gap-1 ">
-            <p className=" text-gray12">End&nbsp;Date:</p>
-            <p>12&nbsp;April,2024</p>
+        {proposals.map((proposal, index) => (
+          <div
+            className="bg-gray22 px-5 py-[17px] relative rounded-2xl"
+            key={index}
+          >
+            <div className="text-xs flex gap-1 ">
+              <p className=" text-gray12">End&nbsp;Date:</p>
+              <p>{proposal.endDate}</p>
+            </div>
+            <div className="flex justify-between  items-center">
+              <p className=" font-bold text-xl text-white">{proposal.title}</p>
+              <button
+                className={`${
+                  proposal.status === "Pending"
+                    ? "bg-[#07652B]"
+                    : "bg-[#015667]"
+                } absolute right-3 top-6 text-white px-2 py-[6px] text-center font-semibold rounded-3xl`}
+              >
+                {proposal.status}
+              </button>
+            </div>
+            <p className="mt-2 text-gray12">{proposal.desc}</p>
           </div>
-          <div className="flex justify-between  items-center">
-            <p className=" font-bold text-xl text-white">Proposal Title</p>
-            <button className="bg-[#07652B] absolute right-3 top-6 text-white px-2 py-[6px] text-center font-semibold rounded-3xl">
-              Pending
-            </button>
-          </div>
-          <p className="mt-2 text-gray12">
-            As part of our ongoing commitment to enhancing the functionality and usability of our decentralized exchange (DEX)
-          </p>
-        </div>{" "}
-        <div className="bg-gray22 px-5 py-[17px] relative rounded-2xl ">
-          <div className="text-xs flex gap-1 ">
-            <p className=" text-gray12">End&nbsp;Date:</p>
-            <p>12&nbsp;April,2024</p>
-          </div>
-          <div className="flex justify-between  items-center">
-            <p className=" font-bold text-xl text-white">Proposal Title</p>
-            <button className="bg-[#015667] absolute right-3 top-6 text-white px-2 py-[6px] text-center font-semibold rounded-3xl">
-              Executed
-            </button>
-          </div>
-          <p className="mt-2 text-gray12">
-            As part of our ongoing commitment to enhancing the functionality and usability of our decentralized exchange (DEX)
-          </p>
-        </div>{" "}
-        <div className="bg-gray22 px-5 py-[17px] relative rounded-2xl ">
-          <div className="text-xs flex gap-1 ">
-            <p className=" text-gray12">End&nbsp;Date:</p>
-            <p>12&nbsp;April,2024</p>
-          </div>
-          <div className="flex justify-between  items-center">
-            <p className=" font-bold text-xl text-white">Proposal Title</p>
-            <button className="bg-[#07652B] absolute right-3 top-6 text-white px-2 py-[6px] text-center font-semibold rounded-3xl">
-              Pending
-            </button>
-          </div>
-          <p className="mt-2 text-gray12">
-            As part of our ongoing commitment to enhancing the functionality and usability of our decentralized exchange (DEX)
-          </p>
-        </div>{" "}
-        <div className="bg-gray22 px-5 py-[17px] relative rounded-2xl ">
-          <div className="text-xs flex gap-1 ">
-            <p className=" text-gray12">End&nbsp;Date:</p>
-            <p>12&nbsp;April,2024</p>
-          </div>
-          <div className="flex justify-between  items-center">
-            <p className=" font-bold text-xl text-white">Proposal Title</p>
-            <button className="bg-[#015667] absolute right-3 top-6 text-white px-2 py-[6px] text-center font-semibold rounded-3xl">
-              Executed
-            </button>
-          </div>
-          <p className="mt-2 text-gray12">
-            As part of our ongoing commitment to enhancing the functionality and usability of our decentralized exchange (DEX)
-          </p>
-        </div>{" "}
-        <div className="bg-gray22 px-5 py-[17px] relative rounded-2xl ">
-          <div className="text-xs flex gap-1 ">
-            <p className=" text-gray12">End&nbsp;Date:</p>
-            <p>12&nbsp;April,2024</p>
-          </div>
-          <div className="flex justify-between  items-center">
-            <p className=" font-bold text-xl text-white">Proposal Title</p>
-            <button className="bg-[#07652B] absolute right-3 top-6 text-white px-2 py-[6px] text-center font-semibold rounded-3xl">
-              Pending
-            </button>
-          </div>
-          <p className="mt-2 text-gray12">
-            As part of our ongoing commitment to enhancing the functionality and usability of our decentralized exchange (DEX)
-          </p>
-        </div>
+        ))}
       </div>
     </div>
   );

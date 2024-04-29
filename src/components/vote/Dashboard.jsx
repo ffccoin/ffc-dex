@@ -4,7 +4,7 @@ import { useState } from "react";
 export default function Dashboard() {
   const [selected, setSelected] = useState("Proposal");
   return (
-    <div className="flex flex-col md:w-[23vw] 2xl:w-[14vw] w-full ">
+    <div className="flex flex-col md:w-[23vw] 2xl:w-[14vw] w-full min-w-[250px]">
       {/* <div className="flex text-2xl text-white font-bold">FFC Coin</div> */}
 
       <div className="flex text-2xl text-white ">Dashboard</div>
