@@ -24,14 +24,14 @@ const BottomBar = () => {
         </div>
         <div className="w-full grid place-items-center">
           <button
-            onClick={() => router.push("/pool")}
+            onClick={() => router.push("/staking")}
             className={`py-2.5 text-center px-1 font-apfel-grotezk ${
-              pathname === "/pool"
+              pathname === "/staking"
                 ? "border-b border-primary1"
                 : "text-gray10 hover:text-white hover:border-b hover:border-primary1"
             }`}
           >
-            Pool
+            Staking
           </button>
         </div>
         <div className="w-full grid place-items-center">
