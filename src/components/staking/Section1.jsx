@@ -37,7 +37,7 @@ export default function Section1() {
         Independently from delegating to resolvers, you can participate in DAO
         activities. Create proposals, vote for them or delegate your voting
         power to a trusted delegate on our Snapshot and participate in the
-        governance forum
+        governance forum.
       </p>
     </div>
   );
