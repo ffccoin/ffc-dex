@@ -143,7 +143,7 @@ const BottomBar = () => {
                         }`}
                         href="https://www.forcefinancecoin.com/faqs"
                       >
-                        Help &nbsp; Center
+                        Help&nbsp;Center
                       </a>
                     )}
                   </Menu.Item>
