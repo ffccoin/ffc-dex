@@ -5,7 +5,7 @@ const axios = require("axios"); // Import axios if not already imported
 // Define your named exports for the handlers
 export async function getTokenData(req, res) {
   const apiKey = process.env.NEXT_PUBLIC_COIN_MARKET_CAP_API_KEY;
-  const baseUrl = `https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=100&cryptocurrency_type=tokens`;
+  const baseUrl = `https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=100`;
   const headers = {
     "X-CMC_PRO_API_KEY": apiKey,
   };
