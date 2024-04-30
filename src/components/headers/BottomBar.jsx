@@ -1,6 +1,7 @@
 "use client";
 
 import { Menu, Transition } from "@headlessui/react";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Fragment } from "react";
 
@@ -85,15 +86,10 @@ const BottomBar = () => {
               >
                 <Menu.Items className="absolute bottom-11 flex flex-col rounded-xl right-0 px-4 py-3 min-w-[250px] h-[17.5rem] bg-gray23 border border-gray19">
                   <Menu.Item>
-                    {({ active }) => (
-                      <a
-                        className={` font-medium px-0.5 py-1.5 ${
-                          active && "bg-gray22/60"
-                        }`}
-                        href="/"
-                      >
+                    {() => (
+                      <div className={` font-medium px-0.5 py-1.5 `}>
                         Protocol
-                      </a>
+                      </div>
                     )}
                   </Menu.Item>
                   <Menu.Item>
@@ -102,7 +98,7 @@ const BottomBar = () => {
                         className={`text-gray12  px-0.5 py-1.5 ${
                           active && "bg-gray22/60"
                         }`}
-                        href="/"
+                        href="/vote"
                       >
                         Governance
                       </a>
@@ -114,34 +110,29 @@ const BottomBar = () => {
                         className={`text-gray12  px-0.5 py-1.5 ${
                           active && "bg-gray22/60"
                         }`}
-                        href="/"
+                        href="https://github.com/ffccoin/ffc-dex"
                       >
                         Developers
                       </a>
                     )}
                   </Menu.Item>
                   <Menu.Item>
-                    {({ active }) => (
-                      <a
-                        className={`mt-1 px-0.5 py-1.5 ${
-                          active && "bg-gray22/60"
-                        }`}
-                        href="/"
-                      >
+                    {() => (
+                      <div className={`mt-1 px-0.5 py-1.5 `}>
                         Need&nbsp;Help?
-                      </a>
+                      </div>
                     )}
                   </Menu.Item>
                   <Menu.Item>
                     {({ active }) => (
-                      <a
+                      <Link
                         className={`text-gray12 px-0.5 py-1.5 ${
                           active && "bg-gray22/60"
                         }`}
-                        href="/"
+                        href="https://www.forcefinancecoin.com/contact-us"
                       >
                         Contact&nbsp;us
-                      </a>
+                      </Link>
                     )}
                   </Menu.Item>
                   <Menu.Item>
@@ -150,7 +141,7 @@ const BottomBar = () => {
                         className={`text-gray12  px-0.5 py-1.5 ${
                           active && "bg-gray22/60"
                         }`}
-                        href="/"
+                        href="https://www.forcefinancecoin.com/faqs"
                       >
                         Help &nbsp; Center
                       </a>
@@ -158,12 +149,19 @@ const BottomBar = () => {
                   </Menu.Item>
                   <Menu.Item>
                     {({ active }) => (
-                      <a
+                      <div
                         className={`text-gray12  items-center mt-3 flex gap-4 `}
-                        href="/"
                       >
-                        {discordIcon} {twitterIcon} {githubIcon}
-                      </a>
+                        <Link href="https://discord.gg/nwj93PTAns">
+                          {discordIcon}
+                        </Link>
+                        <Link href="https://twitter.com/forcefinance_">
+                          {twitterIcon}
+                        </Link>
+                        <Link href="https://github.com/ffccoin/ffc-dex">
+                          {githubIcon}
+                        </Link>
+                      </div>
                     )}
                   </Menu.Item>
                 </Menu.Items>
