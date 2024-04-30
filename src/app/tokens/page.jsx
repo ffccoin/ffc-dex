@@ -1,12 +1,9 @@
-"use client";
-
 import TVLGraph from "@/components/tokens/TVLGraph";
 import TokensTable from "@/components/tokens/TokensTable";
 import VolumeGraph from "@/components/tokens/VolumeGraph";
-import { useChainId } from "wagmi";
 
-const TokensPage = () => {
-  const chainId = useChainId();
+const TokensPage = ({ searchParams }) => {
+  const query = searchParams?.query || "";
   return (
     <div className="flex justify-center">
       <div className="flex flex-col mt-[72px] w-full max-w-[78rem]">
@@ -22,7 +19,7 @@ const TokensPage = () => {
             <VolumeGraph />
           </div>
         </div>
-        <TokensTable chainId={chainId} />
+        <TokensTable query={query} />
       </div>
     </div>
   );

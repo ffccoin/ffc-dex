@@ -49,6 +49,7 @@
     "swr": "^2.2.5",
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",
+    "use-debounce": "^10.0.0",
     "utf-8-validate": "^6.0.3",
     "viem": "2.x",
     "wagmi": "^2.5.7",

@@ -1,25 +1,39 @@
-"use client";
-
 import { formatCurrency, formatNumber } from "@/lib/formatter";
 import axios from "axios";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import TableSearch from "./TableSearch";
 
-const TokensTable = async ({ chainId }) => {
-  const router = useRouter();
-  const response = await axios.get("/api/tokens");
-  const data = await response.data;
+const getData = async () => {
+  const baseUrl = "https://app.forcefinancecoin.com/api/tokens";
+  const res = await axios.get(baseUrl);
+  if (res.status === 200) {
+    return res.data;
+  } else {
+    throw new Error("Failed to fetch data");
+  }
+};
 
-  const handleRowClick = (coin) => {
-    // Navigate to the dynamic route with query parameters
-    router.push(`/tokens/${coin.id}`);
+const TokensTable = async ({ query }) => {
+  const data = await getData();
+  console.log("DATA", data);
+  const fetchFilteredData = () => {
+    if (query) {
+      return data.filter((coin) =>
+        coin.name.toLowerCase().includes(query.toLowerCase())
+      );
+    }
+    return data;
   };
-
+  const filteredData = fetchFilteredData();
   return (
-    <div className="flex flex-col px-10 mt-5 gap-y-5">
+    <div className="flex flex-col px-10 my-5 gap-y-5">
       <div className="flex justify-between">
         <span className="text-2xl font-medium">Tokens</span>
-        <w3m-network-button />
+        <div className="flex gap-x-3 items-center">
+          <TableSearch />
+          <w3m-network-button />
+        </div>
       </div>
       <div className="max-w-screen overflow-auto h-screen">
         <table className="w-full max-w-full overflow-auto my-10 text-left rtl:text-right dark:text-gray-400">
@@ -49,31 +63,33 @@ const TokensTable = async ({ chainId }) => {
             </tr>
           </thead>
           <tbody>
-            {data.map((coin, index) => (
-              <tr
-                className="h-[58px] even:bg-[#1E1E1F] cursor-pointer"
-                onClick={() => handleRowClick(coin)}
-              >
+            {filteredData?.map((coin, index) => (
+              <tr className="h-[58px] even:bg-[#1E1E1F] cursor-pointer">
                 <th
                   scope="row"
                   className="whitespace-nowrap px-6 py-4 font-medium text-neutralLight"
                 >
                   {index + 1}
                 </th>
-                <td className="flex items-center gap-x-3.5 px-6 py-4 text-neutralLight">
-                  <img
-                    src={coin.logoUrl}
-                    alt={coin.name}
-                    width={36}
-                    height={36}
-                    className="rounded-full"
-                  />
-                  <p className="text-white">
-                    {coin.name}
-                    <span className="ml-1 uppercase text-neutralLight">
-                      {coin.symbol}
-                    </span>
-                  </p>
+                <td>
+                  <Link
+                    className="flex items-center gap-x-3.5 px-6 py-4 text-neutralLight"
+                    href={`/tokens/${coin.id}`}
+                  >
+                    <img
+                      src={coin.logoUrl}
+                      alt={coin.name}
+                      width={36}
+                      height={36}
+                      className="rounded-full"
+                    />
+                    <p className="text-white">
+                      {coin.name}
+                      <span className="ml-1 uppercase text-neutralLight">
+                        {coin.symbol}
+                      </span>
+                    </p>
+                  </Link>
                 </td>
                 <td className="px-6 py-4 text-neutralLight">
                   {formatCurrency(coin.quote.USD.price)}

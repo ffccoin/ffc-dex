@@ -67,7 +67,7 @@ const Header = () => {
         <div className="flex gap-x-2 items-center">
           {/* <button className="bg-gray22 text-white rounded-full px-3 py-2 text-sm sm:text-base sm:px-4 sm:py-3 hidden md:block"> */}
           {/* <w3m-network-button  balance="show" />   */}
-          <div className="flex sm:hidden">
+          <div className="flex">
             {chainId === 1 ? (
               <button
                 onClick={() => open({ view: "Networks" })}
