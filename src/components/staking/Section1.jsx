@@ -6,7 +6,7 @@ export default function Section1() {
       <h1 className="text-[32px] font-bold">Staking</h1>
       <div className="flex flex-col mt-8">
         <div className="flex ">
-          <div className="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center">
+          <div className="w-8 flex-shrink-0 h-8 bg-slate-800 rounded-full flex items-center justify-center">
             1
           </div>
           <div className="ml-5">
@@ -18,7 +18,7 @@ export default function Section1() {
         </div>
         <div className="border border-gray12  ml-4 h-12 w-[1px] -mt-6"></div>
         <div className="flex items-center -mt-6">
-          <div className="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center">
+          <div className="w-8 h-8 flex-shrink-0  bg-slate-800 rounded-full flex items-center justify-center">
             2
           </div>
           <div className="ml-5 mt-6">
