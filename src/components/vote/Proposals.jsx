@@ -22,7 +22,7 @@ export default function Proposals() {
               <p>{proposal.endDate}</p>
             </div>
             <div className="flex justify-between  items-center">
-              <p className=" font-bold text-xl text-white">{proposal.title}</p>
+              <p className=" font-bold text-xl text-white w-[68%]">{proposal.title}</p>
               <button
                 className={`${
                   proposal.status === "Pending"
