@@ -12,7 +12,7 @@ export default function Section1() {
           <div className="ml-5">
             <p className="text-[20px] font-medium leading-7">Stake</p>
             <p className="text-gray12 leading-7">
-              Stake your FFC tokens to receive Unicorn Power
+            Stake your FFC token and earn passive income, without active trading or engagement.
             </p>
           </div>
         </div>
@@ -24,8 +24,7 @@ export default function Section1() {
           <div className="ml-5 mt-6">
             <p className="text-[20px] font-medium leading-7">Delegate</p>
             <p className="text-gray12 leading-7">
-              Your Unicorn Power and start receiving rewards
-            </p>
+            Unstaking $FFC lets you earn rewards while trusting experienced validators with the staking process.            </p>
           </div>
         </div>
         <div></div>
