@@ -16,11 +16,9 @@ const TokenDetailsPage = ({ tokenId }) => {
     getData();
   }, []);
   async function getData() {
-    console.log("symbol", tokenId);
     const response = await axios.post("/api/tokenHistory", {
       id: tokenId,
     });
-    console.log("response", response.data);
     setCoin(response.data.data);
     const processedData = response.data.data.quotes.map((quote) => {
       return {

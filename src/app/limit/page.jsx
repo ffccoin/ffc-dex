@@ -22,7 +22,6 @@ const LimitPage = () => {
     apiUrl = `https://bsc.api.0x.org/swap/v1/price`;
   }
   const order = useSelector((state) => state.order);
-  console.log("Order:", order);
   return (
     <main className="overflow-hidden h-auto flex  justify-center  relative">
    <div className="overflow-y-auto h-full overflow-x-hidden flex flex-col items-center w-full justify-center mb-10"> 

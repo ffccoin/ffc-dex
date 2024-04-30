@@ -13,8 +13,6 @@ import Footer from "@/components/Footer";
 const TokensDetailPage = ({ params }) => {
   const selectedToken = params.tokenId;
   const token = tokenList1.find((token) => token.address === selectedToken);
-  console.log("token", token);
-  console.log("token id", selectedToken);
   const [selectedSlippage, setSelectedSlippage] = useState(0.5);
   const { selectedNetworkId } = useWeb3ModalState();
   let apiUrl = `https://api.0x.org/swap/v1/price`;
@@ -22,7 +20,6 @@ const TokensDetailPage = ({ params }) => {
     apiUrl = `https://bsc.api.0x.org/swap/v1/price`;
   }
   const { name } = useSelector((state) => state.coin);
-  console.log("coin :", name);
   return (
     <main className="relative flex flex-col items-center w-full justify-center py-24">
       <LinkedParticlesAnimation />

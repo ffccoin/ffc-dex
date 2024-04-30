@@ -12,7 +12,6 @@ export async function getApproveSpender(req, res) {
     const response = await axios.get(url);
     return NextResponse.json({ data: response.data });
   } catch (error) {
-    console.error(error);
     return NextResponse.json({ message:error });
   }
 }

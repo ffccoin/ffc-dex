@@ -5,7 +5,6 @@ const PerTokenPrice = ({ tokenOne, tokenTwo, slippage, apiUrl }) => {
 
   async function getTokenOnePerTokenTwo() {
     if (tokenOne && tokenTwo) {
-      console.log("HERE");
       const amount = parseFloat(1 * Math.pow(10, tokenOne.decimals));
       const params = {
         sellToken: tokenOne.address,
@@ -34,7 +33,6 @@ const PerTokenPrice = ({ tokenOne, tokenTwo, slippage, apiUrl }) => {
       }
     }
   }
-  console.log("TokenOnePerTokenTwo", tokenOnePerTokenTwo);
 
   useEffect(() => {
     if (tokenOne && tokenTwo) {

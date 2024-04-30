@@ -22,7 +22,6 @@ export async function getTransactionApprove(req, res) {
     const response = await axios.get(url, config);
     return NextResponse.json({ data: response.data });
   } catch (error) {
-    console.error(error);
     return NextResponse.json({ message:error });
   }
 }

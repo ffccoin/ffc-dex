@@ -219,7 +219,6 @@ export default function Swap({ slippage, networkId, apiUrl }) {
     setChangeToken(asset);
     setIsOpen(true);
   }
-  console.log("tokenOne", tokenOne);
 
   return (
     <div className="grid place-items-center">

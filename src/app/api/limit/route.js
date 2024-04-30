@@ -22,13 +22,11 @@ export async function GET(req, res) {
   // const makingAmount = searchParams.get("makingAmount");
   // const takingAmount = searchParams.get("takingAmount");
   const address = searchParams.get("address");
-  console.log("Address in get = ", address);
   const makerTraits = MakerTraits.default()
     .withExpiration(expiration)
     .enablePermit2()
     .allowPartialFills()
     .allowMultipleFills();
-  console.log("Maker Traits in get = ", makerTraits);
   makerTraitsGlobal = makerTraits;
   order = new LimitOrder(
     {
@@ -42,14 +40,8 @@ export async function GET(req, res) {
     },
     makerTraits
   );
-
-  const limitOrderV4Domain = getLimitOrderV4Domain(chainId);
-  // console.log("LimitOrderV4Domain", limitOrderV4Domain);
-  // const hash = order.getOrderHash(limitOrderV4Domain.verifyingContract);
-  // console.log("hash1", hash);
   const domain = getLimitOrderV4Domain(chainId);
   const typedData = order.getTypedData(domain);
-  // console.log(typedData.domain)
   return NextResponse.json({
     domain: typedData.domain,
     message: typedData.message,
@@ -60,14 +52,8 @@ export async function GET(req, res) {
 export async function POST(req, res) {
   const res1 = await req.json();
   const signature = res1.signature;
-  console.log("Signature in post = ", signature);
   const limitOrderV4Domain = getLimitOrderV4Domain(chainId);
-  console.log(
-    "LimitOrderV4Domain in post = ",
-    limitOrderV4Domain.verifyingContract
-  );
   const hash = order.getOrderHash(limitOrderV4Domain.verifyingContract);
-  console.log("hash in post", hash);
   const api = new Api({
     networkId: chainId, // ethereum
     authKey: String(process.env.NEXT_PUBLIC_ONE_INCH_API_KEY), // get it at https://portal.1inch.dev/
@@ -89,31 +75,14 @@ export async function POST(req, res) {
       takingAmount: "100000000000000000",
       salt: "113397207885514340890390803446598239649986846239753457288039162889190521395695",
       extension: "0x",
-      makerTraits: "29400335157912315244266070412362164103369334234598117288525914786373920882688",
+      makerTraits:
+        "29400335157912315244266070412362164103369334234598117288525914786373920882688",
     },
     headers: {
-      "Authorization": "Bearer YWhnQLVh62MTNAcRWm19QrAyrTIC7qan"
+      Authorization: "Bearer YWhnQLVh62MTNAcRWm19QrAyrTIC7qan",
     },
-  },
-  );
-
-  console.log("Result = ", result);
-  // try {
-  //   // @1inch/limit-order-sdk/dist/api/api.js, must edit the submitOrder method to return the promise
-  //   // Check if the result is defined and respond accordingly
-  //   if (result) {
-  //     console.log("Order submitted = ", result);
-  //     return NextResponse.json(result);
-  //   } else {
-  //     throw new Error("The API call did not return a result.");
-  //   }
-  // } catch (error) {
-  //   console.error("Error submitting order:", error.message);
-  //   return NextResponse.json({ error: error.message });
-  // }
-  // // wait a 1.05 seconds after submitting the order to query it
+  });
   await new Promise((resolve) => setTimeout(resolve, 1050));
   const orderInfo = await api.getOrderByHash(hash);
-  console.log("orderInfo", orderInfo);
   return NextResponse.json("done");
 }

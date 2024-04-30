@@ -7,11 +7,6 @@ export async function POST(req, res) {
   const orderHash = params.orderHash;
   const order = params.order;
   const networkId=params.networkId;
-
-  console.log("order hash", orderHash);
-  console.log("signature", signature);
-
-  console.log("order", order);
   const result = await axios.post(
     `https://limit-orders.1inch.io/v4.0/${networkId}`, // post to this for now.
     // "https://api.1inch.dev/orderbook/v4.0/1",
@@ -26,6 +21,5 @@ export async function POST(req, res) {
       },
     }
   );
-  console.log("RESULT:::", result);
   return NextResponse.json(result.data);
 }

@@ -12,7 +12,7 @@ const BottomBar = () => {
       <div className="flex items-center justify-between w-full max-w-[512px] gap-x-1 border border-gray20 rounded-2xl px-1">
         <div className="w-full grid place-items-center">
           <button
-            onClick={() => router.push("/swap")}
+            onClick={() => router.push("/")}
             className={`py-2.5 text-center px-1 font-apfel-grotezk ${
               pathname === "/"
                 ? "border-b border-primary1"

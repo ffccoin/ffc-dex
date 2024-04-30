@@ -38,7 +38,6 @@ export async function getOhlcv(req, res) {
     const data = await response.json();
     return NextResponse.json(data);
   } catch (error) {
-    console.error(error);
     return NextResponse.json({ message: error.message });
   }
 }

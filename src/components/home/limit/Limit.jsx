@@ -202,9 +202,6 @@ export default function Limit({
             tokenTwoAmountString,
             tokenTwo.decimals
           );
-
-          // console.log("MAKER TRAITS:::", makerTraits.value.value.toString());
-
           const order = new LimitOrder(
             {
               makerAsset: new Address(tokenOne.address),
@@ -216,13 +213,9 @@ export default function Limit({
             },
             makerTraits
           );
-          // console.log("ORDER:::", order);
           const salt = order.salt;
-          // console.log("Salt:::", salt);
           const domain = getLimitOrderV4Domain(networkId);
-          // console.log("DOMAIN:::", domain);
           const typedData = order.getTypedData(domain);
-          // console.log("TYPED DATA:::", typedData);
           const converted = {
             ...typedData.domain,
             chainId: networkId.toString(),
@@ -234,21 +227,15 @@ export default function Limit({
               primaryType: typedData.primaryType,
               message: typedData.message,
             });
-            console.log("SIGNATURE:::", signature);
             const orderHash = order.getOrderHash(networkId);
-            console.log("ORDER HASH:::", orderHash);
-            console.log("order built", order.build());
-            console.log("ORDER:::", order);
             const response = await axios.post("/api/limittt", {
               signature: signature,
               order: { ...order.build(), extension: order.extension.encode() },
               orderHash: orderHash,
               networkId: networkId,
             });
-            console.log("RESPONSE:::", response);
           } catch (error) {
             setIsLoading(false);
-            console.log("User rejected the signing request:", error);
             return;
           }
         }

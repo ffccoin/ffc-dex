@@ -34,13 +34,11 @@ const SendPage = () => {
     const amountValue = amountRef.current.value;
     setAmount(amountValue);
     // setButtonLabel("send");
-    console.log(amountValue); // Log the current value
   };
 
   const handleWalletAddressToSendTokensChange = (e) => {
     const walletAddress = walletAddressToSendTokensRef.current.value;
     setWalletAddressToSendTokens(walletAddress);
-    console.log(walletAddress);
   };
   function openModal(asset) {
     setChangeToken(asset);
@@ -243,9 +241,6 @@ const SendPage = () => {
       ];
       const amountValue = amountRef.current.value;
       const walletAddress = walletAddressToSendTokensRef.current.value;
-      console.log(amountValue);
-      console.log(token.decimals);
-      console.log(token.address);
       const data = await writeContractAsync({
         chainId: chainId,
         address: token.address, // change to receipient address
@@ -255,9 +250,7 @@ const SendPage = () => {
       });
       setIsLoading(false);
       setSuccessfulTransaction(true);
-      console.log(data);
     } catch (error) {
-      console.error("Error sending transaction:", error);
       setIsLoading(false);
     }
   }
@@ -272,33 +265,15 @@ const SendPage = () => {
     } else {
       if (!amountRef.current.value) {
         setButtonLabel("Enter amouunt");
-        console.log("amount:", amount);
-        console.log("balance:", balance);
       } else if (!token) {
         setButtonLabel("Select Token");
-        console.log("amount:", amount);
-        console.log("balance:", balance);
       } else if (balance < parseFloat(amountRef.current.value)) {
         setButtonLabel("insufficient balance");
-        console.log("amount:", amount);
-        console.log("balance:", balance);
       } else if (!walletAddressToSendTokensRef.current.value) {
-        console.log("amount:", amount);
-        console.log(
-          "walletAddressToSendTokensRef:",
-          walletAddressToSendTokensRef.current.value
-        );
-        console.log(
-          "walletAddressToSendTokensRef:",
-          walletAddressToSendTokensRef
-        );
         setButtonLabel("Enter Wallet Address");
       } else {
       }
     }
-
-    console.log("amount:", amount);
-    console.log("balance:", balance);
   }, [balance, amount, token, walletAddressToSendTokens]);
   return (
     <div className="overflow-hidden h-full flex items-center justify-center px-4 relative">

@@ -10,8 +10,7 @@ export async function POST(req, res) {
   const timeEnd = "2023-01-02"; // End date for historical data
   const params = await req.json();
   const id = params.id;
-    console.log(id)
-const url = `https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/historical?id=${id}&count=30&interval=1h`;
+  const url = `https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/historical?id=${id}&count=30&interval=1h`;
   const headers = {
     "X-CMC_PRO_API_KEY": apiKey,
   };
@@ -19,10 +18,8 @@ const url = `https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/historic
   try {
     const response = await axios.get(url, { headers });
     const data = response.data;
-    console.log(response);
     return NextResponse.json(data);
   } catch (err) {
-    console.log(err)
     return NextResponse.json(err);
   }
 }

@@ -13,11 +13,6 @@ export function SignMessage() {
   const handleSignMessage = async () => {
     try {
       const signMessageData = await signMessageAsync({ message });
-      
-    //   const signature = await signMessageAsync({
-    //     message: nonce ,
-    // });
-    console.log(signMessageData)
     } catch (error) {
       setError(error);
     } finally {

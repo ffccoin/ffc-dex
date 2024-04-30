@@ -38,7 +38,6 @@ function openTransak() {
   });
   // This will trigger when the user marks payment is made.
   Transak.on(Transak.EVENTS.TRANSAK_ORDER_SUCCESSFUL, (orderData) => {
-    console.log(orderData);
     window.alert("Payment Success");
     transak.close();
   });

@@ -34,9 +34,6 @@ export default function LimitOrders({ networkId }) {
         const response = await axios.post("/api/getOrders", {
           address: address,
         });
-        console.log("RESPONSE", response);
-        console.log("RESPONSE", response.data);
-
         const structuredData = response.data.map((item) => {
           const takerAssetAddress = getLogoURI(item.data.takerAsset);
           const takerAssetAmount = formatUnits(
@@ -79,8 +76,6 @@ export default function LimitOrders({ networkId }) {
             },
           };
         });
-
-        console.log("Structured Data:", structuredData);
         setTableData(structuredData);
       } catch (err) {
         console.log(err);

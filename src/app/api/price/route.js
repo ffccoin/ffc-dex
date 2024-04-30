@@ -14,7 +14,6 @@ export async function getPriceData(req, res) {
     const data = await response.json();
     return NextResponse.json(data);
   } catch (error) {
-    console.error(error);
     return NextResponse.json({ message: error });
   }
 }

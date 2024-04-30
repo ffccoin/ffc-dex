@@ -9,11 +9,9 @@ const TokensTable = async ({ chainId }) => {
   const router = useRouter();
   const response = await axios.get("/api/tokens");
   const data = await response.data;
-  console.log("DATA", response);
 
   const handleRowClick = (coin) => {
     // Navigate to the dynamic route with query parameters
-    console.log(coin);
     router.push(`/tokens/${coin.id}`);
   };
 
