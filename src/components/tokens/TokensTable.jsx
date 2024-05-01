@@ -5,12 +5,34 @@ import Link from "next/link";
 import TableSearch from "./TableSearch";
 
 const getData = async () => {
-  const baseUrl = "https://app.forcefinancecoin.com/api/tokens";
-  const res = await axios.get(baseUrl);
-  if (res.status === 200) {
-    return res.data;
-  } else {
-    throw new Error("Failed to fetch data");
+  const apiKey = process.env.NEXT_PUBLIC_COIN_MARKET_CAP_API_KEY;
+  const baseUrl = `https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=100`;
+  const headers = {
+    "X-CMC_PRO_API_KEY": apiKey,
+  };
+  try {
+    const response = await axios.get(baseUrl, { headers });
+    const data = response.data.data;
+    const detailedTokenData = await axios.get(
+      "https://pro-api.coinmarketcap.com/v1/cryptocurrency/info",
+      {
+        params: {
+          id: data.map((token) => token.id).join(","), // Comma-separated list of token IDs
+        },
+        headers,
+      }
+    );
+
+    const detailedDataMap = detailedTokenData.data.data;
+
+    // Append logo URLs to existing data
+    const updatedData = data.map((token) => ({
+      ...token,
+      logoUrl: detailedDataMap[token.id]?.logo,
+    }));
+    return updatedData;
+  } catch (err) {
+    return [];
   }
 };
 
