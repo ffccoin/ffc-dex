@@ -5,7 +5,6 @@ import HomeHeader from "@/components/headers/HomeHeader";
 import Swap from "@/components/home/swap/Swap";
 import { useWeb3ModalState } from "@web3modal/wagmi/react";
 import { useState } from "react";
-import BlockComponent from "./block";
 
 export default function Home() {
   const { selectedNetworkId } = useWeb3ModalState();
