@@ -17,7 +17,10 @@ const HomeHeader = ({
       <div className="flex items-center gap-x-1 sm:gap-x-2">
         <button
           className={`font-apfel-grotezk font-light text-sm sm:text-base px-4 flex items-center justify-center h-fit pt-1 pb-2 rounded-full
-              ${pathname.startsWith("/tokens/")  && "bg-primary1 text-black" || ( pathname === "/" && "bg-primary1 text-black")}
+              ${
+                (pathname.startsWith("/tokens/") && "bg-primary1 text-black") ||
+                (pathname === "/" && "bg-primary1 text-black")
+              }
             `}
           onClick={() => router.push("/")}
         >
@@ -38,6 +41,14 @@ const HomeHeader = ({
           onClick={() => router.push("/send")}
         >
           Send
+        </button>
+        <button
+          className={`font-apfel-grotezk font-light text-sm sm:text-base px-4 flex items-center justify-center h-fit pt-1 pb-2 rounded-full
+            ${pathname === "/bridge" && "bg-primary1 text-black"}
+          `}
+          onClick={() => router.push("/bridge")}
+        >
+          Bridge
         </button>
         <button
           className={`font-apfel-grotezk font-light text-sm sm:text-base px-4 flex items-center justify-center h-fit pt-1 pb-2 rounded-full

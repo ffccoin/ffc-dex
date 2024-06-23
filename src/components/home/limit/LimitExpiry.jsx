@@ -3,8 +3,7 @@ import React from "react";
 export default function LimitExpiry({ setSelectedOption, selectedOption }) {
   return (
     <div className="flex justify-between py-3 px-2 ">
-                <p>Expiry</p>
-
+      <p>Expiry</p>
       <div className=" flex  gap-1 rounded-2xl ">
         <button
           className={`time-option-btn ${
@@ -16,7 +15,7 @@ export default function LimitExpiry({ setSelectedOption, selectedOption }) {
               selectedOption === "1day" ? "#333b47" : "transparent",
           }}
         >
-        1&nbsp; &nbsp;Day
+          1&nbsp; &nbsp;Day
         </button>
         <button
           className={`time-option-btn ${
@@ -54,7 +53,6 @@ export default function LimitExpiry({ setSelectedOption, selectedOption }) {
         >
           1&nbsp; &nbsp;Year
         </button>
-        
       </div>
     </div>
   );

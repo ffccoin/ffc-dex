@@ -116,6 +116,11 @@ const Sidebar = () => {
                     Tokens
                   </a>
                 </div>
+                <div className="mt-4  hover:text-primary1 ">
+                  <a href="/bridge" className=" ">
+                    Bridge
+                  </a>
+                </div>
                 <div className="mt-4 hover:text-primary1 ">
                   <a href="/vote" className=" ">
                     Vote

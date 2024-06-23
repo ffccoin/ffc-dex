@@ -54,6 +54,16 @@ const Header = () => {
             Tokens
           </button>
           <button
+            onClick={() => router.push("/bridge")}
+            className={`py-2.5 ${
+              pathname === "/bridge"
+                ? "border-b border-primary1"
+                : "hover:text-primary1 hover:border-b hover:border-primary1"
+            } `}
+          >
+            Bridge
+          </button>
+          <button
             onClick={() => router.push("/vote")}
             className={`py-2.5 ${
               pathname === "/vote"

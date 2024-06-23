@@ -16,13 +16,12 @@ const SendPage = () => {
   const [buttonLabel, setButtonLabel] = useState("Enter an amount");
   const chainId = useChainId();
   const [isLoading, setIsLoading] = useState(false);
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
   const { open } = useWeb3Modal();
   const { writeContractAsync } = useWriteContract();
   const [isOpen, setIsOpen] = useState(false);
   const [token, setToken] = useState(null);
   const [changeToken, setChangeToken] = useState(1);
-  const { address } = useAccount();
   const [successfulTransaction, setSuccessfulTransaction] = useState(false);
 
   const [walletAddressToSendTokens, setWalletAddressToSendTokens] =
