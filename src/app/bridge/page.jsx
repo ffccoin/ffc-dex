@@ -2,6 +2,7 @@
 
 import LinkedParticlesAnimation from "@/components/animations/LinkedParticlesAnimation";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useRef, useState } from "react";
 
 const BridgePage = () => {
@@ -35,9 +36,12 @@ const BridgePage = () => {
       <div className="bg-gray22/50 z-50 py-5 px-4 rounded-2xl flex flex-col gap-y-1 items-center justify-center w-full max-w-[512px] mx-4">
         <div className="flex justify-between w-full px-1 pb-3">
           <div className="text-2xl font-bold">Bridge</div>
-          <button className="bg-primary1/90 text-black text-sm hover:bg-primary1 px-5 py-2 rounded-full">
+          <Link
+            href="/transactions"
+            className="bg-primary1/90 text-black text-sm hover:bg-primary1 px-5 py-2 rounded-full"
+          >
             All Transactions
-          </button>
+          </Link>
         </div>
         <div className="grid grid-cols-2 bg-gray22/75 w-full rounded-2xl">
           <div className="flex flex-col gap-1 px-4 py-5">
