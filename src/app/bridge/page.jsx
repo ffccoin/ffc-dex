@@ -10,6 +10,7 @@ const BridgePage = () => {
   const [transferFromDropdown, setTransferFromDropdown] = useState(false);
   const [transferTo, setTransferTo] = useState(1);
   const [transferToDropdown, setTransferToDropdown] = useState(false);
+  const [selectedPercentage, setSelectedPercentage] = useState("25%");
 
   const chainOptions = [
     { id: 0, name: "Ethereum", img: "/chains/ethereum.svg" },
@@ -48,8 +49,40 @@ const BridgePage = () => {
             <span>Balance: 0.0</span>
           </div>
           <div className="flex flex-col justify-center items-end px-4 py-5 gap-3">
-            <div className="flex gap-2 items-center px-2 font-medium text-lg">
-              <Image src="/logos/logo.svg" width={21} height={21} alt="FFC" />
+            <div className="flex items-center gap-1">
+              <button
+                className={`rounded-full text-[10px] px-3 py-0.5 border ${
+                  selectedPercentage === "25%"
+                    ? "border-primary1"
+                    : "border-gray20"
+                }`}
+                onClick={() => setSelectedPercentage("25%")}
+              >
+                25%
+              </button>
+              <button
+                className={`rounded-full text-[10px] px-3 py-0.5 border ${
+                  selectedPercentage === "50%"
+                    ? "border-primary1"
+                    : "border-gray20"
+                }`}
+                onClick={() => setSelectedPercentage("50%")}
+              >
+                50%
+              </button>
+              <button
+                className={`rounded-full text-[10px] px-3 py-0.5 border ${
+                  selectedPercentage === "MAX"
+                    ? "border-primary1"
+                    : "border-gray20"
+                }`}
+                onClick={() => setSelectedPercentage("MAX")}
+              >
+                MAX
+              </button>
+            </div>
+            <div className="flex gap-2 items-center px-2 font-medium text-sm">
+              <Image src="/logos/logo.svg" width={18} height={18} alt="FFC" />
               $FFC
             </div>
             <div className="relative">
@@ -57,29 +90,29 @@ const BridgePage = () => {
                 className="bg-primary1/90 text-black text-sm hover:bg-primary1 pl-2 pr-3 py-2 rounded-full flex items-center"
                 onClick={() => setTransferFromDropdown(!transferFromDropdown)}
               >
-                <div className="rounded-full p-1 w-7 h-7 bg-white mr-2 flex items-center justify-center">
+                <div className="rounded-full p-1 w-5 h-5 bg-white mr-2 flex items-center justify-center">
                   <Image
                     src={chainOptions[transferFrom].img}
-                    width={transferFrom === 0 ? 10 : 18}
-                    height={transferFrom === 0 ? 10 : 18}
+                    width={transferFrom === 0 ? 8 : 14}
+                    height={transferFrom === 0 ? 8 : 14}
                     alt={chainOptions[transferFrom].name}
                   />
                 </div>
                 {chainOptions[transferFrom].name} {chevronDown}
               </button>
               {transferFromDropdown && (
-                <div className="absolute top-12 py-3 px-1 bg-gray23 w-40 right-0 rounded-2xl flex flex-col">
+                <div className="absolute top-12 py-3 px-1 bg-gray23 w-40 right-0 rounded-2xl flex flex-col z-50">
                   {chainOptions.map((chain) => (
                     <button
                       key={chain.id}
                       onClick={() => selectChain(setTransferFrom, chain.id)}
                       className="flex items-center gap-2 text-xs py-2 hover:bg-gray24 rounded-xl px-2"
                     >
-                      <div className="rounded-full p-1 w-7 h-7 bg-white flex items-center justify-center">
+                      <div className="rounded-full p-1 w-5 h-5 bg-white flex items-center justify-center">
                         <Image
                           src={chain.img}
-                          width={chain.id === 0 ? 10 : 18}
-                          height={chain.id === 0 ? 10 : 18}
+                          width={chain.id === 0 ? 8 : 14}
+                          height={chain.id === 0 ? 8 : 14}
                           alt={chain.name}
                         />
                       </div>
@@ -119,29 +152,29 @@ const BridgePage = () => {
                 className="bg-primary1/90 text-black text-sm hover:bg-primary1 pl-2 pr-3 py-2 rounded-full flex items-center"
                 onClick={() => setTransferToDropdown(!transferToDropdown)}
               >
-                <div className="rounded-full p-1 w-7 h-7 bg-white mr-2 flex items-center justify-center">
+                <div className="rounded-full p-1 w-5 h-5 bg-white mr-2 flex items-center justify-center">
                   <Image
                     src={chainOptions[transferTo].img}
-                    width={transferTo === 0 ? 10 : 18}
-                    height={transferTo === 0 ? 10 : 18}
+                    width={transferTo === 0 ? 8 : 14}
+                    height={transferTo === 0 ? 8 : 14}
                     alt={chainOptions[transferTo].name}
                   />
                 </div>
                 {chainOptions[transferTo].name} {chevronDown}
               </button>
               {transferToDropdown && (
-                <div className="absolute top-12 py-3 px-1 bg-gray23 w-40 right-0 rounded-2xl flex flex-col">
+                <div className="absolute top-12 py-3 px-1 bg-gray23 w-40 right-0 rounded-2xl flex flex-col z-50">
                   {chainOptions.map((chain) => (
                     <button
                       key={chain.id}
                       onClick={() => selectChain(setTransferTo, chain.id)}
                       className="flex items-center gap-2 text-xs py-2 hover:bg-gray24 rounded-xl px-2"
                     >
-                      <div className="rounded-full p-1 w-7 h-7 bg-white flex items-center justify-center">
+                      <div className="rounded-full p-1 w-5 h-5 bg-white flex items-center justify-center">
                         <Image
                           src={chain.img}
-                          width={chain.id === 0 ? 10 : 18}
-                          height={chain.id === 0 ? 10 : 18}
+                          width={chain.id === 0 ? 8 : 14}
+                          height={chain.id === 0 ? 8 : 14}
                           alt={chain.name}
                         />
                       </div>
