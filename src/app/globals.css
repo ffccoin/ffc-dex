@@ -19,8 +19,6 @@
     /* --background: 0 0% 100%; */
     /* --foreground: 224 71.4% 4.1%; */
 
-
-
     /* --primary: 220.9 39.3% 11%;
     --primary-foreground: 210 20% 98%; */
 
@@ -28,110 +26,110 @@
     --secondary-foreground: 220.9 39.3% 11%; */
     --muted: 220 15% 16%;
     --muted-foreground: 220 8.9% 46.1%;
- 
+
     /* --accent: 220 14.3% 95.9%;
     --accent-foreground: 220.9 39.3% 11%; */
 
     /* --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 20% 98%; */
 
-    --border: 0 0% 0% ;
+    --border: 0 0% 0%;
     --input: 220 13% 91%;
     --ring: 224 71.4% 4.1%;
     --radius: 0.5rem;
   }
- 
 }
 
-  * {
-    @apply border-border;
-  }
- 
+* {
+  @apply border-border;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
 
-  body {
-    @apply bg-background text-foreground;
-    background-color: #080a0c;
-    color: white;
-  }
-  
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  button,
-  button > div {
-    font-family: "Apfel Grotezk", sans-serif;
-    user-select: none;
-    font-weight: 600;
-  }
-  
-  p,
-  span,
-  div,
-  small {
-    font-family: "Apfel Grotezk", sans-serif;
-    user-select: none;
-  }
-  
-  button {
-    outline: none;
-  }
-  
-  .scrollbar-hidden {
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-  
-  /* Loader */
-  .circle {
-    position: relative;
-    aspect-ratio: 1;
-  }
-  
-  .letter {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    font-family: "Neue Machina Bold", sans-serif;
-    color: #cbfb45;
-  }
-  /* Loader END */
-  
-  #tsparticles {
-    height: 100vh;
-    width: 100vw;
-    z-index: -1;
-    pointer-events: none;
-  }
-  
-  /* Removing arrows from input text */
-  /* Chrome, Safari, Edge, Opera */
-  input::-webkit-outer-spin-button,
-  input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-  
-  /* Firefox */
-  input[type="number"] {
-    -moz-appearance: textfield;
-  }
-  .apexcharts-tooltip {
-    background: #181e25bf; /* Gray background color */
-    color: #ffffff; /* White text color */
-    text-align: center;
-  }
-  .apexcharts-tooltip-title {
-    padding: 0px !important;
-    margin-bottom: 0px !important;
-  }
-  .apexcharts-canvas {
-    width: 100% !important;
-  }
+body {
+  @apply bg-background text-foreground;
+  background-color: #080a0c;
+  color: white;
+}
 
-  /* .text-gradient-9 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+button,
+button > div {
+  font-family: "Apfel Grotezk", sans-serif;
+  user-select: none;
+  font-weight: 600;
+}
+
+p,
+span,
+div,
+small {
+  font-family: "Apfel Grotezk", sans-serif;
+  user-select: none;
+}
+
+button {
+  outline: none;
+}
+
+.scrollbar-hidden {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* Loader */
+.circle {
+  position: relative;
+  aspect-ratio: 1;
+}
+
+.letter {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  font-family: "Neue Machina Bold", sans-serif;
+  color: #cbfb45;
+}
+/* Loader END */
+
+#tsparticles {
+  height: 100vh;
+  width: 100vw;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Removing arrows from input text */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+.apexcharts-tooltip {
+  background: #181e25bf; /* Gray background color */
+  color: #ffffff; /* White text color */
+  text-align: center;
+}
+.apexcharts-tooltip-title {
+  padding: 0px !important;
+  margin-bottom: 0px !important;
+}
+.apexcharts-canvas {
+  width: 100% !important;
+}
+
+/* .text-gradient-9 {
     background: -webkit-linear-gradient(
       91deg,
       #8ad4ec 0%,
@@ -224,4 +222,3 @@
       rgba(103, 45, 3, 0.7) 85.28%
     );
   } */
- 

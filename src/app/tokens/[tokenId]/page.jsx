@@ -21,23 +21,20 @@ const TokensDetailPage = ({ params }) => {
   }
   const { name } = useSelector((state) => state.coin);
   return (
-    <main className="relative flex flex-col items-center w-full justify-center py-24">
-      <LinkedParticlesAnimation />
-      <div className="flex w-full items-center flex-col h-fullitems-center lg:flex-row px-5 gap-5">
-        <TokenDetailsPage tokenId={selectedToken} />
-        <div className="bg-gray22/50 rounded-2xl flex flex-col px-4 py-5 w-full z-50 max-w-fit">
-          <HomeHeader
-            selectedSlippage={selectedSlippage}
-            setSelectedSlippage={setSelectedSlippage}
-          />
-          <Swap
-            slippage={selectedSlippage}
-            networkId={selectedNetworkId}
-            apiUrl={apiUrl}
-          />
-        </div>
+    <div className="flex w-full items-center flex-col h-full lg:flex-row px-5 gap-5">
+      <TokenDetailsPage tokenId={selectedToken} />
+      <div className="bg-gray22/50 rounded-2xl flex flex-col px-4 py-5 w-full z-50 max-w-fit">
+        <HomeHeader
+          selectedSlippage={selectedSlippage}
+          setSelectedSlippage={setSelectedSlippage}
+        />
+        <Swap
+          slippage={selectedSlippage}
+          networkId={selectedNetworkId}
+          apiUrl={apiUrl}
+        />
       </div>
-    </main>
+    </div>
   );
 };
 

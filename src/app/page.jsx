@@ -18,20 +18,16 @@ export default function Home() {
   }
 
   return (
-    <main className="flex items-center justify-center px-4 relative">
-      <LinkedParticlesAnimation />
-      {/* <BlockComponent/> */}
-      <div className="bg-gray22/50 relative top-44 z-50 py-4 sm:px-2 rounded-2xl flex flex-col items-center justify-center w-fit">
-        <HomeHeader
-          selectedSlippage={selectedSlippage}
-          setSelectedSlippage={setSelectedSlippage}
-        />
-        <Swap
-          slippage={selectedSlippage}
-          networkId={selectedNetworkId}
-          apiUrl={apiUrl}
-        />
-      </div>
-    </main>
+    <div className="bg-gray22/50 top-44 z-50 py-4 sm:px-2 rounded-2xl flex flex-col items-center justify-center w-fit">
+      <HomeHeader
+        selectedSlippage={selectedSlippage}
+        setSelectedSlippage={setSelectedSlippage}
+      />
+      <Swap
+        slippage={selectedSlippage}
+        networkId={selectedNetworkId}
+        apiUrl={apiUrl}
+      />
+    </div>
   );
 }

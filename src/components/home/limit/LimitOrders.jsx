@@ -54,9 +54,8 @@ export default function LimitOrders({ networkId }) {
           );
 
           // Assuming formatUnits and other variables are properly defined elsewhere
-          takerOrderRates = formatUnits(takerOrderRates,12);
-          makerOrderRates = formatUnits(makerOrderRates,1);
-
+          takerOrderRates = formatUnits(takerOrderRates, 12);
+          makerOrderRates = formatUnits(makerOrderRates, 1);
 
           return {
             createdAt: item.createDateTime,
@@ -90,10 +89,10 @@ export default function LimitOrders({ networkId }) {
 
   const [selectedOption, setSelectedOption] = useState("ActiveOrders");
   return (
-    <div className=" md:p-5 px-4 ">
+    <div className=" md:p-5 px-4">
       <div className="flex justify-between border-b border-[#2b3144] pb-4">
         <div className="text-gray12">Limit orders</div>
-        <div className="bg-[#23272f]    sm:max-w-60  rounded-md ">
+        <div className="bg-[#23272f] sm:max-w-60 rounded-md">
           <button
             className={`time-option-btn ${
               selectedOption === "ActiveOrders" && "active"
@@ -121,45 +120,9 @@ export default function LimitOrders({ networkId }) {
         </div>
       </div>
       <div>
-        <div className="flex h-full min-h-screen overflow-auto w-full flex-col">
+        <div className="flex h-full overflow-auto w-full flex-col">
           <DataTable columns={columns} data={tableData} />
         </div>
-
-        {/* <table className="w-full my-10 text-left rtl:text-right dark:text-gray-400">
-      <thead className="h-[58px] bg-[#1E1E1F] text-white">
-        <tr>
-          <th scope="col" className="px-6 py-3 font-neue-machina-bold">
-            #
-          </th>
-          <th scope="col" className="px-6 py-3 font-neue-machina-bold">
-            Name
-          </th>
-          <th scope="col" className="px-6 py-3 font-neue-machina-bold">
-            Last Price
-          </th>
-          <th scope="col" className="px-6 py-3 font-neue-machina-bold">
-            24th Change
-          </th>
-          <th scope="col" className="px-6 py-3 font-neue-machina-bold">
-            Chart
-          </th>
-          <th scope="col" className="px-6 py-3 font-neue-machina-bold">
-            Market Cap
-          </th>
-          <th scope="col" className="px-6 py-3 font-neue-machina-bold">
-            Trade
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-      <td>hi</td>
-      <td>hi</td>
-      <td>hi</td>
-      <td>hi</td>
-      <td>hi</td>
-      <td>hi</td>
-      </tbody>
-    </table> */}
       </div>
     </div>
   );

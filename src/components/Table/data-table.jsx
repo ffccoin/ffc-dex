@@ -29,7 +29,7 @@ export function DataTable({ columns, data }) {
   });
 
   return (
-    <div>
+    <div className="flex flex-col gap-3">
       <div className="rounded-md border">
         <Table>
           <TableHeader>

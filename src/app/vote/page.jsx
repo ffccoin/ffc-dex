@@ -2,6 +2,7 @@
 
 import LinkedParticlesAnimation from "@/components/animations/LinkedParticlesAnimation";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 
@@ -13,75 +14,73 @@ const VotePage = () => {
     setIsOpen(!isOpen);
   };
   return (
-    <div className="flex justify-center px-4 overflow-x-hidden">
-      <LinkedParticlesAnimation />
-      <div className="w-full h-full max-h-[76vh] flex flex-col md:flex-row gap-10 mt-[80px] max-w-7xl">
-        {/* TAB SELECTOR */}
-        <div className="flex order-1 flex-col md:w-[23vw] 2xl:w-[14vw] w-full min-w-[250px] h-fit">
-          <div className="flex text-2xl text-white ">Dashboard</div>
-          <div
-            onClick={() => {
-              setSelectedTab("Proposal");
-            }}
-            className={`flex text-lg py-2 pl-2 w-full items-start text-white font-medium gap-2 mt-5 ${
-              selectedTab === "Proposal" ? " bg-gray22/80 " : "bg-transparent"
-            }  items-center `}
-          >
-            {doc} Proposal{" "}
-          </div>
-          <div
-            onClick={() => {
-              setSelectedTab("Requests");
-            }}
-            className={`flex  ${
-              selectedTab === "Requests" ? "bg-gray22/80" : "bg-transparent"
-            } text-lg py-2 pl-2 w-full mt-3 text-white font-medium gap-2  items-center "`}
-          >
-            <Image src={"./home/mail.svg"} width={20} height={20} /> Requests{" "}
-          </div>
-        </div>
-        {/* Proposals */}
-        <div className="flex order-3 md:order-2 flex-col mt-3 max-h-[75vh]">
-          <div className="flex  md:flex-row flex-col justify-between">
-            <div className="flex text-3xl font-bold text-white">Proposals</div>
-          </div>
-          <div className="flex flex-col md:mt-10 mt-6 gap-y-4 overflow-auto scrollbar-hidden">
-            {proposals.map((proposal, index) => (
-              <div
-                className="bg-gray22 px-5 py-[17px] relative rounded-2xl"
-                key={index}
-              >
-                <div className="text-xs flex gap-1 ">
-                  <p className=" text-gray12">End&nbsp;Date:</p>
-                  <p>{proposal.endDate}</p>
-                </div>
-                <div className="flex justify-between  items-center">
-                  <p className=" font-bold text-xl text-white w-[68%]">
-                    {proposal.title}
-                  </p>
-                  <button
-                    className={`${
-                      proposal.status === "Pending"
-                        ? "bg-[#07652B]"
-                        : "bg-[#015667]"
-                    } absolute right-3 top-6 text-white px-2 py-[6px] text-center font-semibold rounded-3xl`}
-                  >
-                    {proposal.status}
-                  </button>
-                </div>
-                <p className="mt-2 text-gray12">{proposal.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-        {/* Add Proposal */}
-        <button
-          onClick={() => toggleFlash()}
-          className="rounded-full order-2 md:order-3 md:mt-0 h-fit md:self-start self-end w-fit px-4 py-2 text-sm font-bold bg-primary1 text-black"
+    <div className="w-full h-full max-h-[76vh] flex flex-col md:flex-row gap-10 max-w-7xl">
+      {/* TAB SELECTOR */}
+      <div className="flex order-1 flex-col md:w-[23vw] 2xl:w-[14vw] w-full min-w-[250px] h-fit">
+        <div className="flex text-2xl text-white ">Dashboard</div>
+        <div
+          onClick={() => {
+            setSelectedTab("Proposal");
+          }}
+          className={`flex text-lg py-2 pl-2 w-full items-start text-white font-medium gap-2 mt-5 ${
+            selectedTab === "Proposal" ? " bg-gray22/80 " : "bg-transparent"
+          }  items-center `}
         >
-          Add&#160;new&#160;Proposal
-        </button>
+          {doc} Proposal{" "}
+        </div>
+        <div
+          onClick={() => {
+            setSelectedTab("Requests");
+          }}
+          className={`flex  ${
+            selectedTab === "Requests" ? "bg-gray22/80" : "bg-transparent"
+          } text-lg py-2 pl-2 w-full mt-3 text-white font-medium gap-2  items-center "`}
+        >
+          <Image src={"./home/mail.svg"} width={20} height={20} /> Requests{" "}
+        </div>
       </div>
+      {/* Proposals */}
+      <div className="flex order-3 md:order-2 flex-col mt-3 max-h-[75vh]">
+        <div className="flex  md:flex-row flex-col justify-between">
+          <div className="flex text-3xl font-bold text-white">Proposals</div>
+        </div>
+        <div className="flex flex-col my-10 mt-6 gap-y-4">
+          {proposals.map((proposal, index) => (
+            <Link
+              href={`/vote/${proposal.id}`}
+              className="bg-gray22 px-5 py-[17px] relative rounded-2xl"
+              key={index}
+            >
+              <div className="text-xs flex gap-1 ">
+                <p className=" text-gray12">End&nbsp;Date:</p>
+                <p>{proposal.endDate}</p>
+              </div>
+              <div className="flex justify-between  items-center">
+                <p className=" font-bold text-xl text-white w-[68%]">
+                  {proposal.title}
+                </p>
+                <button
+                  className={`${
+                    proposal.status === "Pending"
+                      ? "bg-[#07652B]"
+                      : "bg-[#015667]"
+                  } absolute right-3 top-6 text-white px-2 py-[6px] text-center font-semibold rounded-3xl`}
+                >
+                  {proposal.status}
+                </button>
+              </div>
+              <p className="mt-2 text-gray12">{proposal.desc}</p>
+            </Link>
+          ))}
+        </div>
+      </div>
+      {/* Add Proposal */}
+      <button
+        onClick={() => toggleFlash()}
+        className="rounded-full order-2 md:order-3 md:mt-0 h-fit md:self-start self-end w-fit px-4 py-2 text-sm font-bold bg-primary1 text-black"
+      >
+        Add&#160;new&#160;Proposal
+      </button>
     </div>
   );
 };

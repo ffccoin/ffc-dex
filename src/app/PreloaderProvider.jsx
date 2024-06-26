@@ -1,5 +1,7 @@
 "use client";
 import Footer from "@/components/Footer";
+import LinkedParticlesAnimation from "@/components/animations/LinkedParticlesAnimation";
+import LoadingPage from "@/components/animations/loading";
 import BottomBar from "@/components/headers/BottomBar";
 import Header from "@/components/headers/Header";
 import { usePathname } from "next/navigation";
@@ -15,15 +17,18 @@ const PreloaderProvider = ({ children }) => {
   return (
     <main className="min-h-screen h-full">
       {!loading ? (
-        <div className="flex flex-col h-screen justify-between">
+        <div className="flex flex-col justify-between min-h-screen">
           {pathname !== "/login" && <Header />}
-          {children}
+          <main className="flex items-center max-w-[100vw] overflow-x-hidden justify-center px-4 relative py-[90px] scrollbar-hidden">
+            <LinkedParticlesAnimation />
+            {children}
+          </main>
           {pathname !== "/login" && <BottomBar />}
           {pathname !== "/login" && <Footer />}
         </div>
       ) : (
-        // <LoadingPage />
-        <></>
+        <LoadingPage />
+        // <></>
       )}
     </main>
   );

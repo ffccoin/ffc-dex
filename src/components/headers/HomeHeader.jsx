@@ -44,14 +44,6 @@ const HomeHeader = ({
         </button>
         <button
           className={`font-apfel-grotezk font-light text-sm sm:text-base px-4 flex items-center justify-center h-fit pt-1 pb-2 rounded-full
-            ${pathname === "/bridge" && "bg-primary1 text-black"}
-          `}
-          onClick={() => router.push("/bridge")}
-        >
-          Bridge
-        </button>
-        <button
-          className={`font-apfel-grotezk font-light text-sm sm:text-base px-4 flex items-center justify-center h-fit pt-1 pb-2 rounded-full
             ${pathname === "/buy" && "bg-primary1 text-black"}
           `}
           onClick={() => router.push("/buy")}
