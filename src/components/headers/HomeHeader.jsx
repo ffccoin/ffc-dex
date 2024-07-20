@@ -16,7 +16,7 @@ const HomeHeader = ({
     <div className="flex flex-row w-full px-4 sm:px-2 justify-between items-center max-w-[512px]">
       <div className="flex items-center gap-x-1 sm:gap-x-2">
         <button
-          className={`font-apfel-grotezk font-light text-sm sm:text-base px-4 flex items-center justify-center h-fit pt-1 pb-2 rounded-full
+          className={`font-apfel-grotezk font-light text-xs sm:text-base px-4 flex items-center justify-center h-fit pt-1 pb-2 rounded-full
               ${
                 (pathname.startsWith("/tokens/") && "bg-primary1 text-black") ||
                 (pathname === "/" && "bg-primary1 text-black")
@@ -27,7 +27,18 @@ const HomeHeader = ({
           Swap
         </button>
         <button
-          className={`font-apfel-grotezk font-light text-sm sm:text-base px-4 flex items-center justify-center h-fit pt-1 pb-2 rounded-full
+          className={`font-apfel-grotezk font-light text-xs sm:text-base px-4 flex items-center justify-center h-fit pt-1 pb-2 rounded-full
+              ${
+                (pathname.startsWith("/tokens/") && "bg-primary1 text-black") ||
+                (pathname === "/bridge" && "bg-primary1 text-black")
+              }
+            `}
+          onClick={() => router.push("/bridge")}
+        >
+          Bridge
+        </button>
+        <button
+          className={`font-apfel-grotezk font-light text-xs sm:text-base px-4 flex items-center justify-center h-fit pt-1 pb-2 rounded-full
             ${pathname === "/limit" && "bg-primary1 text-black"}
           `}
           onClick={() => router.push("/limit")}
@@ -35,7 +46,7 @@ const HomeHeader = ({
           Limit
         </button>
         <button
-          className={`font-apfel-grotezk font-light text-sm sm:text-base px-4 flex items-center justify-center h-fit pt-1 pb-2 rounded-full
+          className={`font-apfel-grotezk font-light text-xs sm:text-base px-4 flex items-center justify-center h-fit pt-1 pb-2 rounded-full
             ${pathname === "/send" && "bg-primary1 text-black"}
           `}
           onClick={() => router.push("/send")}
@@ -43,7 +54,7 @@ const HomeHeader = ({
           Send
         </button>
         <button
-          className={`font-apfel-grotezk font-light text-sm sm:text-base px-4 flex items-center justify-center h-fit pt-1 pb-2 rounded-full
+          className={`font-apfel-grotezk font-light text-xs sm:text-base px-4 flex items-center justify-center h-fit pt-1 pb-2 rounded-full
             ${pathname === "/buy" && "bg-primary1 text-black"}
           `}
           onClick={() => router.push("/buy")}
